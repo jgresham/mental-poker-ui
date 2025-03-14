@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Texas Hold'em Poker Web App
+
+A mobile-optimized Texas Hold'em Poker web application built with Next.js, TypeScript, and shadcn/ui components.
+
+## Features
+
+- Support for 2-10 players
+- Mobile-optimized interface
+- Visual representation of the poker table, cards, and players
+- Game state management for poker rounds (preflop, flop, turn, river)
+- Player actions: fold, check, call, raise
+- Visual indicators for dealer, small blind, big blind, and all-in status
+- Player avatars and chip counts
+
+## Technologies Used
+
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- React Hooks for state management
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18.17 or later
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/texas-holdem-poker.git
+cd texas-holdem-poker
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## Learn More
+## How to Play
 
-To learn more about Next.js, take a look at the following resources:
+1. Start by selecting the number of players (2-10) and your position at the table.
+2. The game will automatically deal cards and assign dealer, small blind, and big blind positions.
+3. Players take turns clockwise around the table.
+4. Available actions include:
+   - Fold: Give up your hand and exit the current round
+   - Check: Pass the action to the next player (only if no bet is required)
+   - Call: Match the current bet
+   - Raise: Increase the current bet
+5. The game progresses through the standard poker stages: preflop, flop, turn, river, and showdown.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Deploy on Vercel
+## Acknowledgments
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Built with Next.js and shadcn/ui components
+- Designed for mobile-first experience
