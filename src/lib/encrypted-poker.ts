@@ -18,7 +18,6 @@ import { shuffleArray } from "./utils";
 // consumer will want apis:
 // shuffleAndEncryptDeck(deck: string[] | bigint[], privateKey: bigint) -> encryptedDeck: bigint[]
 // decryptCard(encryptedCard: bigint, privateKey: bigint) -> card: string | bigint
-
 export function shuffleAndEncryptCardDeck({
   deck,
   publicKey,
@@ -30,13 +29,84 @@ export function shuffleAndEncryptCardDeck({
 }): { c1: bigint; c2: bigint }[][] {
   // shuffle the deck
   // Type assertion to handle both string[] and bigint[] cases
-  // const shuffledDeck = shuffleArray([...deck] as unknown[]) as typeof deck;
-  const shuffledDeck = [...deck];
+  const shuffledDeck = shuffleArray([...deck] as unknown[]) as typeof deck;
   // encrypt each card in the deck
   const encryptedDeck = shuffledDeck.map((card) =>
     encryptMessage({ message: card, publicKey, privateKey }),
   );
   return encryptedDeck;
+}
+
+export function encryptCardDeck({
+  deck,
+  publicKey,
+  privateKey,
+}: {
+  deck: string[];
+  publicKey: bigint;
+  privateKey: bigint;
+}): { c1: bigint; c2: bigint }[][] {
+  const encryptedDeck = deck.map((card) =>
+    encryptMessage({ message: card, publicKey, privateKey }),
+  );
+  return encryptedDeck;
+}
+
+export function encryptCard({
+  card,
+  publicKey,
+  privateKey,
+}: {
+  card: string;
+  publicKey: bigint;
+  privateKey: bigint;
+}): { c1: bigint; c2: bigint }[] {
+  return encryptMessage({ message: card, publicKey, privateKey });
+}
+
+export function encryptEncryptedCard({
+  encryptedCard,
+  publicKey,
+  privateKey,
+}: {
+  encryptedCard: bigint[]; // c2 values
+  publicKey: bigint;
+  privateKey: bigint;
+}): { c1: bigint; c2: bigint }[] {
+  const encryptedMessageChunks = encryptMessageChunks({
+    messageChunks: encryptedCard,
+    publicKey,
+    privateKey,
+  });
+  return encryptedMessageChunks;
+}
+
+export function encryptEncryptedDeck({
+  encryptedDeck,
+  publicKey,
+  privateKey,
+}: {
+  encryptedDeck: { c1: bigint; c2: bigint }[][];
+  publicKey: bigint;
+  privateKey: bigint;
+}): { c1: bigint; c2: bigint }[][] {
+  // encrypt each card in the deck
+  const doubleOrMoreEncryptedDeck = encryptedDeck.map(
+    (messageChunks: { c1: bigint; c2: bigint }[]) => {
+      return encryptMessageChunks({
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        messageChunks: messageChunks.map(({ c1: _c1, c2 }) => c2),
+        publicKey,
+        privateKey,
+      });
+      // for each messageChunk, push the c1 value and overwrite the c2 value
+      // return messageChunks.map((messageChunk, index) => ({
+      //   messageChunks.c1.push,
+      //   c2: encryptedMessageChunks[index].c2,
+      // }));
+    },
+  );
+  return doubleOrMoreEncryptedDeck;
 }
 
 export function shuffleAndEncryptEncryptedDeck({

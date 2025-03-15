@@ -311,6 +311,9 @@ export function encryptMessage({
 }
 
 // Called by each party encrypting the already encrypted message
+/**
+ * messageChunks is really just an array of c2 values
+ */
 export function encryptMessageChunks({
   messageChunks,
   publicKey,
@@ -324,7 +327,150 @@ export function encryptMessageChunks({
   g?: bigint;
   p?: bigint;
 }): { c1: bigint; c2: bigint }[] {
-  return messageChunks.map((chunk) => encryptChunk(chunk, publicKey, privateKey, g, p));
+  return messageChunks.map((chunk) => {
+    const encrypted = encryptChunk(chunk, publicKey, privateKey, g, p);
+    // encryptedResults[chunkIndex].c1Values.push(encrypted.c1);
+    // encryptedResults[chunkIndex].c2 = encrypted.c2;
+    return {
+      c1: encrypted.c1,
+      c2: encrypted.c2,
+    };
+  });
+}
+
+// Test multi-party commutative encryption with chunking support
+// @param msg - The message to encrypt
+// @param p - The prime number (defaults to 2048-bit prime)
+// @param g - The generator (defaults to 2)
+// @param parties - The number of parties
+export function testMultiPartyCommutative({
+  msg,
+  p = p2048,
+  g = g2048,
+  parties,
+}: {
+  msg: string;
+  p?: bigint;
+  g?: bigint;
+  parties: number;
+}) {
+  console.log(`${getTimestamp()} Testing ${parties}-party commutative message: "${msg}"`);
+
+  // Calculate safe chunk size
+  const chunkSize = getSafeChunkSize(p);
+  console.log(`${getTimestamp()} Using chunk size: ${chunkSize} bytes`);
+
+  // Convert message to chunks
+  const messageChunks = stringToChunks(msg, chunkSize);
+  console.log(`${getTimestamp()} Message split into ${messageChunks.length} chunks`);
+
+  // Generate keys for each party
+  const privateKeys: bigint[] = [];
+  const publicKeys: bigint[] = [];
+
+  for (let i = 0; i < parties; i++) {
+    console.log(`${getTimestamp()} Generating keys for party ${i + 1}`);
+    const privateKey = randomBigIntInRange(BigInt(3), p);
+    privateKeys.push(privateKey);
+
+    const publicKey = bigintModArith.modPow(g, privateKey, p);
+    publicKeys.push(publicKey);
+
+    console.log(
+      `${getTimestamp()} Party ${i + 1} - Private key: ${privateKey}, Public key: ${publicKey}`,
+    );
+  }
+
+  console.log(`\nMessage: "${msg}"`);
+
+  // Display keys for all parties
+  for (let i = 0; i < parties; i++) {
+    console.log(`Party ${i + 1}'s Public key: g=${g}, Y=${publicKeys[i]}, p=${p}`);
+    console.log(`Party ${i + 1}'s Private key: x=${privateKeys[i]}`);
+  }
+
+  // Process each chunk
+  // An array of encrypted chunks (single encrypted message)
+  // is an array of c1[] and the last c2 value
+  const encryptedResults = messageChunks.map((chunk, chunkIndex) => {
+    console.log(`\n${getTimestamp()} Processing chunk ${chunkIndex + 1}: ${chunk}`);
+
+    // Initial ciphertext values
+    const c1Values: bigint[] = [];
+    let currentC2 = chunk;
+
+    // Each party adds their encryption layer
+    for (let i = 0; i < parties; i++) {
+      console.log(`${getTimestamp()} Party ${i + 1} adding encryption layer`);
+      const encrypted = encryptChunk(currentC2, publicKeys[i], privateKeys[i], g, p);
+      c1Values.push(encrypted.c1);
+      currentC2 = encrypted.c2;
+
+      console.log(
+        `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${currentC2}`,
+      );
+    }
+
+    console.log(`${getTimestamp()} Final encrypted chunk: c2=${currentC2}`);
+
+    return {
+      c1Values,
+      c2: currentC2,
+    };
+  });
+
+  // Decryption in different orders
+  const decryptResults: string[] = [];
+
+  // Try different decryption orders
+  const permutations = generatePermutations([...Array(parties).keys()]);
+
+  for (const perm of permutations) {
+    console.log(
+      `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
+    );
+
+    const decryptedChunks = encryptedResults.map((encryptedChunk, chunkIndex) => {
+      console.log(`${getTimestamp()} Decrypting chunk ${chunkIndex + 1}`);
+
+      // Always start with the last c2 value
+      let currentC2 = encryptedChunk.c2;
+
+      // Remove encryption layers in the order specified by perm
+      for (const partyIndex of perm) {
+        console.log(
+          `${getTimestamp()} Party ${partyIndex + 1} removing encryption layer`,
+        );
+        // Use the specific party's c1 value and private key
+        currentC2 = removeEncryptionLayer(
+          encryptedChunk.c1Values[partyIndex],
+          currentC2,
+          privateKeys[partyIndex],
+          p,
+        );
+        console.log(
+          `${getTimestamp()} After Party ${partyIndex + 1}'s decryption: ${currentC2}`,
+        );
+      }
+
+      return currentC2;
+    });
+
+    // Convert decrypted chunks back to string
+    const decryptedMessage = chunksToString(decryptedChunks);
+    console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
+
+    decryptResults.push(decryptedMessage);
+    console.log(
+      `\nResult for order ${perm.map((i) => i + 1).join(" -> ")}: "${decryptedMessage}"`,
+    );
+  }
+
+  // Check if all decryption orders yielded the original message
+  const allCorrect = decryptResults.every((result) => result === msg);
+  console.log(`\n${getTimestamp()} All decryption orders correct: ${allCorrect}`);
+
+  return allCorrect;
 }
 
 // Modified version of testMultiPartyCommutative with flipped loops
@@ -465,137 +611,6 @@ export function testMultiPartyCommutativeFlipped({
 
     // Convert decrypted chunks back to string
     const decryptedMessage = chunksToString(finalDecryptedChunks);
-    console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
-
-    decryptResults.push(decryptedMessage);
-    console.log(
-      `\nResult for order ${perm.map((i) => i + 1).join(" -> ")}: "${decryptedMessage}"`,
-    );
-  }
-
-  // Check if all decryption orders yielded the original message
-  const allCorrect = decryptResults.every((result) => result === msg);
-  console.log(`\n${getTimestamp()} All decryption orders correct: ${allCorrect}`);
-
-  return allCorrect;
-}
-
-// Test multi-party commutative encryption with chunking support
-// @param msg - The message to encrypt
-// @param p - The prime number (defaults to 2048-bit prime)
-// @param g - The generator (defaults to 2)
-// @param parties - The number of parties
-export function testMultiPartyCommutative({
-  msg,
-  p = p2048,
-  g = g2048,
-  parties,
-}: {
-  msg: string;
-  p?: bigint;
-  g?: bigint;
-  parties: number;
-}) {
-  console.log(`${getTimestamp()} Testing ${parties}-party commutative message: "${msg}"`);
-
-  // Calculate safe chunk size
-  const chunkSize = getSafeChunkSize(p);
-  console.log(`${getTimestamp()} Using chunk size: ${chunkSize} bytes`);
-
-  // Convert message to chunks
-  const messageChunks = stringToChunks(msg, chunkSize);
-  console.log(`${getTimestamp()} Message split into ${messageChunks.length} chunks`);
-
-  // Generate keys for each party
-  const privateKeys: bigint[] = [];
-  const publicKeys: bigint[] = [];
-
-  for (let i = 0; i < parties; i++) {
-    console.log(`${getTimestamp()} Generating keys for party ${i + 1}`);
-    const privateKey = randomBigIntInRange(BigInt(3), p);
-    privateKeys.push(privateKey);
-
-    const publicKey = bigintModArith.modPow(g, privateKey, p);
-    publicKeys.push(publicKey);
-
-    console.log(
-      `${getTimestamp()} Party ${i + 1} - Private key: ${privateKey}, Public key: ${publicKey}`,
-    );
-  }
-
-  console.log(`\nMessage: "${msg}"`);
-
-  // Display keys for all parties
-  for (let i = 0; i < parties; i++) {
-    console.log(`Party ${i + 1}'s Public key: g=${g}, Y=${publicKeys[i]}, p=${p}`);
-    console.log(`Party ${i + 1}'s Private key: x=${privateKeys[i]}`);
-  }
-
-  // Process each chunk
-  const encryptedResults = messageChunks.map((chunk, chunkIndex) => {
-    console.log(`\n${getTimestamp()} Processing chunk ${chunkIndex + 1}: ${chunk}`);
-
-    // Initial ciphertext values
-    const c1Values: bigint[] = [];
-    let currentC2 = chunk;
-
-    // Each party adds their encryption layer
-    for (let i = 0; i < parties; i++) {
-      console.log(`${getTimestamp()} Party ${i + 1} adding encryption layer`);
-      const encrypted = encryptChunk(currentC2, publicKeys[i], privateKeys[i], g, p);
-      c1Values.push(encrypted.c1);
-      currentC2 = encrypted.c2;
-
-      console.log(
-        `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${currentC2}`,
-      );
-    }
-
-    console.log(`${getTimestamp()} Final encrypted chunk: c2=${currentC2}`);
-
-    return {
-      c1Values,
-      c2: currentC2,
-    };
-  });
-
-  // Decryption in different orders
-  const decryptResults: string[] = [];
-
-  // Try different decryption orders
-  const permutations = generatePermutations([...Array(parties).keys()]);
-
-  for (const perm of permutations) {
-    console.log(
-      `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
-    );
-
-    const decryptedChunks = encryptedResults.map((encryptedChunk, chunkIndex) => {
-      console.log(`${getTimestamp()} Decrypting chunk ${chunkIndex + 1}`);
-
-      let currentC2 = encryptedChunk.c2;
-
-      // Remove encryption layers in the order specified by perm
-      for (const partyIndex of perm) {
-        console.log(
-          `${getTimestamp()} Party ${partyIndex + 1} removing encryption layer`,
-        );
-        currentC2 = removeEncryptionLayer(
-          encryptedChunk.c1Values[partyIndex],
-          currentC2,
-          privateKeys[partyIndex],
-          p,
-        );
-        console.log(
-          `${getTimestamp()} After Party ${partyIndex + 1}'s decryption: ${currentC2}`,
-        );
-      }
-
-      return currentC2;
-    });
-
-    // Convert decrypted chunks back to string
-    const decryptedMessage = chunksToString(decryptedChunks);
     console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
 
     decryptResults.push(decryptedMessage);
