@@ -5,9 +5,9 @@
 
 import {
   encryptMessage,
-  encryptMessageChunks,
+  encryptMessageBigint,
   removeEncryptionLayer,
-} from "./elgamal-commutative-node-fixedr";
+} from "./elgamal-commutative-node-1chunk";
 import { shuffleArray } from "./utils";
 
 // consumer will want apis:
@@ -23,7 +23,7 @@ export function shuffleAndEncryptCardDeck({
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[][] {
+}): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
   // Type assertion to handle both string[] and bigint[] cases
   const shuffledDeck = shuffleArray([...deck] as unknown[]) as typeof deck;
@@ -44,7 +44,7 @@ export function encryptCardDeck({
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[][] {
+}): { c1: bigint; c2: bigint }[] {
   const encryptedDeck = deck.map((card) =>
     encryptMessage({ message: card, publicKey, privateKey, r }),
   );
@@ -61,7 +61,7 @@ export function encryptCard({
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[] {
+}): { c1: bigint; c2: bigint } {
   return encryptMessage({ message: card, publicKey, privateKey, r });
 }
 
@@ -71,13 +71,13 @@ export function encryptEncryptedCard({
   privateKey,
   r,
 }: {
-  encryptedCard: bigint[]; // c2 values
+  encryptedCard: bigint; // c2 value
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[] {
+}): { c1: bigint; c2: bigint } {
   const encryptedMessageChunks = encryptMessageChunks({
-    messageChunks: encryptedCard,
+    messageBigint: encryptedCard,
     publicKey,
     privateKey,
     r,
@@ -91,26 +91,20 @@ export function encryptEncryptedDeck({
   privateKey,
   r,
 }: {
-  encryptedDeck: { c1: bigint; c2: bigint }[][];
+  encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[][] {
+}): { c1: bigint; c2: bigint }[] {
   // encrypt each card in the deck
   const doubleOrMoreEncryptedDeck = encryptedDeck.map(
-    (messageChunks: { c1: bigint; c2: bigint }[]) => {
-      return encryptMessageChunks({
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        messageChunks: messageChunks.map(({ c1: _c1, c2 }) => c2),
+    (encryptedMessageBigint: { c1: bigint; c2: bigint }) => {
+      return encryptMessageBigint({
+        messageBigint: encryptedMessageBigint.c2,
         publicKey,
         privateKey,
         r,
       });
-      // for each messageChunk, push the c1 value and overwrite the c2 value
-      // return messageChunks.map((messageChunk, index) => ({
-      //   messageChunks.c1.push,
-      //   c2: encryptedMessageChunks[index].c2,
-      // }));
     },
   );
   return doubleOrMoreEncryptedDeck;
@@ -122,11 +116,11 @@ export function shuffleAndEncryptDeck({
   privateKey,
   r,
 }: {
-  encryptedDeck: { c1: bigint; c2: bigint }[][];
+  encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[][] {
+}): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
   // Type assertion to handle both string[] and bigint[] cases
   const shuffledEncryptedDeck = shuffleArray([
@@ -134,10 +128,9 @@ export function shuffleAndEncryptDeck({
   ] as unknown[]) as typeof encryptedDeck;
   // encrypt each card in the deck
   const doubleOrMoreEncryptedDeck = shuffledEncryptedDeck.map(
-    (messageChunks: { c1: bigint; c2: bigint }[]) =>
-      encryptMessageChunks({
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        messageChunks: messageChunks.map(({ c1: _c1, c2 }) => c2),
+    (encryptedMessageBigint: { c1: bigint; c2: bigint }) =>
+      encryptMessageBigint({
+        messageBigint: encryptedMessageBigint.c2,
         publicKey,
         privateKey,
         r,
@@ -152,11 +145,11 @@ export function shuffleAndEncryptEncryptedDeck({
   privateKey,
   r,
 }: {
-  encryptedDeck: { c1: bigint; c2: bigint }[][];
+  encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
   privateKey: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[][] {
+}): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
   // Type assertion to handle both string[] and bigint[] cases
   const shuffledEncryptedDeck = shuffleArray([
@@ -164,10 +157,9 @@ export function shuffleAndEncryptEncryptedDeck({
   ] as unknown[]) as typeof encryptedDeck;
   // encrypt each card in the deck
   const doubleOrMoreEncryptedDeck = shuffledEncryptedDeck.map(
-    (messageChunks: { c1: bigint; c2: bigint }[]) =>
-      encryptMessageChunks({
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        messageChunks: messageChunks.map(({ c1: _c1, c2 }) => c2),
+    (encryptedMessageBigint: { c1: bigint; c2: bigint }) =>
+      encryptMessageBigint({
+        messageBigint: encryptedMessageBigint.c2,
         publicKey,
         privateKey,
         r,
@@ -193,12 +185,9 @@ export function decryptCard({
   encryptedCard,
   privateKey,
 }: {
-  encryptedCard: { c1: bigint; c2: bigint }[];
+  encryptedCard: { c1: bigint; c2: bigint };
   privateKey: bigint;
-}): bigint[] {
+}): bigint {
   // For every chunk in the encrypted card, decrypt it
-  const decryptedCard = encryptedCard.map((chunk) =>
-    removeEncryptionLayer(chunk.c1, chunk.c2, privateKey),
-  );
-  return decryptedCard;
+  return removeEncryptionLayer(encryptedCard.c1, encryptedCard.c2, privateKey);
 }

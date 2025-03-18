@@ -43,11 +43,6 @@ export function randomBigIntInRange(min: bigint, max: bigint): bigint {
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("")}`,
   );
-  // const randomValue = BigInt(
-  //   `0x${Array.from(randomBytes)
-  //     .map((b) => b.toString(16).padStart(2, "0"))
-  //     .join("")}`,
-  // );
   const randomValue = BigInt(
     `0x${Array.from(randomBytes)
       .map((b) => b.toString(16).padStart(2, "0"))
@@ -91,7 +86,9 @@ export function primitiveRoot(p: bigint): bigint {
   }
 }
 
-// Get safe chunk size based on prime size
+/**
+ * Maximum size in bytes of a message that can be encrypted with the given prime
+ */
 export function getSafeChunkSize(p: bigint): number {
   // Get bit length of p
   const bitLength = p.toString(2).length;
@@ -102,18 +99,22 @@ export function getSafeChunkSize(p: bigint): number {
   return safeByteSize;
 }
 
-// Improved function to convert string to BigInt chunks
-export function stringToChunks(str: string, chunkSize?: number): bigint[] {
-  let chunkSizeToUse = chunkSize;
-  if (!chunkSizeToUse) {
-    chunkSizeToUse = getSafeChunkSize(p2048);
-  }
+// Convert string to a single BigInt
+export function stringToBigint(str: string): bigint {
   console.log(
-    `${getTimestamp()} Converting string "${str}" to chunks with size ${chunkSizeToUse}`,
+    `${getTimestamp()} Converting string "${str}" to a single BigInt hex encoding`,
   );
+
   // Use TextEncoder for browser compatibility
   const encoder = new TextEncoder();
   const buffer = encoder.encode(str);
+
+  // Check if the string is too large
+  if (buffer.length > getSafeChunkSize(p2048)) {
+    console.error(
+      `String is too large to convert to a single BigInt. Maximum size is ${getSafeChunkSize(p2048)} bytes, but got ${buffer.length} bytes.`,
+    );
+  }
 
   console.log(
     `${getTimestamp()} String as buffer: ${Array.from(buffer)
@@ -121,60 +122,39 @@ export function stringToChunks(str: string, chunkSize?: number): bigint[] {
       .join("")}`,
   );
 
-  const chunks: bigint[] = [];
-  for (let i = 0; i < buffer.length; i += chunkSizeToUse) {
-    const chunkBuffer = buffer.slice(i, i + chunkSizeToUse);
-    console.log(
-      `${getTimestamp()} Processing chunk ${chunks.length + 1}: ${Array.from(chunkBuffer)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("")}`,
-    );
-    // const chunk = BigInt(
-    //   `0x${Array.from(chunkBuffer)
-    //     .map((b) => b.toString(16).padStart(2, "0"))
-    //     .join("")}`,
-    // );
-    const chunk = BigInt(
-      `0x${Array.from(chunkBuffer)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("")}`,
-    );
-    console.log(`${getTimestamp()} Chunk as BigInt: ${chunk}`);
-    chunks.push(chunk);
-  }
+  // Convert the entire buffer to a single BigInt
+  // The padStart(2, "0") ensures each byte is represented as two hex digits
+  // For example, 0x5 becomes 0x05, ensuring consistent byte representation
+  const bigint = BigInt(
+    `0x${Array.from(buffer)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")}`,
+  );
 
-  console.log(`${getTimestamp()} Created ${chunks.length} chunks`);
-  return chunks;
+  console.log(`${getTimestamp()} Converted to BigInt: ${bigint}`);
+  return bigint;
 }
 
-// Improved function to convert BigInt chunks back to string
-export function chunksToString(chunks: bigint[]): string {
-  console.log(`${getTimestamp()} Converting ${chunks.length} chunks back to string`);
+// Convert a single BigInt to string
+export function bigintToString(chunk: bigint): string {
+  console.log(`${getTimestamp()} Converting bigint to string: ${chunk}`);
 
   // Use TextDecoder for browser compatibility
   const decoder = new TextDecoder();
-  let resultArray: number[] = [];
 
-  for (let i = 0; i < chunks.length; i++) {
-    console.log(`${getTimestamp()} Processing chunk ${i + 1}: ${chunks[i]}`);
+  // Convert BigInt to hex and ensure even length
+  let hexStr = chunk.toString(16);
+  if (hexStr.length % 2 !== 0) hexStr = `0${hexStr}`;
 
-    // Convert BigInt to hex and ensure even length
-    let hexStr = chunks[i].toString(16);
-    if (hexStr.length % 2 !== 0) hexStr = `0${hexStr}`;
-
-    // Create array from hex
-    const byteArray: number[] = [];
-    for (let j = 0; j < hexStr.length; j += 2) {
-      byteArray.push(Number.parseInt(hexStr.substring(j, j + 2), 16));
-    }
-
-    console.log(`${getTimestamp()} Chunk ${i + 1} as array: [${byteArray.join(", ")}]`);
-
-    // Concatenate arrays
-    resultArray = resultArray.concat(byteArray);
+  // Create array from hex
+  const byteArray: number[] = [];
+  for (let j = 0; j < hexStr.length; j += 2) {
+    byteArray.push(Number.parseInt(hexStr.substring(j, j + 2), 16));
   }
 
-  const result = decoder.decode(new Uint8Array(resultArray));
+  console.log(`${getTimestamp()} Bigint as array: [${byteArray.join(", ")}]`);
+
+  const result = decoder.decode(new Uint8Array(byteArray));
   console.log(`${getTimestamp()} Converted to string: "${result}"`);
   return result;
 }
@@ -251,37 +231,31 @@ export function encryptMessage({
   g?: bigint;
   p?: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[] {
-  const chunks = stringToChunks(message, getSafeChunkSize(p));
-  return chunks.map((chunk) => encryptChunk(chunk, publicKey, privateKey, g, p, r));
+}): { c1: bigint; c2: bigint } {
+  const bigintMessage = stringToBigint(message);
+  return encryptChunk(bigintMessage, publicKey, privateKey, g, p, r);
 }
 
 // Called by each party encrypting the already encrypted message
 /**
  * messageChunks is really just an array of c2 values
  */
-export function encryptMessageChunks({
-  messageChunks,
+export function encryptMessageBigint({
+  messageBigint,
   publicKey,
   privateKey,
   g = g2048,
   p = p2048,
   r,
 }: {
-  messageChunks: bigint[];
+  messageBigint: bigint;
   publicKey: bigint;
   privateKey: bigint;
   g?: bigint;
   p?: bigint;
   r?: bigint;
-}): { c1: bigint; c2: bigint }[] {
-  return messageChunks.map((chunk) => {
-    const encrypted = encryptChunk(chunk, publicKey, privateKey, g, p, r);
-    return {
-      c1: encrypted.c1,
-      c2: encrypted.c2,
-    };
-  });
+}): { c1: bigint; c2: bigint } {
+  return encryptChunk(messageBigint, publicKey, privateKey, g, p, r);
 }
 
 // Test multi-party commutative encryption with chunking support
@@ -307,8 +281,8 @@ export function testMultiPartyCommutative({
   console.log(`${getTimestamp()} Using chunk size: ${chunkSize} bytes`);
 
   // Convert message to chunks
-  const messageChunks = stringToChunks(msg, chunkSize);
-  console.log(`${getTimestamp()} Message split into ${messageChunks.length} chunks`);
+  const messageBigint = stringToBigint(msg);
+  console.log(`${getTimestamp()} Message split into ${messageBigint} chunks`);
 
   // Generate keys for each party
   const privateKeys: bigint[] = [];
@@ -338,32 +312,32 @@ export function testMultiPartyCommutative({
   // Process each chunk
   // An array of encrypted chunks (single encrypted message)
   // is an array of c1[] and the last c2 value
-  const encryptedResults = messageChunks.map((chunk, chunkIndex) => {
-    console.log(`\n${getTimestamp()} Processing chunk ${chunkIndex + 1}: ${chunk}`);
+  const encryptedResults = {
+    c1Values: [] as bigint[],
+    c2: messageBigint,
+  };
+  console.log(`\n${getTimestamp()} Processing encryptedResults ${encryptedResults}`);
 
-    // Initial ciphertext values
-    const c1Values: bigint[] = [];
-    let currentC2 = chunk;
+  // Initial ciphertext values
+  const c1Values: bigint[] = [];
+  let currentC2 = encryptedResults.c2;
 
-    // Each party adds their encryption layer
-    for (let i = 0; i < parties; i++) {
-      console.log(`${getTimestamp()} Party ${i + 1} adding encryption layer`);
-      const encrypted = encryptChunk(currentC2, publicKeys[i], privateKeys[i], g, p);
-      c1Values.push(encrypted.c1);
-      currentC2 = encrypted.c2;
+  // Each party adds their encryption layer
+  for (let i = 0; i < parties; i++) {
+    console.log(`${getTimestamp()} Party ${i + 1} adding encryption layer`);
+    const encrypted = encryptChunk(currentC2, publicKeys[i], privateKeys[i], g, p);
+    c1Values.push(encrypted.c1);
+    currentC2 = encrypted.c2;
 
-      console.log(
-        `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${currentC2}`,
-      );
-    }
+    console.log(
+      `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${currentC2}`,
+    );
+  }
 
-    console.log(`${getTimestamp()} Final encrypted chunk: c2=${currentC2}`);
+  console.log(`${getTimestamp()} Final encrypted chunk: c2=${currentC2}`);
 
-    return {
-      c1Values,
-      c2: currentC2,
-    };
-  });
+  encryptedResults.c1Values = c1Values;
+  encryptedResults.c2 = currentC2;
 
   // Decryption in different orders
   const decryptResults: string[] = [];
@@ -376,34 +350,28 @@ export function testMultiPartyCommutative({
       `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
     );
 
-    const decryptedChunks = encryptedResults.map((encryptedChunk, chunkIndex) => {
-      console.log(`${getTimestamp()} Decrypting chunk ${chunkIndex + 1}`);
+    console.log(`${getTimestamp()} Decrypting ${encryptedResults.c2}`);
 
-      // Always start with the last c2 value
-      let currentC2 = encryptedChunk.c2;
+    // Always start with the last c2 value
+    let currentC2 = encryptedResults.c2;
 
-      // Remove encryption layers in the order specified by perm
-      for (const partyIndex of perm) {
-        console.log(
-          `${getTimestamp()} Party ${partyIndex + 1} removing encryption layer`,
-        );
-        // Use the specific party's c1 value and private key
-        currentC2 = removeEncryptionLayer(
-          encryptedChunk.c1Values[partyIndex],
-          currentC2,
-          privateKeys[partyIndex],
-          p,
-        );
-        console.log(
-          `${getTimestamp()} After Party ${partyIndex + 1}'s decryption: ${currentC2}`,
-        );
-      }
-
-      return currentC2;
-    });
+    // Remove encryption layers in the order specified by perm
+    for (const partyIndex of perm) {
+      console.log(`${getTimestamp()} Party ${partyIndex + 1} removing encryption layer`);
+      // Use the specific party's c1 value and private key
+      currentC2 = removeEncryptionLayer(
+        encryptedResults.c1Values[partyIndex],
+        currentC2,
+        privateKeys[partyIndex],
+        p,
+      );
+      console.log(
+        `${getTimestamp()} After Party ${partyIndex + 1}'s decryption: ${currentC2}`,
+      );
+    }
 
     // Convert decrypted chunks back to string
-    const decryptedMessage = chunksToString(decryptedChunks);
+    const decryptedMessage = bigintToString(currentC2);
     console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
 
     decryptResults.push(decryptedMessage);
