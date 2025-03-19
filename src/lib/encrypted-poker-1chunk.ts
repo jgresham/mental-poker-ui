@@ -76,13 +76,12 @@ export function encryptEncryptedCard({
   privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
-  const encryptedMessageChunks = encryptMessageChunks({
+  return encryptMessageBigint({
     messageBigint: encryptedCard,
     publicKey,
     privateKey,
     r,
   });
-  return encryptedMessageChunks;
 }
 
 export function encryptEncryptedDeck({

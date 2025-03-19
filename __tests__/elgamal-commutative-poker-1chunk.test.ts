@@ -26,10 +26,6 @@ import {
   shuffleAndEncryptDeck,
   shuffleAndEncryptEncryptedDeck,
 } from "../src/lib/encrypted-poker-1chunk";
-import {
-  chunksToString,
-  encryptMessageChunks,
-} from "../src/lib/elgamal-commutative-node-fixedr";
 
 // ['0'...'51']
 const DECK = [...Array(52).keys()].map((i) => i.toString());
