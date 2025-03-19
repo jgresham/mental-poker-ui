@@ -5,12 +5,12 @@ import {
   generateKeys,
   randomBigIntInRange,
   stringToBigint,
-  testMultiPartyCommutative,
-  testMultiPartyCommutativeFlipped,
   p2048,
   generateC1,
   g2048,
   generatePermutations,
+  getTimestamp,
+  removeEncryptionLayer,
 } from "../src/lib/elgamal-commutative-node-1chunk";
 // import {
 //   testMultiPartyCommutative,
@@ -26,9 +26,263 @@ import {
   shuffleAndEncryptDeck,
   shuffleAndEncryptEncryptedDeck,
 } from "../src/lib/encrypted-poker-1chunk";
+import * as bigintModArith from "bigint-mod-arith";
 
 // ['0'...'51']
 const DECK = [...Array(52).keys()].map((i) => i.toString());
+
+// Modified version of testMultiPartyCommutative with flipped loops
+function testMultiPartyCommutativeFlipped({
+  msg,
+  p = p2048,
+  g = g2048,
+  parties,
+}: {
+  msg: string;
+  p?: bigint;
+  g?: bigint;
+  parties: number;
+}) {
+  console.log(`${getTimestamp()} Testing ${parties}-party commutative message: "${msg}"`);
+
+  // Convert message to chunks
+  const messageBigint = stringToBigint(msg);
+  console.log(`${getTimestamp()} Message split into ${messageBigint} chunks`);
+
+  // Generate keys for each party
+  const privateKeys: bigint[] = [];
+  const publicKeys: bigint[] = [];
+
+  for (let i = 0; i < parties; i++) {
+    console.log(`${getTimestamp()} Generating keys for party ${i + 1}`);
+    const privateKey = randomBigIntInRange(BigInt(3), p);
+    privateKeys.push(privateKey);
+
+    const publicKey = bigintModArith.modPow(g, privateKey, p);
+    publicKeys.push(publicKey);
+
+    console.log(
+      `${getTimestamp()} Party ${i + 1} - Private key: ${privateKey}, Public key: ${publicKey}`,
+    );
+  }
+
+  console.log(`\nMessage: "${msg}"`);
+
+  // Display keys for all parties
+  for (let i = 0; i < parties; i++) {
+    console.log(`Party ${i + 1}'s Public key: g=${g}, Y=${publicKeys[i]}, p=${p}`);
+    console.log(`Party ${i + 1}'s Private key: x=${privateKeys[i]}`);
+  }
+
+  // Initialize arrays to store encryption data for each chunk
+  const encryptedResults = {
+    c1Values: [] as bigint[],
+    c2: messageBigint,
+  };
+
+  // Set initial c2 values to the original message chunks
+  encryptedResults.c2 = messageBigint;
+
+  // FLIPPED LOOP ORDER: Each party encrypts the message before moving to next party
+  for (let i = 0; i < parties; i++) {
+    console.log(`\n${getTimestamp()} Party ${i + 1} adding encryption layer to msg`);
+
+    const encrypted = encryptMessageBigint({
+      messageBigint: encryptedResults.c2,
+      publicKey: publicKeys[i],
+      g,
+      p,
+    });
+
+    encryptedResults.c1Values.push(encrypted.c1);
+    encryptedResults.c2 = encrypted.c2;
+
+    console.log(
+      `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${encrypted.c2}`,
+    );
+  }
+
+  // Log final encrypted state
+  console.log(`${getTimestamp()} Final encrypted chunk: c2=${encryptedResults.c2}`);
+
+  // Decryption in different orders
+  const decryptResults: string[] = [];
+
+  // Try different decryption orders
+  const permutations = generatePermutations([...Array(parties).keys()]);
+
+  for (const perm of permutations) {
+    console.log(
+      `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
+    );
+
+    // KEEP DECRYPTION LOOP ORDER THE SAME:
+    console.log(`${getTimestamp()} Decrypting msg`);
+
+    let currentC2 = encryptedResults.c2;
+
+    // Remove encryption layers in the order specified by perm
+    for (const partyIndex of perm) {
+      console.log(
+        `${getTimestamp()} Party ${partyIndex + 1} removing encryption layer from msg`,
+      );
+      currentC2 = removeEncryptionLayer(
+        encryptedResults.c1Values[partyIndex],
+        currentC2,
+        privateKeys[partyIndex],
+        p,
+      );
+      console.log(
+        `${getTimestamp()} After Party ${partyIndex + 1}'s decryption of msg: ${currentC2}`,
+      );
+    }
+
+    // Convert decrypted chunks back to string
+    const decryptedMessage = bigintToString(currentC2);
+    console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
+
+    decryptResults.push(decryptedMessage);
+    console.log(
+      `\nResult for order ${perm.map((i) => i + 1).join(" -> ")}: "${decryptedMessage}"`,
+    );
+  }
+
+  // Check if all decryption orders yielded the original message
+  const allCorrect = decryptResults.every((result) => result === msg);
+  console.log(`\n${getTimestamp()} All decryption orders correct: ${allCorrect}`);
+
+  return allCorrect;
+}
+
+// Test multi-party commutative encryption with chunking support
+// @param msg - The message to encrypt
+// @param p - The prime number (defaults to 2048-bit prime)
+// @param g - The generator (defaults to 2)
+// @param parties - The number of parties
+function testMultiPartyCommutative({
+  msg,
+  p = p2048,
+  g = g2048,
+  parties,
+}: {
+  msg: string;
+  p?: bigint;
+  g?: bigint;
+  parties: number;
+}) {
+  console.log(`${getTimestamp()} Testing ${parties}-party commutative message: "${msg}"`);
+
+  // Convert message to chunks
+  const messageBigint = stringToBigint(msg);
+  console.log(`${getTimestamp()} Message split into ${messageBigint} chunks`);
+
+  // Generate keys for each party
+  const privateKeys: bigint[] = [];
+  const publicKeys: bigint[] = [];
+
+  for (let i = 0; i < parties; i++) {
+    console.log(`${getTimestamp()} Generating keys for party ${i + 1}`);
+    const privateKey = randomBigIntInRange(BigInt(3), p);
+    privateKeys.push(privateKey);
+
+    const publicKey = bigintModArith.modPow(g, privateKey, p);
+    publicKeys.push(publicKey);
+
+    console.log(
+      `${getTimestamp()} Party ${i + 1} - Private key: ${privateKey}, Public key: ${publicKey}`,
+    );
+  }
+
+  console.log(`\nMessage: "${msg}"`);
+
+  // Display keys for all parties
+  for (let i = 0; i < parties; i++) {
+    console.log(`Party ${i + 1}'s Public key: g=${g}, Y=${publicKeys[i]}, p=${p}`);
+    console.log(`Party ${i + 1}'s Private key: x=${privateKeys[i]}`);
+  }
+
+  // Process each chunk
+  // An array of encrypted chunks (single encrypted message)
+  // is an array of c1[] and the last c2 value
+  const encryptedResults = {
+    c1Values: [] as bigint[],
+    c2: messageBigint,
+  };
+  console.log(`\n${getTimestamp()} Processing encryptedResults ${encryptedResults}`);
+
+  // Initial ciphertext values
+  const c1Values: bigint[] = [];
+  let currentC2 = encryptedResults.c2;
+
+  // Each party adds their encryption layer
+  for (let i = 0; i < parties; i++) {
+    console.log(`${getTimestamp()} Party ${i + 1} adding encryption layer`);
+    const encrypted = encryptMessageBigint({
+      messageBigint: currentC2,
+      publicKey: publicKeys[i],
+      g,
+      p,
+    });
+    c1Values.push(encrypted.c1);
+    currentC2 = encrypted.c2;
+
+    console.log(
+      `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${currentC2}`,
+    );
+  }
+
+  console.log(`${getTimestamp()} Final encrypted chunk: c2=${currentC2}`);
+
+  encryptedResults.c1Values = c1Values;
+  encryptedResults.c2 = currentC2;
+
+  // Decryption in different orders
+  const decryptResults: string[] = [];
+
+  // Try different decryption orders
+  const permutations = generatePermutations([...Array(parties).keys()]);
+
+  for (const perm of permutations) {
+    console.log(
+      `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
+    );
+
+    console.log(`${getTimestamp()} Decrypting ${encryptedResults.c2}`);
+
+    // Always start with the last c2 value
+    let currentC2 = encryptedResults.c2;
+
+    // Remove encryption layers in the order specified by perm
+    for (const partyIndex of perm) {
+      console.log(`${getTimestamp()} Party ${partyIndex + 1} removing encryption layer`);
+      // Use the specific party's c1 value and private key
+      currentC2 = removeEncryptionLayer(
+        encryptedResults.c1Values[partyIndex],
+        currentC2,
+        privateKeys[partyIndex],
+        p,
+      );
+      console.log(
+        `${getTimestamp()} After Party ${partyIndex + 1}'s decryption: ${currentC2}`,
+      );
+    }
+
+    // Convert decrypted chunks back to string
+    const decryptedMessage = bigintToString(currentC2);
+    console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
+
+    decryptResults.push(decryptedMessage);
+    console.log(
+      `\nResult for order ${perm.map((i) => i + 1).join(" -> ")}: "${decryptedMessage}"`,
+    );
+  }
+
+  // Check if all decryption orders yielded the original message
+  const allCorrect = decryptResults.every((result) => result === msg);
+  console.log(`\n${getTimestamp()} All decryption orders correct: ${allCorrect}`);
+
+  return allCorrect;
+}
 
 test("testMultiPartyCommutative_hello", () => {
   const result = testMultiPartyCommutative({ msg: "Hello, world!", parties: 3 });
@@ -50,7 +304,6 @@ test("encrypted-poker.ts, single player test, single card", () => {
   const encryptedCard = encryptCard({
     card: DECK[0],
     publicKey: publicKey1,
-    privateKey: privateKey1,
   });
   const decryptedCard = decryptCard({
     encryptedCard,
@@ -62,7 +315,6 @@ test("encrypted-poker.ts, single player test, single card", () => {
   const encryptedCard1 = encryptCard({
     card: DECK[1],
     publicKey: publicKey1,
-    privateKey: privateKey1,
   });
   const decryptedCard1 = decryptCard({
     encryptedCard: encryptedCard1,
@@ -78,12 +330,10 @@ test("encrypted-poker.ts, two player's test, single card", () => {
   const encryptedCardPlayer1 = encryptCard({
     card: DECK[29],
     publicKey: publicKey1,
-    privateKey: privateKey1,
   });
   const encryptedCardPlayer2 = encryptEncryptedCard({
     encryptedCard: encryptedCardPlayer1.c2,
     publicKey: publicKey2,
-    privateKey: privateKey2,
   });
   // first test order of decryption 2 -> 1, then 1 -> 2
   const decryptedCardPlayer2_Perm1 = decryptCard({
@@ -168,7 +418,6 @@ test("encrypted-poker.ts, single player test, no shuffle and shuffle", () => {
   const encryptedDeck1 = encryptCardDeck({
     deck: DECK,
     publicKey: publicKey1,
-    privateKey: privateKey1,
   });
   const decryptedCard = decryptCard({
     encryptedCard: encryptedDeck1[0],
@@ -182,7 +431,6 @@ test("encrypted-poker.ts, single player test, no shuffle and shuffle", () => {
   const encryptedDeck2 = shuffleAndEncryptCardDeck({
     deck: DECK,
     publicKey: publicKey1,
-    privateKey: privateKey1,
   });
   const decryptedCard2 = decryptCard({
     encryptedCard: encryptedDeck2[0],
@@ -201,7 +449,6 @@ test("encrypted-poker.ts, two player test, no shuffle", () => {
   const encryptedDeck1 = encryptCardDeck({
     deck: DECK,
     publicKey: publicKey1,
-    privateKey: privateKey1,
     r: r1,
   });
   expect(encryptedDeck1.length).toBe(DECK.length);
@@ -209,7 +456,6 @@ test("encrypted-poker.ts, two player test, no shuffle", () => {
   const encryptedDeck2 = encryptEncryptedDeck({
     encryptedDeck: encryptedDeck1,
     publicKey: publicKey2,
-    privateKey: privateKey2,
     r: r2,
   });
   expect(encryptedDeck2.length).toBe(DECK.length);
@@ -284,13 +530,11 @@ test("encrypted-poker.ts, two player test, shuffle, decrypt every card", () => {
   const encryptedDeck1 = shuffleAndEncryptCardDeck({
     deck: DECK,
     publicKey: publicKey1,
-    privateKey: privateKey1,
     r: r1,
   });
   const encryptedDeck2 = shuffleAndEncryptEncryptedDeck({
     encryptedDeck: encryptedDeck1,
     publicKey: publicKey2,
-    privateKey: privateKey2,
     r: r2,
   });
 
@@ -596,7 +840,6 @@ test("encrypted-poker.ts, single player test shuffle", () => {
   const encryptedDeck1 = shuffleAndEncryptCardDeck({
     deck: DECK,
     publicKey: publicKey1,
-    privateKey: privateKey1,
   });
   const decryptedCard = decryptCard({
     encryptedCard: encryptedDeck1[0],
@@ -631,7 +874,6 @@ test("encrypted-poker.ts, 3 players, 1 card", () => {
   const encrypted1 = encryptMessageBigint({
     messageBigint: chunks,
     publicKey: publicKey1,
-    privateKey: privateKey1,
     r: r1,
   });
 
@@ -639,7 +881,6 @@ test("encrypted-poker.ts, 3 players, 1 card", () => {
   const encrypted2 = encryptMessageBigint({
     messageBigint: encrypted1.c2,
     publicKey: publicKey2,
-    privateKey: privateKey2,
     r: r2,
   });
 
@@ -647,7 +888,6 @@ test("encrypted-poker.ts, 3 players, 1 card", () => {
   const encrypted3 = encryptMessageBigint({
     messageBigint: encrypted2.c2,
     publicKey: publicKey3,
-    privateKey: privateKey3,
     r: r3,
   });
 

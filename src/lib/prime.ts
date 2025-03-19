@@ -66,3 +66,56 @@ export async function generatePrime(bits: number): Promise<bigint> {
     console.log("Candidate was not prime, trying again");
   }
 }
+
+// Utility function to generate a random BigInt within a range
+export function randomBigIntInRange(min: bigint, max: bigint): bigint {
+  console.log(`Generating random BigInt between ${min} and ${max}`);
+  const range = max - min;
+  console.log(`Range calculated: ${range}`);
+  const bytesNeeded = Math.ceil(range.toString(2).length / 8);
+  console.log(`Bytes needed: ${bytesNeeded}`);
+
+  // Use Web Crypto API instead of Node.js crypto
+  const randomBytes = new Uint8Array(bytesNeeded);
+  window.crypto.getRandomValues(randomBytes);
+
+  console.log(
+    `Random bytes generated: ${Array.from(randomBytes)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")}`,
+  );
+  const randomValue = BigInt(
+    `0x${Array.from(randomBytes)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")}`,
+  );
+  console.log(`Random value as BigInt: ${randomValue}`);
+  const result = (randomValue % range) + min;
+  console.log(`Final random BigInt: ${result}`);
+  return result;
+}
+
+// Function to find a primitive root modulo p
+export function primitiveRoot(p: bigint): bigint {
+  console.log(`Finding primitive root for p=${p}`);
+  while (true) {
+    console.log("Generating a random value for g");
+    const g = randomBigIntInRange(BigInt(3), p);
+    console.log(`Testing g=${g}`);
+
+    console.log("Checking if g^2 mod p = 1");
+    if (bigintModArith.modPow(g, BigInt(2), p) === BigInt(1)) {
+      console.log("g^2 mod p = 1, skipping");
+      continue;
+    }
+
+    console.log("Checking if g^p mod p = 1");
+    if (bigintModArith.modPow(g, p, p) === BigInt(1)) {
+      console.log("g^p mod p = 1, skipping");
+      continue;
+    }
+
+    console.log(`Found primitive root g=${g}`);
+    return g;
+  }
+}

@@ -16,12 +16,10 @@ import { shuffleArray } from "./utils";
 export function shuffleAndEncryptCardDeck({
   deck,
   publicKey,
-  privateKey,
   r,
 }: {
   deck: string[];
   publicKey: bigint;
-  privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
@@ -29,7 +27,7 @@ export function shuffleAndEncryptCardDeck({
   const shuffledDeck = shuffleArray([...deck] as unknown[]) as typeof deck;
   // encrypt each card in the deck
   const encryptedDeck = shuffledDeck.map((card) =>
-    encryptMessage({ message: card, publicKey, privateKey, r }),
+    encryptMessage({ message: card, publicKey, r }),
   );
   return encryptedDeck;
 }
@@ -37,16 +35,14 @@ export function shuffleAndEncryptCardDeck({
 export function encryptCardDeck({
   deck,
   publicKey,
-  privateKey,
   r,
 }: {
   deck: string[];
   publicKey: bigint;
-  privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint }[] {
   const encryptedDeck = deck.map((card) =>
-    encryptMessage({ message: card, publicKey, privateKey, r }),
+    encryptMessage({ message: card, publicKey, r }),
   );
   return encryptedDeck;
 }
@@ -54,32 +50,27 @@ export function encryptCardDeck({
 export function encryptCard({
   card,
   publicKey,
-  privateKey,
   r,
 }: {
   card: string;
   publicKey: bigint;
-  privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
-  return encryptMessage({ message: card, publicKey, privateKey, r });
+  return encryptMessage({ message: card, publicKey, r });
 }
 
 export function encryptEncryptedCard({
   encryptedCard,
   publicKey,
-  privateKey,
   r,
 }: {
   encryptedCard: bigint; // c2 value
   publicKey: bigint;
-  privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
   return encryptMessageBigint({
     messageBigint: encryptedCard,
     publicKey,
-    privateKey,
     r,
   });
 }
@@ -87,12 +78,10 @@ export function encryptEncryptedCard({
 export function encryptEncryptedDeck({
   encryptedDeck,
   publicKey,
-  privateKey,
   r,
 }: {
   encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
-  privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint }[] {
   // encrypt each card in the deck
@@ -101,7 +90,6 @@ export function encryptEncryptedDeck({
       return encryptMessageBigint({
         messageBigint: encryptedMessageBigint.c2,
         publicKey,
-        privateKey,
         r,
       });
     },
@@ -112,7 +100,6 @@ export function encryptEncryptedDeck({
 export function shuffleAndEncryptDeck({
   encryptedDeck,
   publicKey,
-  privateKey,
   r,
 }: {
   encryptedDeck: { c1: bigint; c2: bigint }[];
@@ -131,7 +118,6 @@ export function shuffleAndEncryptDeck({
       encryptMessageBigint({
         messageBigint: encryptedMessageBigint.c2,
         publicKey,
-        privateKey,
         r,
       }),
   );
@@ -141,12 +127,10 @@ export function shuffleAndEncryptDeck({
 export function shuffleAndEncryptEncryptedDeck({
   encryptedDeck,
   publicKey,
-  privateKey,
   r,
 }: {
   encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
-  privateKey: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
@@ -160,7 +144,6 @@ export function shuffleAndEncryptEncryptedDeck({
       encryptMessageBigint({
         messageBigint: encryptedMessageBigint.c2,
         publicKey,
-        privateKey,
         r,
       }),
   );

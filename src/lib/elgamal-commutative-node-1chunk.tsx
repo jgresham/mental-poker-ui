@@ -1,7 +1,8 @@
-// A n player and large message implementation of https://asecuritysite.com/elgamal/el_comm
+// An n player and 1 chunk message implementation of https://asecuritysite.com/elgamal/el_comm
 
 // Uses Web Crypto API window.crypto
 import * as bigintModArith from "bigint-mod-arith";
+import { randomBigIntInRange } from "./prime";
 
 // primes and generators chosen from https://www.ietf.org/rfc/rfc3526.txt
 // 2048 bit prime
@@ -26,64 +27,11 @@ export function getTimestamp(): string {
   return `[${new Date().toISOString()}]`;
 }
 
-// Utility function to generate a random BigInt within a range
-export function randomBigIntInRange(min: bigint, max: bigint): bigint {
-  console.log(`${getTimestamp()} Generating random BigInt between ${min} and ${max}`);
-  const range = max - min;
-  console.log(`${getTimestamp()} Range calculated: ${range}`);
-  const bytesNeeded = Math.ceil(range.toString(2).length / 8);
-  console.log(`${getTimestamp()} Bytes needed: ${bytesNeeded}`);
-
-  // Use Web Crypto API instead of Node.js crypto
-  const randomBytes = new Uint8Array(bytesNeeded);
-  window.crypto.getRandomValues(randomBytes);
-
-  console.log(
-    `${getTimestamp()} Random bytes generated: ${Array.from(randomBytes)
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("")}`,
-  );
-  const randomValue = BigInt(
-    `0x${Array.from(randomBytes)
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("")}`,
-  );
-  console.log(`${getTimestamp()} Random value as BigInt: ${randomValue}`);
-  const result = (randomValue % range) + min;
-  console.log(`${getTimestamp()} Final random BigInt: ${result}`);
-  return result;
-}
-
 // Generate a private and public key pair
 export function generateKeys(): { publicKey: bigint; privateKey: bigint } {
   const privateKey = randomBigIntInRange(BigInt(3), p2048);
   const publicKey = bigintModArith.modPow(g2048, privateKey, p2048);
   return { publicKey, privateKey };
-}
-
-// Function to find a primitive root modulo p
-export function primitiveRoot(p: bigint): bigint {
-  console.log(`${getTimestamp()} Finding primitive root for p=${p}`);
-  while (true) {
-    console.log(`${getTimestamp()} Generating a random value for g`);
-    const g = randomBigIntInRange(BigInt(3), p);
-    console.log(`${getTimestamp()} Testing g=${g}`);
-
-    console.log(`${getTimestamp()} Checking if g^2 mod p = 1`);
-    if (bigintModArith.modPow(g, BigInt(2), p) === BigInt(1)) {
-      console.log(`${getTimestamp()} g^2 mod p = 1, skipping`);
-      continue;
-    }
-
-    console.log(`${getTimestamp()} Checking if g^p mod p = 1`);
-    if (bigintModArith.modPow(g, p, p) === BigInt(1)) {
-      console.log(`${getTimestamp()} g^p mod p = 1, skipping`);
-      continue;
-    }
-
-    console.log(`${getTimestamp()} Found primitive root g=${g}`);
-    return g;
-  }
 }
 
 /**
@@ -171,33 +119,6 @@ export function generateC1(g: bigint, r: bigint, p: bigint): bigint {
   return bigintModArith.modPow(g, r, p);
 }
 
-// Encrypt a BigInt chunk in the commutative scheme (for multi-party use)
-export function encryptChunk(
-  chunk: bigint,
-  publicKey: bigint,
-  privateKey: bigint,
-  g: bigint,
-  p: bigint,
-  r?: bigint,
-): { c1: bigint; c2: bigint } {
-  console.log(`${getTimestamp()} Encrypting chunk: ${chunk}`);
-
-  // Generate a random value r
-  // This should be done in a secure way and forgotten after use
-  // It is not required in decryption
-  const rToUse = r ?? randomBigIntInRange(BigInt(3), p);
-  console.log(`${getTimestamp()} Random value r: ${rToUse}`);
-
-  // Compute c1 = g^r mod p
-  const c1 = generateC1(g, rToUse, p);
-  console.log(`${getTimestamp()} c1 = g^r mod p = ${c1}`);
-
-  const c2 = (bigintModArith.modPow(publicKey, rToUse, p) * chunk) % p;
-  console.log(`${getTimestamp()} c2 = (Y^r * m) mod p = ${c2}`);
-
-  return { c1, c2 };
-}
-
 // Decrypt a BigInt chunk (remove one layer of encryption)
 export function removeEncryptionLayer(
   c1: bigint,
@@ -220,20 +141,18 @@ export function removeEncryptionLayer(
 export function encryptMessage({
   message,
   publicKey,
-  privateKey,
   g = g2048,
   p = p2048,
   r,
 }: {
   message: string;
   publicKey: bigint;
-  privateKey: bigint;
   g?: bigint;
   p?: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
   const bigintMessage = stringToBigint(message);
-  return encryptChunk(bigintMessage, publicKey, privateKey, g, p, r);
+  return encryptMessageBigint({ messageBigint: bigintMessage, publicKey, g, p, r });
 }
 
 // Called by each party encrypting the already encrypted message
@@ -243,276 +162,30 @@ export function encryptMessage({
 export function encryptMessageBigint({
   messageBigint,
   publicKey,
-  privateKey,
   g = g2048,
   p = p2048,
   r,
 }: {
   messageBigint: bigint;
   publicKey: bigint;
-  privateKey: bigint;
   g?: bigint;
   p?: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
-  return encryptChunk(messageBigint, publicKey, privateKey, g, p, r);
-}
+  console.log(`${getTimestamp()} Encrypting messageBigint: ${messageBigint}`);
 
-// Test multi-party commutative encryption with chunking support
-// @param msg - The message to encrypt
-// @param p - The prime number (defaults to 2048-bit prime)
-// @param g - The generator (defaults to 2)
-// @param parties - The number of parties
-export function testMultiPartyCommutative({
-  msg,
-  p = p2048,
-  g = g2048,
-  parties,
-}: {
-  msg: string;
-  p?: bigint;
-  g?: bigint;
-  parties: number;
-}) {
-  console.log(`${getTimestamp()} Testing ${parties}-party commutative message: "${msg}"`);
+  // Generate a random value r if not provided
+  const rToUse = r ?? randomBigIntInRange(BigInt(3), p);
+  console.log(`${getTimestamp()} Random value r: ${rToUse}`);
 
-  // Calculate safe chunk size
-  const chunkSize = getSafeChunkSize(p);
-  console.log(`${getTimestamp()} Using chunk size: ${chunkSize} bytes`);
+  // Compute c1 = g^r mod p
+  const c1 = generateC1(g, rToUse, p);
+  console.log(`${getTimestamp()} c1 = g^r mod p = ${c1}`);
 
-  // Convert message to chunks
-  const messageBigint = stringToBigint(msg);
-  console.log(`${getTimestamp()} Message split into ${messageBigint} chunks`);
+  const c2 = (bigintModArith.modPow(publicKey, rToUse, p) * messageBigint) % p;
+  console.log(`${getTimestamp()} c2 = (Y^r * m) mod p = ${c2}`);
 
-  // Generate keys for each party
-  const privateKeys: bigint[] = [];
-  const publicKeys: bigint[] = [];
-
-  for (let i = 0; i < parties; i++) {
-    console.log(`${getTimestamp()} Generating keys for party ${i + 1}`);
-    const privateKey = randomBigIntInRange(BigInt(3), p);
-    privateKeys.push(privateKey);
-
-    const publicKey = bigintModArith.modPow(g, privateKey, p);
-    publicKeys.push(publicKey);
-
-    console.log(
-      `${getTimestamp()} Party ${i + 1} - Private key: ${privateKey}, Public key: ${publicKey}`,
-    );
-  }
-
-  console.log(`\nMessage: "${msg}"`);
-
-  // Display keys for all parties
-  for (let i = 0; i < parties; i++) {
-    console.log(`Party ${i + 1}'s Public key: g=${g}, Y=${publicKeys[i]}, p=${p}`);
-    console.log(`Party ${i + 1}'s Private key: x=${privateKeys[i]}`);
-  }
-
-  // Process each chunk
-  // An array of encrypted chunks (single encrypted message)
-  // is an array of c1[] and the last c2 value
-  const encryptedResults = {
-    c1Values: [] as bigint[],
-    c2: messageBigint,
-  };
-  console.log(`\n${getTimestamp()} Processing encryptedResults ${encryptedResults}`);
-
-  // Initial ciphertext values
-  const c1Values: bigint[] = [];
-  let currentC2 = encryptedResults.c2;
-
-  // Each party adds their encryption layer
-  for (let i = 0; i < parties; i++) {
-    console.log(`${getTimestamp()} Party ${i + 1} adding encryption layer`);
-    const encrypted = encryptChunk(currentC2, publicKeys[i], privateKeys[i], g, p);
-    c1Values.push(encrypted.c1);
-    currentC2 = encrypted.c2;
-
-    console.log(
-      `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${currentC2}`,
-    );
-  }
-
-  console.log(`${getTimestamp()} Final encrypted chunk: c2=${currentC2}`);
-
-  encryptedResults.c1Values = c1Values;
-  encryptedResults.c2 = currentC2;
-
-  // Decryption in different orders
-  const decryptResults: string[] = [];
-
-  // Try different decryption orders
-  const permutations = generatePermutations([...Array(parties).keys()]);
-
-  for (const perm of permutations) {
-    console.log(
-      `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
-    );
-
-    console.log(`${getTimestamp()} Decrypting ${encryptedResults.c2}`);
-
-    // Always start with the last c2 value
-    let currentC2 = encryptedResults.c2;
-
-    // Remove encryption layers in the order specified by perm
-    for (const partyIndex of perm) {
-      console.log(`${getTimestamp()} Party ${partyIndex + 1} removing encryption layer`);
-      // Use the specific party's c1 value and private key
-      currentC2 = removeEncryptionLayer(
-        encryptedResults.c1Values[partyIndex],
-        currentC2,
-        privateKeys[partyIndex],
-        p,
-      );
-      console.log(
-        `${getTimestamp()} After Party ${partyIndex + 1}'s decryption: ${currentC2}`,
-      );
-    }
-
-    // Convert decrypted chunks back to string
-    const decryptedMessage = bigintToString(currentC2);
-    console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
-
-    decryptResults.push(decryptedMessage);
-    console.log(
-      `\nResult for order ${perm.map((i) => i + 1).join(" -> ")}: "${decryptedMessage}"`,
-    );
-  }
-
-  // Check if all decryption orders yielded the original message
-  const allCorrect = decryptResults.every((result) => result === msg);
-  console.log(`\n${getTimestamp()} All decryption orders correct: ${allCorrect}`);
-
-  return allCorrect;
-}
-
-// Modified version of testMultiPartyCommutative with flipped loops
-export function testMultiPartyCommutativeFlipped({
-  msg,
-  p = p2048,
-  g = g2048,
-  parties,
-}: {
-  msg: string;
-  p?: bigint;
-  g?: bigint;
-  parties: number;
-}) {
-  console.log(`${getTimestamp()} Testing ${parties}-party commutative message: "${msg}"`);
-
-  // Calculate safe chunk size
-  const chunkSize = getSafeChunkSize(p);
-  console.log(`${getTimestamp()} Using chunk size: ${chunkSize} bytes`);
-
-  // Convert message to chunks
-  const messageBigint = stringToBigint(msg);
-  console.log(`${getTimestamp()} Message split into ${messageBigint} chunks`);
-
-  // Generate keys for each party
-  const privateKeys: bigint[] = [];
-  const publicKeys: bigint[] = [];
-
-  for (let i = 0; i < parties; i++) {
-    console.log(`${getTimestamp()} Generating keys for party ${i + 1}`);
-    const privateKey = randomBigIntInRange(BigInt(3), p);
-    privateKeys.push(privateKey);
-
-    const publicKey = bigintModArith.modPow(g, privateKey, p);
-    publicKeys.push(publicKey);
-
-    console.log(
-      `${getTimestamp()} Party ${i + 1} - Private key: ${privateKey}, Public key: ${publicKey}`,
-    );
-  }
-
-  console.log(`\nMessage: "${msg}"`);
-
-  // Display keys for all parties
-  for (let i = 0; i < parties; i++) {
-    console.log(`Party ${i + 1}'s Public key: g=${g}, Y=${publicKeys[i]}, p=${p}`);
-    console.log(`Party ${i + 1}'s Private key: x=${privateKeys[i]}`);
-  }
-
-  // Initialize arrays to store encryption data for each chunk
-  const encryptedResults = {
-    c1Values: [] as bigint[],
-    c2: messageBigint,
-  };
-
-  // Set initial c2 values to the original message chunks
-  encryptedResults.c2 = messageBigint;
-
-  // FLIPPED LOOP ORDER: Each party encrypts the message before moving to next party
-  for (let i = 0; i < parties; i++) {
-    console.log(`\n${getTimestamp()} Party ${i + 1} adding encryption layer to msg`);
-
-    const encrypted = encryptChunk(
-      encryptedResults.c2,
-      publicKeys[i],
-      privateKeys[i],
-      g,
-      p,
-    );
-
-    encryptedResults.c1Values.push(encrypted.c1);
-    encryptedResults.c2 = encrypted.c2;
-
-    console.log(
-      `${getTimestamp()} After Party ${i + 1}'s encryption: c1=${encrypted.c1}, c2=${encrypted.c2}`,
-    );
-  }
-
-  // Log final encrypted state
-  console.log(`${getTimestamp()} Final encrypted chunk: c2=${encryptedResults.c2}`);
-
-  // Decryption in different orders
-  const decryptResults: string[] = [];
-
-  // Try different decryption orders
-  const permutations = generatePermutations([...Array(parties).keys()]);
-
-  for (const perm of permutations) {
-    console.log(
-      `\n${getTimestamp()} Trying decryption order: ${perm.map((i) => i + 1).join(" -> ")}`,
-    );
-
-    // KEEP DECRYPTION LOOP ORDER THE SAME:
-    console.log(`${getTimestamp()} Decrypting msg`);
-
-    let currentC2 = encryptedResults.c2;
-
-    // Remove encryption layers in the order specified by perm
-    for (const partyIndex of perm) {
-      console.log(
-        `${getTimestamp()} Party ${partyIndex + 1} removing encryption layer from msg`,
-      );
-      currentC2 = removeEncryptionLayer(
-        encryptedResults.c1Values[partyIndex],
-        currentC2,
-        privateKeys[partyIndex],
-        p,
-      );
-      console.log(
-        `${getTimestamp()} After Party ${partyIndex + 1}'s decryption of msg: ${currentC2}`,
-      );
-    }
-
-    // Convert decrypted chunks back to string
-    const decryptedMessage = bigintToString(currentC2);
-    console.log(`${getTimestamp()} Decrypted message: "${decryptedMessage}"`);
-
-    decryptResults.push(decryptedMessage);
-    console.log(
-      `\nResult for order ${perm.map((i) => i + 1).join(" -> ")}: "${decryptedMessage}"`,
-    );
-  }
-
-  // Check if all decryption orders yielded the original message
-  const allCorrect = decryptResults.every((result) => result === msg);
-  console.log(`\n${getTimestamp()} All decryption orders correct: ${allCorrect}`);
-
-  return allCorrect;
+  return { c1, c2 };
 }
 
 // Helper function to generate all permutations of an array
@@ -533,32 +206,3 @@ export function generatePermutations<T>(arr: T[]): T[][] {
 
   return result;
 }
-
-// Browser-compatible version of main function
-export async function runElGamalDemo(message = "This is a test message", parties = 3) {
-  console.log(`${getTimestamp()} Starting ElGamal demo`);
-
-  // Use the 512-bit prime from the original code
-  const p = BigInt(
-    "13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006083527",
-  );
-  console.log(`${getTimestamp()} Using prime p: ${p}`);
-
-  // Find primitive root
-  console.log(`${getTimestamp()} Finding primitive root`);
-  const g = primitiveRoot(p);
-  console.log(`${getTimestamp()} Found primitive root g: ${g}`);
-
-  // Test with the provided message
-  console.log(`\n${getTimestamp()} Testing with message: "${message}"`);
-  const result = testMultiPartyCommutative({ msg: message, parties });
-  console.log(`${getTimestamp()} Test result: ${result}`);
-
-  return result;
-}
-
-// Remove Node.js specific code
-// console.log(`${getTimestamp()} Starting program`);
-// main().catch(error => {
-//   console.error(`${getTimestamp()} Error in main function:`, error);
-// });
