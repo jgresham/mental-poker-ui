@@ -109,9 +109,13 @@ export function bigintToString(chunk: bigint): string {
 
 // Modular multiplicative inverse
 export function modInverse(a: bigint, m: bigint): bigint {
-  console.log(`${getTimestamp()} Computing modular inverse of ${a} mod ${m}`);
+  console.log(
+    `${getTimestamp()} Computing modular inverse of ${a} or hex: ${a.toString(16)} % mod ${m} or hex: ${m.toString(16)}`,
+  );
   const result = bigintModArith.modInv(a, m);
-  console.log(`${getTimestamp()} Modular inverse result: ${result}`);
+  console.log(
+    `${getTimestamp()} Modular inverse result: ${result} or hex: ${result.toString(16)}`,
+  );
   return result;
 }
 

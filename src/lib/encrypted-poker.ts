@@ -1,3 +1,5 @@
+import * as bigintModArith from "bigint-mod-arith";
+
 // calls an encryption library of functions to create an encrypted poker game
 // shuffle and encrypt a deck
 // each player takes a turn shuffling and encrypting each item in the deck then passing it to the next player
