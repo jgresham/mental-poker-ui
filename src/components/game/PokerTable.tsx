@@ -6,9 +6,10 @@ import { Card } from "./Card";
 interface PokerTableProps {
   gameState: GameState;
   currentPlayerId?: string;
+  roomId?: string;
 }
 
-export function PokerTable({ gameState, currentPlayerId }: PokerTableProps) {
+export function PokerTable({ gameState, currentPlayerId, roomId }: PokerTableProps) {
   const { players, communityCards, pot, stage } = gameState;
 
   // Calculate positions for players around the table
@@ -44,7 +45,7 @@ export function PokerTable({ gameState, currentPlayerId }: PokerTableProps) {
 
   // Find the current player's index
   const currentPlayerIndex = currentPlayerId
-    ? players.findIndex(player => player.id === currentPlayerId)
+    ? players.findIndex((player) => player.id === currentPlayerId)
     : -1;
 
   const positions = getPlayerPositions(players.length, currentPlayerIndex);
@@ -52,6 +53,9 @@ export function PokerTable({ gameState, currentPlayerId }: PokerTableProps) {
   return (
     <div className="relative w-full h-[calc(100vh-4rem)] bg-green-800 rounded-3xl overflow-hidden">
       {/* Poker table felt */}
+      <div className="z-10 absolute top-2 left-2 text-[8px] text-gray-400">
+        Room: {roomId}
+      </div>
       <div className="absolute inset-[5%] bg-green-700 rounded-[40%] border-8 border-brown-800 shadow-inner">
         {/* Pot amount */}
         <div className="absolute top-[30%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-sm">
@@ -93,14 +97,11 @@ export function PokerTable({ gameState, currentPlayerId }: PokerTableProps) {
                 top: `${position.y}%`,
               }}
             >
-              <Player
-                player={player}
-                isCurrentUser={isCurrentUser}
-              />
+              <Player player={player} isCurrentUser={isCurrentUser} />
             </div>
           );
         })}
       </div>
     </div>
   );
-} 
+}

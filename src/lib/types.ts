@@ -1,5 +1,18 @@
 export type Suit = "hearts" | "diamonds" | "clubs" | "spades";
-export type Rank = "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "A";
+export type Rank =
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "J"
+  | "Q"
+  | "K"
+  | "A";
 
 export interface Card {
   suit: Suit;
@@ -22,7 +35,14 @@ export interface Player {
   avatarUrl?: string;
 }
 
-export type GameStage = "preflop" | "flop" | "turn" | "river" | "showdown" | "ended";
+export type GameStage =
+  | "waiting"
+  | "preflop"
+  | "flop"
+  | "turn"
+  | "river"
+  | "showdown"
+  | "ended";
 
 export interface GameState {
   players: Player[];
@@ -35,4 +55,4 @@ export interface GameState {
   dealerIndex: number;
   smallBlindAmount: number;
   bigBlindAmount: number;
-} 
+}
