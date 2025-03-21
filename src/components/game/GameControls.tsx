@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { GameState } from "@/lib/types";
-import {
-  dealCards,
-  dealCommunityCards,
-  getNextStage,
-  nextPlayer
-} from "@/lib/poker-utils";
-
+import type { GameState } from "@/lib/types";
+import { dealCommunityCards, getNextStage, nextPlayer } from "@/lib/poker-utils";
+import { useRouter } from "next/navigation";
 interface GameControlsProps {
   gameState: GameState;
   onGameStateChange: (newState: GameState) => void;
@@ -17,34 +12,34 @@ interface GameControlsProps {
 export function GameControls({
   gameState,
   onGameStateChange,
-  currentPlayerId
+  currentPlayerId,
 }: GameControlsProps) {
   const [betAmount, setBetAmount] = useState<number>(gameState.currentBet);
-
+  const router = useRouter();
   const currentPlayer = currentPlayerId
-    ? gameState.players.find(p => p.id === currentPlayerId)
+    ? gameState.players.find((p) => p.id === currentPlayerId)
     : undefined;
 
   const isPlayerTurn = currentPlayer?.isTurn || false;
 
   // Check if all active players have matched the current bet or are all-in
   const allPlayersActed = gameState.players
-    .filter(p => p.isActive && !p.isAllIn)
-    .every(p => p.bet === gameState.currentBet || p.chips === 0);
+    .filter((p) => p.isActive && !p.isAllIn)
+    .every((p) => p.bet === gameState.currentBet || p.chips === 0);
 
   // Handle fold action
   const handleFold = () => {
     if (!isPlayerTurn || !currentPlayerId) return;
 
-    const updatedPlayers = gameState.players.map(player =>
+    const updatedPlayers = gameState.players.map((player) =>
       player.id === currentPlayerId
         ? { ...player, isActive: false, isTurn: false }
-        : player
+        : player,
     );
 
     const newState = nextPlayer({
       ...gameState,
-      players: updatedPlayers
+      players: updatedPlayers,
     });
 
     onGameStateChange(newState);
@@ -71,21 +66,21 @@ export function GameControls({
     const isAllIn = currentPlayer.chips <= amountToCall;
     const actualCallAmount = isAllIn ? currentPlayer.chips : amountToCall;
 
-    const updatedPlayers = gameState.players.map(player =>
+    const updatedPlayers = gameState.players.map((player) =>
       player.id === currentPlayerId
         ? {
-          ...player,
-          chips: player.chips - actualCallAmount,
-          bet: player.bet + actualCallAmount,
-          isAllIn: isAllIn
-        }
-        : player
+            ...player,
+            chips: player.chips - actualCallAmount,
+            bet: player.bet + actualCallAmount,
+            isAllIn: isAllIn,
+          }
+        : player,
     );
 
     const newState = nextPlayer({
       ...gameState,
       players: updatedPlayers,
-      pot: gameState.pot + actualCallAmount
+      pot: gameState.pot + actualCallAmount,
     });
 
     onGameStateChange(newState);
@@ -105,22 +100,22 @@ export function GameControls({
     // Check if raise is at least the minimum (double the current bet)
     if (betAmount < gameState.currentBet * 2) return;
 
-    const updatedPlayers = gameState.players.map(player =>
+    const updatedPlayers = gameState.players.map((player) =>
       player.id === currentPlayerId
         ? {
-          ...player,
-          chips: player.chips - amountToAdd,
-          bet: betAmount,
-          isAllIn: player.chips - amountToAdd === 0
-        }
-        : player
+            ...player,
+            chips: player.chips - amountToAdd,
+            bet: betAmount,
+            isAllIn: player.chips - amountToAdd === 0,
+          }
+        : player,
     );
 
     const newState = nextPlayer({
       ...gameState,
       players: updatedPlayers,
       pot: gameState.pot + amountToAdd,
-      currentBet: betAmount
+      currentBet: betAmount,
     });
 
     onGameStateChange(newState);
@@ -131,10 +126,10 @@ export function GameControls({
     if (!allPlayersActed) return;
 
     // Reset player bets for the new round
-    const updatedPlayers = gameState.players.map(player => ({
+    const updatedPlayers = gameState.players.map((player) => ({
       ...player,
       bet: 0,
-      isTurn: player.id === gameState.players[gameState.dealerIndex].id
+      isTurn: player.id === gameState.players[gameState.dealerIndex].id,
     }));
 
     // Move to the next stage and deal cards if needed
@@ -144,7 +139,7 @@ export function GameControls({
       players: updatedPlayers,
       stage: nextStage,
       currentBet: 0,
-      activePlayerIndex: gameState.dealerIndex
+      activePlayerIndex: gameState.dealerIndex,
     };
 
     // Deal community cards based on the new stage
@@ -155,42 +150,29 @@ export function GameControls({
     onGameStateChange(newState);
   };
 
-  // Handle starting a new game
-  const handleNewGame = () => {
-    // Reset player cards and bets
-    const updatedPlayers = gameState.players.map((player, index) => ({
-      ...player,
-      cards: [],
-      bet: 0,
-      isActive: true,
-      isAllIn: false,
-      isDealer: index === (gameState.dealerIndex + 1) % gameState.players.length,
-      isSmallBlind: index === (gameState.dealerIndex + 2) % gameState.players.length,
-      isBigBlind: index === (gameState.dealerIndex + 3) % gameState.players.length,
-      isTurn: index === (gameState.dealerIndex + 4) % gameState.players.length
-    }));
-
-    // Create new game state
-    const newState: GameState = {
-      ...gameState,
-      players: updatedPlayers,
-      communityCards: [],
-      pot: 0,
-      currentBet: gameState.bigBlindAmount,
-      stage: "preflop",
-      activePlayerIndex: (gameState.dealerIndex + 4) % gameState.players.length,
-      dealerIndex: (gameState.dealerIndex + 1) % gameState.players.length
-    };
-
-    // Deal cards to players
-    const stateWithCards = dealCards(newState);
-
-    onGameStateChange(stateWithCards);
+  // Handle leaving game
+  const handleLeaveGame = () => {
+    // ask the user to confirm they want to leave
+    // if they leave during a round, warn them:
+    // that their hand will be folded and they will forfeit any of their chips in the pot
+    // if they confirm, leave the game
+    // if they cancel, do nothing
+    if (
+      confirm(
+        "Are you sure you want to leave the game? Any chips in the pot will be forfeited.",
+      )
+    ) {
+      // Handle leaving logic here
+      router.push("/");
+    }
   };
 
   // Determine which buttons should be enabled
-  const canCheck = gameState.currentBet === 0 || (currentPlayer && currentPlayer.bet === gameState.currentBet);
-  const canCall = gameState.currentBet > 0 && currentPlayer && currentPlayer.bet < gameState.currentBet;
+  const canCheck =
+    gameState.currentBet === 0 ||
+    (currentPlayer && currentPlayer.bet === gameState.currentBet);
+  const canCall =
+    gameState.currentBet > 0 && currentPlayer && currentPlayer.bet < gameState.currentBet;
   const canRaise = currentPlayer && currentPlayer.chips > 0;
 
   return (
@@ -199,19 +181,10 @@ export function GameControls({
         <div className="text-white">
           <span className="text-xs sm:text-sm">Bet: ${gameState.currentBet}</span>
           {currentPlayer && (
-            <span className="text-xs sm:text-sm ml-2 sm:ml-4">Chips: ${currentPlayer.chips}</span>
+            <span className="text-xs sm:text-sm ml-2 sm:ml-4">
+              Chips: ${currentPlayer.chips}
+            </span>
           )}
-        </div>
-        <div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-7 text-xs px-2"
-            onClick={handleNewGame}
-            disabled={gameState.stage !== "ended" && gameState.stage !== "showdown"}
-          >
-            New Game
-          </Button>
         </div>
       </div>
 
@@ -269,8 +242,19 @@ export function GameControls({
         </div>
       )}
 
+      <div>
+        <Button
+          variant="destructive"
+          size="sm"
+          className="h-7 text-xs px-2"
+          onClick={handleLeaveGame}
+        >
+          Leave Game
+        </Button>
+      </div>
+
       {/* Dealer controls - only visible when it's time to advance the game */}
-      {allPlayersActed && gameState.stage !== "ended" && (
+      {/* {allPlayersActed && gameState.stage !== "ended" && (
         <div className="mt-1">
           <Button
             variant="outline"
@@ -281,7 +265,7 @@ export function GameControls({
             {gameState.stage === "river" ? "Show Cards" : "Next Round"}
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
-} 
+}
