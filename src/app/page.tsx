@@ -15,7 +15,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { createRoom } from "../api/mocks";
+import { useCreateRoom } from "../api/mocks";
 
 export default function Home() {
   const router = useRouter();
@@ -24,6 +24,9 @@ export default function Home() {
   const [showSetup, setShowSetup] = useState<boolean>(true);
   const [currentPlayerId, setCurrentPlayerId] = useState<string>("player-0");
   const [isPublic, setIsPublic] = useState<boolean>(true);
+
+  const { mutate: createRoom, isPending: isCreatingRoom } = useCreateRoom();
+
   // Initialize game when player count changes
   useEffect(() => {
     if (!showSetup && !gameState) {
@@ -34,9 +37,15 @@ export default function Home() {
   }, [showSetup, gameState, playerCount]);
 
   // Handle starting a new game
-  const handleStartGame = async () => {
-    const room = await createRoom({ isPrivate: !isPublic });
-    router.push(`/room/${room.id}`);
+  const handleStartGame = () => {
+    createRoom(
+      { isPrivate: !isPublic },
+      {
+        onSuccess: (createdRoom) => {
+          router.push(`/room/${createdRoom.id}`);
+        },
+      },
+    );
   };
 
   return (
@@ -178,7 +187,9 @@ export default function Home() {
           </div>
 
           <DialogFooter>
-            <Button onClick={handleStartGame}>Start Game</Button>
+            <Button onClick={handleStartGame} disabled={isCreatingRoom}>
+              Start Game {isCreatingRoom && "loading..."}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

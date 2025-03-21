@@ -11,22 +11,39 @@ interface PlayerProps {
 }
 
 export function Player({ player, isCurrentUser = false }: PlayerProps) {
-  const { name, chips, cards, isActive, isDealer, isSmallBlind, isBigBlind, isTurn, isAllIn, bet, avatarUrl } = player;
+  const {
+    name,
+    address,
+    chips,
+    cards,
+    isActive,
+    isDealer,
+    isSmallBlind,
+    isBigBlind,
+    isTurn,
+    isAllIn,
+    bet,
+    avatarUrl,
+  } = player;
 
   // Get initials for avatar fallback
   const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
+    ? name
+        ?.split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : address?.slice(2, 4).toUpperCase();
 
   return (
     <div
       className={cn(
         "flex flex-col items-center p-1 rounded-lg transition-all max-w-[110px] mx-auto",
-        isTurn ? "bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500" : "bg-gray-100 dark:bg-gray-800/30",
+        isTurn
+          ? "bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500"
+          : "bg-gray-100 dark:bg-gray-800/30",
         !isActive && "opacity-50",
-        isCurrentUser && "bg-green-100 dark:bg-green-900/30"
+        isCurrentUser && "bg-green-100 dark:bg-green-900/30",
       )}
     >
       <div className="flex items-center gap-1 mb-1 w-full">
@@ -41,26 +58,50 @@ export function Player({ player, isCurrentUser = false }: PlayerProps) {
       </div>
 
       <div className="flex gap-1 mb-1 justify-center">
-        {cards.map((card, index) => (
-          <Card
-            key={index}
-            card={{
-              ...card,
-              // Make cards face up if this is the current user
-              faceUp: isCurrentUser ? true : card.faceUp
-            }}
-            className="w-9 h-12"
-          />
+        {[0, 1].map((index) => (
+          <div key={index} className="w-9 h-12">
+            {cards[index] ? (
+              <Card
+                card={{
+                  ...cards[index],
+                  faceUp: isCurrentUser ? true : cards[index].faceUp,
+                }}
+                className="w-full h-full"
+              />
+            ) : (
+              <div className="w-full h-full rounded border border-black/10" />
+            )}
+          </div>
         ))}
       </div>
 
       <div className="flex flex-wrap gap-1 justify-center">
-        {isDealer && <Badge variant="outline" className="text-xs py-0 px-1 h-5">D</Badge>}
-        {isSmallBlind && <Badge variant="outline" className="text-xs py-0 px-1 h-5">SB</Badge>}
-        {isBigBlind && <Badge variant="outline" className="text-xs py-0 px-1 h-5">BB</Badge>}
-        {isAllIn && <Badge variant="destructive" className="text-xs py-0 px-1 h-5">All-In</Badge>}
-        {bet > 0 && <Badge variant="secondary" className="text-xs py-0 px-1 h-5">Bet: ${bet}</Badge>}
+        {isDealer && (
+          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+            D
+          </Badge>
+        )}
+        {isSmallBlind && (
+          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+            SB
+          </Badge>
+        )}
+        {isBigBlind && (
+          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+            BB
+          </Badge>
+        )}
+        {isAllIn && (
+          <Badge variant="destructive" className="text-xs py-0 px-1 h-5">
+            All-In
+          </Badge>
+        )}
+        {bet > 0 && (
+          <Badge variant="secondary" className="text-xs py-0 px-1 h-5">
+            Bet: ${bet}
+          </Badge>
+        )}
       </div>
     </div>
   );
-} 
+}

@@ -22,7 +22,7 @@ export interface Card {
 
 export interface Player {
   id: string;
-  name: string;
+  address: string;
   chips: number;
   cards: Card[];
   isActive: boolean;
@@ -32,11 +32,13 @@ export interface Player {
   isTurn: boolean;
   isAllIn: boolean;
   bet: number;
+  name?: string;
   avatarUrl?: string;
 }
 
 export type GameStage =
-  | "waiting"
+  | "waiting to start"
+  | "waiting for players"
   | "preflop"
   | "flop"
   | "turn"

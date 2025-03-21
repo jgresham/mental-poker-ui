@@ -91,7 +91,7 @@ export function PokerTable({ gameState, currentPlayerId, roomId }: PokerTablePro
           return (
             <div
               key={player.id}
-              className="absolute w-[110px] transform -translate-x-1/2 -translate-y-1/2"
+              className="z-10 absolute w-[110px] transform -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${position.x}%`,
                 top: `${position.y}%`,
