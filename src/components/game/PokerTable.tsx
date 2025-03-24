@@ -64,7 +64,7 @@ export function PokerTable({ gameState, currentPlayerId, roomId }: PokerTablePro
 
         {/* Community cards */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-1 sm:gap-2">
-          {communityCards.map((card, index) => (
+          {communityCards?.map((card, index) => (
             <Card key={index} card={card} className="w-12 h-16 sm:w-14 sm:h-20" />
           ))}
           {/* Placeholder for missing community cards */}

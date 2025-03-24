@@ -1,25 +1,8 @@
-import type { Card, GameStage, GameState } from "../lib/types";
+import { GameStage } from "./../lib/types";
+import type { Card, GameStage, GameState, Room, Player } from "../lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-type Player = {
-  id: string;
-  address: string;
-  chips: number;
-  currentBet: number;
-  hasFolded: boolean;
-  isAllIn: boolean;
-  holeCards: Card[];
-};
-
-type Room = {
-  id: string;
-  isPrivate: boolean;
-  players: Player[];
-  maxPlayers: number;
-  stage: GameStage;
-};
 
 const FAKE_LOADING_TIME = 1500;
 const TO_FAKE_DATA = true;
@@ -38,7 +21,14 @@ if (TO_FAKE_DATA) {
         currentBet: 0,
         hasFolded: false,
         isAllIn: false,
-        holeCards: [],
+        cards: [],
+        seatPosition: 0,
+        isActive: true,
+        isDealer: false,
+        isSmallBlind: false,
+        isBigBlind: false,
+        isTurn: false,
+        bet: 0,
       },
       {
         id: "player-2",
@@ -47,7 +37,14 @@ if (TO_FAKE_DATA) {
         currentBet: 0,
         hasFolded: false,
         isAllIn: false,
-        holeCards: [],
+        cards: [],
+        seatPosition: 1,
+        isActive: true,
+        isDealer: false,
+        isSmallBlind: false,
+        isBigBlind: false,
+        isTurn: false,
+        bet: 0,
       },
       {
         id: "player-3",
@@ -56,11 +53,23 @@ if (TO_FAKE_DATA) {
         currentBet: 0,
         hasFolded: false,
         isAllIn: false,
-        holeCards: [],
-      },
+        cards: [],
+        seatPosition: 2,
+        isActive: true,
+        isDealer: false,
+        isSmallBlind: false,
+        isBigBlind: false,
+        isTurn: false,
+        bet: 0,
     ],
     maxPlayers: 8,
     stage: "preflop",
+    gameState: {
+      communityCards: [],
+      deck: [],
+      pot: 0,
+      currentBet: 0,
+    },
   });
 }
 
@@ -90,6 +99,7 @@ export const joinRoom = async ({
   if (room.players.length >= room.maxPlayers) {
     throw new Error("Room is full");
   }
+
   room.players.push({
     id: playerId,
     address: `0x${Math.floor(Math.random() * 16777215)
@@ -99,11 +109,37 @@ export const joinRoom = async ({
     currentBet: 0,
     hasFolded: false,
     isAllIn: false,
-    holeCards: [],
+    cards: [],
+    isActive: true,
+    isDealer: false,
+    isSmallBlind: false,
+    isBigBlind: false,
+    isTurn: false,
+    bet: 0,
+    seatPosition: ,
   });
   if (room.players.length >= 2) {
     room.stage = "preflop";
   }
+  return room;
+};
+
+export const submitEncryptedShuffle = async ({
+  roomId,
+  deck,
+}: { roomId: string; deck: bigint[] }) => {
+  await sleep(FAKE_LOADING_TIME);
+  const room = rooms.find((room) => room.id === roomId);
+  if (!room) {
+    throw new Error("Room not found");
+  }
+  if (room.stage !== "preflop") {
+    throw new Error("Cannot submit encrypted shuffle at this stage");
+  }
+  // TODO: ensure it is the player's turn to submit the shuffle
+  room.gameState.encryptedDeck = deck;
+  room.gameState.currentPlayerIndex =
+    (room.gameState.currentPlayerIndex + 1) % room.gameState.players.length;
   return room;
 };
 
@@ -189,16 +225,21 @@ export const useGetRoom = (roomId: string) => {
           isTurn: false,
           isAllIn: false,
           bet: 0,
+          hasFolded: false,
+          currentBet: 0,
         })),
         communityCards: [],
         pot: 0,
         stage: room.stage,
         deck: [],
         currentBet: 0,
-        activePlayerIndex: 0,
+        currentPlayerIndex: 0,
         dealerIndex: 0,
         smallBlindAmount: 0,
         bigBlindAmount: 0,
+        lastRaiseIndex: 0,
+        revealedCommunityCards: 0,
+        encryptedDeck: [],
       };
       return gameState;
     },

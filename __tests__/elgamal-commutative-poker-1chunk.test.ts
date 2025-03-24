@@ -24,12 +24,11 @@ import {
   shuffleAndEncryptCardDeck,
   shuffleAndEncryptDeck,
   shuffleAndEncryptEncryptedDeck,
+  DECK,
+  formatCardDeckForShuffleAndEncrypt,
 } from "../src/lib/encrypted-poker-1chunk";
 import { randomBigIntInRange } from "../src/lib/prime";
 import * as bigintModArith from "bigint-mod-arith";
-
-// ['0'...'51']
-const DECK = [...Array(52).keys()].map((i) => i.toString());
 
 // Modified version of testMultiPartyCommutative with flipped loops
 function testMultiPartyCommutativeFlipped({
@@ -660,16 +659,11 @@ test("encrypted-poker.ts, 10-player test, shuffle, decrypt every card with 3 per
     if (i > 0) {
       deck = players[i - 1].encryptedDeck;
     } else {
-      const c1 = generateC1(r, g2048, p2048);
-      deck = DECK.map((card) => {
-        const c2 = stringToBigint(card);
-        return { c1, c2 };
-      });
+      deck = formatCardDeckForShuffleAndEncrypt({ deck: DECK, r });
     }
     const encryptedDeck = shuffleAndEncryptDeck({
       encryptedDeck: deck,
       publicKey,
-      privateKey,
       r,
     });
     players.push({ publicKey, privateKey, r, encryptedDeck });
@@ -764,16 +758,11 @@ test("encrypted-poker.ts, 10/multi-player test, shuffle, decrypt every card with
     if (i > 0) {
       deck = players[i - 1].encryptedDeck;
     } else {
-      const c1 = generateC1(r, g2048, p2048);
-      deck = DECK.map((card) => {
-        const c2 = stringToBigint(card);
-        return { c1, c2 };
-      });
+      deck = formatCardDeckForShuffleAndEncrypt({ deck: DECK, r });
     }
     const encryptedDeck = shuffleAndEncryptDeck({
       encryptedDeck: deck,
       publicKey,
-      privateKey,
       r,
     });
     players.push({ publicKey, privateKey, r, encryptedDeck });

@@ -23,7 +23,9 @@ export interface Card {
 export interface Player {
   id: string;
   address: string;
+  seatPosition: number;
   chips: number;
+  currentBet: number;
   cards: Card[];
   isActive: boolean;
   isDealer: boolean;
@@ -31,10 +33,20 @@ export interface Player {
   isBigBlind: boolean;
   isTurn: boolean;
   isAllIn: boolean;
+  hasFolded: boolean;
   bet: number;
   name?: string;
   avatarUrl?: string;
 }
+
+export type Room = {
+  id: string;
+  isPrivate: boolean;
+  players: Player[];
+  maxPlayers: number;
+  stage: GameStage;
+  gameState: GameState;
+};
 
 export type GameStage =
   | "waiting to start"
@@ -46,6 +58,21 @@ export type GameStage =
   | "showdown"
   | "ended";
 
+// Solidity contract GameState
+// struct GameState {
+//   GameStage stage;
+//   uint256 pot;
+//   uint256 currentStageBet;
+//   uint256 smallBlind;
+//   uint256 bigBlind;
+//   uint256 dealerPosition;
+//   uint256 currentPlayerIndex;
+//   uint256 lastRaiseIndex;
+//   bytes32[5] communityCards;
+//   uint256 revealedCommunityCards;
+//   BigNumber[] encryptedDeck;
+// }
+
 export interface GameState {
   players: Player[];
   communityCards: Card[];
@@ -53,8 +80,11 @@ export interface GameState {
   pot: number;
   currentBet: number;
   stage: GameStage;
-  activePlayerIndex: number;
+  currentPlayerIndex: number;
   dealerIndex: number;
   smallBlindAmount: number;
   bigBlindAmount: number;
+  lastRaiseIndex: number;
+  revealedCommunityCards: number;
+  encryptedDeck: bigint[];
 }

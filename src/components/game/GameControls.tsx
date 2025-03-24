@@ -139,7 +139,7 @@ export function GameControls({
       players: updatedPlayers,
       stage: nextStage,
       currentBet: 0,
-      activePlayerIndex: gameState.dealerIndex,
+      currentPlayerIndex: gameState.dealerIndex,
     };
 
     // Deal community cards based on the new stage

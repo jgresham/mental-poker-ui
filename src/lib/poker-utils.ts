@@ -1,9 +1,23 @@
-import { Card, Rank, Suit, Player, GameState, GameStage } from "./types";
+import { Card, Rank, Suit, Player, GameState, GameStage, Room } from "./types";
 
 // Create a new deck of cards
 export function createDeck(): Card[] {
   const suits: Suit[] = ["hearts", "diamonds", "clubs", "spades"];
-  const ranks: Rank[] = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+  const ranks: Rank[] = [
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "J",
+    "Q",
+    "K",
+    "A",
+  ];
   const deck: Card[] = [];
 
   for (const suit of suits) {
@@ -90,7 +104,7 @@ export function initializeGame(
   playerCount: number,
   initialChips: number = 1000,
   smallBlind: number = 5,
-  bigBlind: number = 10
+  bigBlind: number = 10,
 ): GameState {
   // Ensure player count is between 2 and 10
   const count = Math.min(Math.max(playerCount, 2), 10);
@@ -128,7 +142,7 @@ export function initializeGame(
     pot: smallBlind + bigBlind,
     currentBet: bigBlind,
     stage: "preflop",
-    activePlayerIndex: (3 % count),
+    currentPlayerIndex: 3 % count,
     dealerIndex: 0,
     smallBlindAmount: smallBlind,
     bigBlindAmount: bigBlind,
@@ -155,11 +169,11 @@ export function getNextStage(currentStage: GameStage): GameStage {
 
 // Move to the next active player
 export function nextPlayer(gameState: GameState): GameState {
-  const { players, activePlayerIndex } = gameState;
-  let nextIndex = (activePlayerIndex + 1) % players.length;
+  const { players, currentPlayerIndex } = gameState;
+  let nextIndex = (currentPlayerIndex + 1) % players.length;
 
   // Find the next active player
-  while (!players[nextIndex].isActive && nextIndex !== activePlayerIndex) {
+  while (!players[nextIndex].isActive && nextIndex !== currentPlayerIndex) {
     nextIndex = (nextIndex + 1) % players.length;
   }
 
@@ -172,7 +186,7 @@ export function nextPlayer(gameState: GameState): GameState {
   return {
     ...gameState,
     players: updatedPlayers,
-    activePlayerIndex: nextIndex,
+    currentPlayerIndex: nextIndex,
   };
 }
 
@@ -184,4 +198,20 @@ export function getCardImage(card: Card): string {
 
   const suitSymbol = card.suit.charAt(0);
   return `/images/cards/${card.rank}${suitSymbol}.svg`;
-} 
+}
+
+/**
+ * Gets the first available seat position in the room by finding the lowest index
+ * seat that is not occupied by a player.
+ * @param room - The room to get the first available seat position from
+ * @returns The first available seat position
+ */
+export const getFirstAvailableSeatPosition = (room: Room) => {
+  // if all seats are taken, return the next seat position
+  for (let i = 0; i <= room.players.length; i++) {
+    if (!room.players.some((player) => player.seatPosition === i)) {
+      return i;
+    }
+  }
+  return room.players.length;
+};

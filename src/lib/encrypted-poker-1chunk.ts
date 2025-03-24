@@ -5,11 +5,18 @@ import * as bigintModArith from "bigint-mod-arith";
 // each player takes a turn shuffling and encrypting each item in the deck then passing it to the next player
 // then all players decrypt the first two cards and send it to the first player
 
-import { encryptMessage } from "./elgamal-commutative-node-1chunk";
+import {
+  encryptMessage,
+  generateC1,
+  stringToBigint,
+} from "./elgamal-commutative-node-1chunk";
 import { shuffleArray } from "./utils";
 import { randomBigIntInRange } from "./prime";
 
 // Start Minimal necessary functions
+
+// ['0'...'51']
+export const DECK = [...Array(52).keys()].map((i) => i.toString());
 
 const p2048str =
   "0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3BE39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF695581718399549CCEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF";
@@ -96,6 +103,25 @@ export function encryptMessageBigint({
   return { c1, c2 };
 }
 
+export function formatCardDeckForShuffleAndEncrypt({
+  deck,
+  r,
+}: { deck: string[]; r: bigint }) {
+  const c1 = generateC1(r, g2048, p2048);
+  const formattedDeck = deck.map((card) => {
+    const c2 = stringToBigint(card);
+    return { c1, c2 };
+  });
+  return formattedDeck;
+}
+
+/**
+ * Shuffle and encrypt a deck (This should be used over the other shuffleAndEncrypt functions)
+ * @param encryptedDeck - The encrypted deck to shuffle
+ * @param publicKey - The public key of the player encrypting the deck
+ * @param r - The random value used to encrypt the deck
+ * @returns The shuffled and encrypted deck
+ */
 export function shuffleAndEncryptDeck({
   encryptedDeck,
   publicKey,
@@ -110,6 +136,15 @@ export function shuffleAndEncryptDeck({
   const shuffledEncryptedDeck = shuffleArray([
     ...encryptedDeck,
   ] as unknown[]) as typeof encryptedDeck;
+  console.log("\n\n\n\n\n\n SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
+  console.log(
+    JSON.stringify(
+      shuffledEncryptedDeck,
+      (key, value) => (typeof value === "bigint" ? value.toString(16) : value),
+      2,
+    ),
+  );
+  console.log("\n\n\n\n\n\n END SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
   // encrypt each card in the deck
   const doubleOrMoreEncryptedDeck = shuffledEncryptedDeck.map(
     (encryptedMessageBigint: { c1: bigint; c2: bigint }) =>

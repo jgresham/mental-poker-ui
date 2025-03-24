@@ -16,7 +16,7 @@ export default function Room() {
     stage: "preflop",
     deck: [],
     currentBet: 0,
-    activePlayerIndex: 0,
+    currentPlayerIndex: 0,
     dealerIndex: 0,
     smallBlindAmount: 0,
     bigBlindAmount: 0,
