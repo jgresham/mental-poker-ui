@@ -107,7 +107,7 @@ export function formatCardDeckForShuffleAndEncrypt({
   deck,
   r,
 }: { deck: string[]; r: bigint }) {
-  const c1 = generateC1(r, g2048, p2048);
+  const c1 = generateC1(g2048, r, p2048);
   const formattedDeck = deck.map((card) => {
     const c2 = stringToBigint(card);
     return { c1, c2 };
@@ -133,18 +133,19 @@ export function shuffleAndEncryptDeck({
 }): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
   // Type assertion to handle both string[] and bigint[] cases
-  const shuffledEncryptedDeck = shuffleArray([
-    ...encryptedDeck,
-  ] as unknown[]) as typeof encryptedDeck;
-  console.log("\n\n\n\n\n\n SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
-  console.log(
-    JSON.stringify(
-      shuffledEncryptedDeck,
-      (key, value) => (typeof value === "bigint" ? value.toString(16) : value),
-      2,
-    ),
-  );
-  console.log("\n\n\n\n\n\n END SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
+  // const shuffledEncryptedDeck = shuffleArray([
+  //   ...encryptedDeck,
+  // ] as unknown[]) as typeof encryptedDeck;
+  const shuffledEncryptedDeck = [...encryptedDeck];
+  // console.log("\n\n\n\n\n\n SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
+  // console.log(
+  //   JSON.stringify(
+  //     shuffledEncryptedDeck,
+  //     (key, value) => (typeof value === "bigint" ? value.toString(16) : value),
+  //     2,
+  //   ),
+  // );
+  // console.log("\n\n\n\n\n\n END SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
   // encrypt each card in the deck
   const doubleOrMoreEncryptedDeck = shuffledEncryptedDeck.map(
     (encryptedMessageBigint: { c1: bigint; c2: bigint }) =>
