@@ -61,14 +61,21 @@ if (TO_FAKE_DATA) {
         isBigBlind: false,
         isTurn: false,
         bet: 0,
+      },
     ],
-    maxPlayers: 8,
-    stage: "preflop",
+    seatPositionToPlayerIndex: [0, 1, 2],
+    numPlayers: 0,
     gameState: {
       communityCards: [],
-      deck: [],
       pot: 0,
-      currentBet: 0,
+      currentStageBet: 0,
+      smallBlind: 0,
+      bigBlind: 0,
+      dealerPosition: 0,
+      currentPlayerIndex: 0,
+      lastRaiseIndex: 0,
+      encryptedDeck: [],
+      stage: GameStage.Shuffle,
     },
   });
 }
@@ -79,8 +86,20 @@ export const createRoom = async ({ isPrivate = false }: { isPrivate?: boolean })
     id: rooms.length.toString(),
     isPrivate,
     players: [],
-    maxPlayers: 8,
-    stage: "waiting for players" as GameStage,
+    seatPositionToPlayerIndex: [],
+    numPlayers: 0,
+    gameState: {
+      communityCards: [],
+      pot: 0,
+      currentStageBet: 0,
+      smallBlind: 0,
+      bigBlind: 0,
+      dealerPosition: 0,
+      currentPlayerIndex: 0,
+      lastRaiseIndex: 0,
+      encryptedDeck: [],
+      stage: GameStage.Shuffle,
+    },
   };
   rooms.push(room);
   return room;
@@ -116,7 +135,7 @@ export const joinRoom = async ({
     isBigBlind: false,
     isTurn: false,
     bet: 0,
-    seatPosition: ,
+    seatPosition: room.players.length,
   });
   if (room.players.length >= 2) {
     room.stage = "preflop";

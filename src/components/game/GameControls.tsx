@@ -5,7 +5,7 @@ import { dealCommunityCards, getNextStage, nextPlayer } from "@/lib/poker-utils"
 import { useRouter } from "next/navigation";
 interface GameControlsProps {
   gameState: GameState;
-  onGameStateChange: (newState: GameState) => void;
+  onGameStateChange?: (newState: GameState) => void;
   currentPlayerId?: string;
 }
 
@@ -14,7 +14,7 @@ export function GameControls({
   onGameStateChange,
   currentPlayerId,
 }: GameControlsProps) {
-  const [betAmount, setBetAmount] = useState<number>(gameState.currentBet);
+  const [betAmount, setBetAmount] = useState<number>(gameState?.currentStageBet || 0);
   const router = useRouter();
   const currentPlayer = currentPlayerId
     ? gameState.players.find((p) => p.id === currentPlayerId)
@@ -25,7 +25,7 @@ export function GameControls({
   // Check if all active players have matched the current bet or are all-in
   const allPlayersActed = gameState.players
     .filter((p) => p.isActive && !p.isAllIn)
-    .every((p) => p.bet === gameState.currentBet || p.chips === 0);
+    .every((p) => p.bet === gameState.currentStageBet || p.chips === 0);
 
   // Handle fold action
   const handleFold = () => {
@@ -42,7 +42,7 @@ export function GameControls({
       players: updatedPlayers,
     });
 
-    onGameStateChange(newState);
+    onGameStateChange?.(newState);
   };
 
   // Handle check action
@@ -50,17 +50,18 @@ export function GameControls({
     if (!isPlayerTurn || !currentPlayerId) return;
 
     // Can only check if current bet is 0 or player has already matched it
-    if (gameState.currentBet > 0 && currentPlayer?.bet !== gameState.currentBet) return;
+    if (gameState.currentStageBet > 0 && currentPlayer?.bet !== gameState.currentStageBet)
+      return;
 
     const newState = nextPlayer(gameState);
-    onGameStateChange(newState);
+    onGameStateChange?.(newState);
   };
 
   // Handle call action
   const handleCall = () => {
     if (!isPlayerTurn || !currentPlayerId || !currentPlayer) return;
 
-    const amountToCall = gameState.currentBet - (currentPlayer.bet || 0);
+    const amountToCall = gameState.currentStageBet - (currentPlayer.bet || 0);
 
     // If player doesn't have enough chips, they go all-in
     const isAllIn = currentPlayer.chips <= amountToCall;
@@ -98,7 +99,7 @@ export function GameControls({
     if (amountToAdd > currentPlayer.chips) return;
 
     // Check if raise is at least the minimum (double the current bet)
-    if (betAmount < gameState.currentBet * 2) return;
+    if (betAmount < gameState.currentStageBet * 2) return;
 
     const updatedPlayers = gameState.players.map((player) =>
       player.id === currentPlayerId
@@ -115,7 +116,7 @@ export function GameControls({
       ...gameState,
       players: updatedPlayers,
       pot: gameState.pot + amountToAdd,
-      currentBet: betAmount,
+      currentStageBet: betAmount,
     });
 
     onGameStateChange(newState);
@@ -138,7 +139,7 @@ export function GameControls({
       ...gameState,
       players: updatedPlayers,
       stage: nextStage,
-      currentBet: 0,
+      currentStageBet: 0,
       currentPlayerIndex: gameState.dealerIndex,
     };
 
@@ -169,17 +170,19 @@ export function GameControls({
 
   // Determine which buttons should be enabled
   const canCheck =
-    gameState.currentBet === 0 ||
-    (currentPlayer && currentPlayer.bet === gameState.currentBet);
+    gameState.currentStageBet === 0 ||
+    (currentPlayer && currentPlayer.bet === gameState.currentStageBet);
   const canCall =
-    gameState.currentBet > 0 && currentPlayer && currentPlayer.bet < gameState.currentBet;
+    gameState.currentStageBet > 0 &&
+    currentPlayer &&
+    currentPlayer.bet < gameState.currentStageBet;
   const canRaise = currentPlayer && currentPlayer.chips > 0;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 p-2 flex flex-col gap-1 z-10">
       <div className="flex justify-between items-center mb-1">
         <div className="text-white">
-          <span className="text-xs sm:text-sm">Bet: ${gameState.currentBet}</span>
+          <span className="text-xs sm:text-sm">Bet: ${gameState.currentStageBet}</span>
           {currentPlayer && (
             <span className="text-xs sm:text-sm ml-2 sm:ml-4">
               Chips: ${currentPlayer.chips}
@@ -215,7 +218,7 @@ export function GameControls({
           disabled={!isPlayerTurn || !canCall}
           onClick={handleCall}
         >
-          Call ${gameState.currentBet}
+          Call ${gameState.currentStageBet}
         </Button>
         <Button
           variant="default"
@@ -233,7 +236,7 @@ export function GameControls({
         <div className="mt-1">
           <input
             type="range"
-            min={gameState.currentBet * 2}
+            min={gameState.currentStageBet * 2}
             max={currentPlayer.chips + currentPlayer.bet}
             value={betAmount}
             onChange={(e) => setBetAmount(Number(e.target.value))}

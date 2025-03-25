@@ -126,26 +126,20 @@ export function shuffleAndEncryptDeck({
   encryptedDeck,
   publicKey,
   r,
+  noShuffle,
 }: {
   encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
   r?: bigint;
+  noShuffle?: boolean;
 }): { c1: bigint; c2: bigint }[] {
   // shuffle the deck
-  // Type assertion to handle both string[] and bigint[] cases
-  // const shuffledEncryptedDeck = shuffleArray([
-  //   ...encryptedDeck,
-  // ] as unknown[]) as typeof encryptedDeck;
-  const shuffledEncryptedDeck = [...encryptedDeck];
-  // console.log("\n\n\n\n\n\n SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
-  // console.log(
-  //   JSON.stringify(
-  //     shuffledEncryptedDeck,
-  //     (key, value) => (typeof value === "bigint" ? value.toString(16) : value),
-  //     2,
-  //   ),
-  // );
-  // console.log("\n\n\n\n\n\n END SHUFFLED ENCRYPTED DECK \n\n\n\n\n");
+  let shuffledEncryptedDeck = shuffleArray([
+    ...encryptedDeck,
+  ] as unknown[]) as typeof encryptedDeck;
+  if (noShuffle) {
+    shuffledEncryptedDeck = [...encryptedDeck];
+  }
   // encrypt each card in the deck
   const doubleOrMoreEncryptedDeck = shuffledEncryptedDeck.map(
     (encryptedMessageBigint: { c1: bigint; c2: bigint }) =>

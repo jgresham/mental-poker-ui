@@ -34,8 +34,10 @@ import * as bigintModArith from "bigint-mod-arith";
 // Set timeout for all tests in this file to 60 seconds
 vi.setConfig({ testTimeout: 60000 });
 
-test("test generate data, NUM_PLAYERS-player test, shuffle, decrypt every card with 3 permutations", () => {
+test("test generate data, 2-player test, optional-shuffle", () => {
   const NUM_PLAYERS = 2;
+  const SHUFFLE = true;
+  console.log(`SHUFFLE?: ${SHUFFLE}`);
 
   const players: {
     publicKey: bigint;
@@ -91,6 +93,7 @@ test("test generate data, NUM_PLAYERS-player test, shuffle, decrypt every card w
       encryptedDeck: deck,
       publicKey,
       r,
+      noShuffle: !SHUFFLE,
     });
     console.log(
       `DEBUGGG: \npub: ${publicKey.toString(16)} \npriv: ${privateKey.toString(16)} \nr: ${r.toString(16)}, \nprevDeck: ${deck[0].c2.toString(16)} \n eDeck: ${encryptedDeck[0].c2.toString(16)}`,
@@ -102,6 +105,7 @@ test("test generate data, NUM_PLAYERS-player test, shuffle, decrypt every card w
     encryptedDeck: players[0].encryptedDeck,
     publicKey: players[1].publicKey,
     r: players[1].r,
+    noShuffle: !SHUFFLE,
   });
   console.log(
     `DEBUGGG: \npub: ${players[1].publicKey.toString(16)} \npriv: ${players[1].privateKey.toString(16)} \nr: ${players[1].r.toString(16)}, \nprevDeck: ${players[0].encryptedDeck[0].c2.toString(16)} \n eDeck: ${encryptedDeckAgain[0].c2.toString(16)}`,
@@ -189,6 +193,10 @@ test("test generate data, NUM_PLAYERS-player test, shuffle, decrypt every card w
     expect(remainingCards).toContain(decryptedCardString); // card is not a duplicate
     remainingCards = remainingCards.filter((card) => card !== decryptedCardString);
   }
+  // All cards were encrypted and decrypted without duplicates or extra cards
+  expect(remainingCards.length).toBe(0);
+
+  // Start reveal cards and validate
 
   console.log("\n\n\n\n\n\n DECRYPT CARDS \n\n\n\n\n");
   // for (let i = 0; i < players.length; i++) {
@@ -243,8 +251,8 @@ test("test generate data, NUM_PLAYERS-player test, shuffle, decrypt every card w
   );
 
   console.log(`P2 decryptes P1's cards at index 0 and 2`);
-  const card0 = players[1].encryptedDeck[1].c2;
-  const card2 = players[1].encryptedDeck[3].c2;
+  const card0 = players[1].encryptedDeck[0].c2;
+  const card2 = players[1].encryptedDeck[2].c2;
   const decryptedCard0 = decryptCard({
     encryptedCard: {
       c1: players[1].encryptedDeck[0].c1,
@@ -441,7 +449,4 @@ test("test generate data, NUM_PLAYERS-player test, shuffle, decrypt every card w
     `player2: decrypted card string card river: ${bigintToString(decryptedRiverfinal)}`,
   );
   console.log("\n\n\n\n\n\n END DECRYPT CARDS \n\n\n\n\n");
-
-  // All cards were encrypted and decrypted without duplicates or extra cards
-  expect(remainingCards.length).toBe(0);
 });

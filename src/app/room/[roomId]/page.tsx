@@ -1,33 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { useParams } from "next/navigation";
 import { PokerTable } from "@/components/game/PokerTable";
 import { GameControls } from "@/components/game/GameControls";
-import { GameState } from "@/lib/types";
 import { useGetRoom } from "../../../api/mocks";
 
 export default function Room() {
   const params = useParams();
-  const [gameState, setGameState] = useState<GameState>({
-    players: [],
-    communityCards: [],
-    pot: 0,
-    stage: "preflop",
-    deck: [],
-    currentBet: 0,
-    currentPlayerIndex: 0,
-    dealerIndex: 0,
-    smallBlindAmount: 0,
-    bigBlindAmount: 0,
-  });
   const roomId = params.roomId as string;
 
   const { data: room, isLoading, isError } = useGetRoom(roomId);
-
-  const handleGameStateChange = (newState: GameState) => {
-    setGameState(newState);
-  };
 
   if (isError) {
     return (
@@ -55,11 +37,10 @@ export default function Room() {
             <PokerTable
               gameState={room}
               currentPlayerId={room.players[0]?.id}
-              roomId={room.id || ""}
+              roomId={roomId || ""}
             />
             <GameControls
-              gameState={gameState}
-              onGameStateChange={handleGameStateChange}
+              gameState={room?.gameState}
               currentPlayerId={room.players?.[0]?.id}
             />
           </>
