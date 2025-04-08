@@ -35,13 +35,14 @@ export default function Room() {
         {room && (
           <>
             <PokerTable
-              gameState={room}
+              room={room}
               currentPlayerId={room.players[0]?.id}
               roomId={roomId || ""}
             />
             <GameControls
               gameState={room?.gameState}
               currentPlayerId={room.players?.[0]?.id}
+              isPlayerTurn={true}
             />
           </>
         )}

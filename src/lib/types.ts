@@ -62,6 +62,10 @@ export interface Player {
 // GameState public gameState;
 // bool public isPrivate;
 
+export const MAX_PLAYERS = 10;
+export const MIN_PLAYERS = 2;
+export const EMPTY_SEAT = 255;
+
 export interface Room {
   id: string;
   players: Player[];

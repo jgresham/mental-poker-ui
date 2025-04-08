@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { PokerTable } from "@/components/game/PokerTable";
-import { GameControls } from "@/components/game/GameControls";
-import { GameState } from "@/lib/types";
-import { initializeGame, dealCards } from "@/lib/poker-utils";
+import { useState } from "react";
+// import { PokerTable } from "@/components/game/PokerTable";
+// import { GameControls } from "@/components/game/GameControls";
+// import { GameState } from "@/lib/types";
+// import { initializeGame, dealCards } from "@/lib/poker-utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,22 +19,22 @@ import { useCreateRoom } from "../api/mocks";
 
 export default function Home() {
   const router = useRouter();
-  const [gameState, setGameState] = useState<GameState | null>(null);
+  // const [gameState, setGameState] = useState<GameState | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(8);
   const [showSetup, setShowSetup] = useState<boolean>(true);
-  const [currentPlayerId, setCurrentPlayerId] = useState<string>("player-0");
+  // const [currentPlayerId, setCurrentPlayerId] = useState<string>("player-0");
   const [isPublic, setIsPublic] = useState<boolean>(true);
 
   const { mutate: createRoom, isPending: isCreatingRoom } = useCreateRoom();
 
   // Initialize game when player count changes
-  useEffect(() => {
-    if (!showSetup && !gameState) {
-      const initialState = initializeGame(playerCount);
-      const stateWithCards = dealCards(initialState);
-      setGameState(stateWithCards);
-    }
-  }, [showSetup, gameState, playerCount]);
+  // useEffect(() => {
+  //   if (!showSetup && !gameState) {
+  //     const initialState = initializeGame(playerCount);
+  //     const stateWithCards = dealCards(initialState);
+  //     setGameState(stateWithCards);
+  //   }
+  // }, [showSetup, gameState, playerCount]);
 
   // Handle starting a new game
   const handleStartGame = () => {

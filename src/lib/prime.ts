@@ -1,3 +1,5 @@
+import * as bigintModArith from "bigint-mod-arith";
+
 // Function to check if a number is prime (simplified for demonstration)
 export function isPrime(n: bigint): boolean {
   console.log(`Checking if ${n} is prime`);

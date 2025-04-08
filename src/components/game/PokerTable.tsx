@@ -1,16 +1,17 @@
 import React from "react";
-import { GameState } from "@/lib/types";
+import { type Room } from "@/lib/types";
 import { Player } from "./Player";
 import { Card } from "./Card";
 
 interface PokerTableProps {
-  gameState: GameState;
+  room: Room;
   currentPlayerId?: string;
   roomId?: string;
 }
 
-export function PokerTable({ gameState, currentPlayerId, roomId }: PokerTableProps) {
-  const { players, communityCards, pot, stage } = gameState;
+export function PokerTable({ room, currentPlayerId, roomId }: PokerTableProps) {
+  const { players, gameState } = room;
+  const { communityCards, pot, stage } = gameState;
 
   // Calculate positions for players around the table
   const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {

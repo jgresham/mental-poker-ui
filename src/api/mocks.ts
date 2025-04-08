@@ -1,5 +1,11 @@
-import { GameStage } from "./../lib/types";
-import type { Card, GameStage, GameState, Room, Player } from "../lib/types";
+import {
+  type Card,
+  type GameStage,
+  type GameState,
+  type Room,
+  type Player,
+  MAX_PLAYERS,
+} from "../lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -75,7 +81,7 @@ if (TO_FAKE_DATA) {
       currentPlayerIndex: 0,
       lastRaiseIndex: 0,
       encryptedDeck: [],
-      stage: GameStage.Shuffle,
+      stage: 1 as GameStage.Shuffle,
     },
   });
 }
@@ -98,7 +104,7 @@ export const createRoom = async ({ isPrivate = false }: { isPrivate?: boolean })
       currentPlayerIndex: 0,
       lastRaiseIndex: 0,
       encryptedDeck: [],
-      stage: GameStage.Shuffle,
+      stage: 1 as GameStage.Shuffle,
     },
   };
   rooms.push(room);
@@ -115,7 +121,7 @@ export const joinRoom = async ({
   if (!room) {
     throw new Error("Room not found");
   }
-  if (room.players.length >= room.maxPlayers) {
+  if (room.players.length >= MAX_PLAYERS) {
     throw new Error("Room is full");
   }
 
@@ -138,7 +144,7 @@ export const joinRoom = async ({
     seatPosition: room.players.length,
   });
   if (room.players.length >= 2) {
-    room.stage = "preflop";
+    room.gameState.stage = 3 as GameStage.Preflop;
   }
   return room;
 };
@@ -152,13 +158,13 @@ export const submitEncryptedShuffle = async ({
   if (!room) {
     throw new Error("Room not found");
   }
-  if (room.stage !== "preflop") {
+  if (room.gameState.stage !== (3 as GameStage.Preflop)) {
     throw new Error("Cannot submit encrypted shuffle at this stage");
   }
   // TODO: ensure it is the player's turn to submit the shuffle
   room.gameState.encryptedDeck = deck;
   room.gameState.currentPlayerIndex =
-    (room.gameState.currentPlayerIndex + 1) % room.gameState.players.length;
+    (room.gameState.currentPlayerIndex + 1) % room.players.length;
   return room;
 };
 
@@ -185,7 +191,7 @@ export const startGame = async ({ roomId }: { roomId: string }) => {
   if (room.players.length < 2) {
     throw new Error("Not enough players to start game");
   }
-  room.stage = "preflop";
+  room.gameState.stage = 3 as GameStage.Preflop;
   return true;
 };
 
@@ -231,36 +237,37 @@ export const useGetRoom = (roomId: string) => {
         throw new Error("Room not found");
       }
       // TODO: convert & parse types backend Room to frontend GameState
-      const gameState: GameState = {
-        players: room.players.map((player) => ({
-          id: player.id,
-          address: player.address,
-          chips: player.chips,
-          cards: [],
-          isActive: false,
-          isDealer: false,
-          isSmallBlind: false,
-          isBigBlind: false,
-          isTurn: false,
-          isAllIn: false,
-          bet: 0,
-          hasFolded: false,
-          currentBet: 0,
-        })),
-        communityCards: [],
-        pot: 0,
-        stage: room.stage,
-        deck: [],
-        currentBet: 0,
-        currentPlayerIndex: 0,
-        dealerIndex: 0,
-        smallBlindAmount: 0,
-        bigBlindAmount: 0,
-        lastRaiseIndex: 0,
-        revealedCommunityCards: 0,
-        encryptedDeck: [],
-      };
-      return gameState;
+      // const matchedRoom: Room = {
+      //   ...room,
+      //   players: room.players.map((player) => ({
+      //     id: player.id,
+      //     address: player.address,
+      //     chips: player.chips,
+      //     cards: [],
+      //     isActive: false,
+      //     isDealer: false,
+      //     isSmallBlind: false,
+      //     isBigBlind: false,
+      //     isTurn: false,
+      //     isAllIn: false,
+      //     bet: 0,
+      //     hasFolded: false,
+      //     currentBet: 0,
+      //   })),
+      //   communityCards: [],
+      //   pot: 0,
+      //   stage: room.gameState.stage,
+      //   deck: [],
+      //   currentBet: 0,
+      //   currentPlayerIndex: 0,
+      //   dealerIndex: 0,
+      //   smallBlindAmount: 0,
+      //   bigBlindAmount: 0,
+      //   lastRaiseIndex: 0,
+      //   revealedCommunityCards: 0,
+      //   encryptedDeck: [],
+      // };
+      return room;
     },
     refetchInterval: 2000, // Poll for updates every 2 seconds
   });

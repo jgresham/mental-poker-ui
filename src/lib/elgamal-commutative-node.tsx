@@ -665,7 +665,7 @@ export async function runElGamalDemo(
 
   // Test with the provided message
   console.log(`\n${getTimestamp()} Testing with message: "${message}"`);
-  const result = testMultiPartyCommutative(message, p, g, parties);
+  const result = testMultiPartyCommutative({ msg: message, p, g, parties });
   console.log(`${getTimestamp()} Test result: ${result}`);
 
   return result;
