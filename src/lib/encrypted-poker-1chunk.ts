@@ -117,6 +117,7 @@ export function formatCardDeckForShuffleAndEncrypt({
 
 /**
  * Shuffle and encrypt a deck (This should be used over the other shuffleAndEncrypt functions)
+ * c1 is not used in the encryption process ... hmm
  * @param encryptedDeck - The encrypted deck to shuffle
  * @param publicKey - The public key of the player encrypting the deck
  * @param r - The random value used to encrypt the deck

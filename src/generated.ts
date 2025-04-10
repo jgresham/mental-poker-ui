@@ -1776,6 +1776,28 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'getAllSimpleProperties',
+    outputs: [
+      {
+        name: '',
+        internalType: 'enum TexasHoldemRoom.GameStage',
+        type: 'uint8',
+      },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'cardIndex', internalType: 'uint256', type: 'uint256' }],
     name: 'getEncrypedCard',
     outputs: [
@@ -1790,6 +1812,13 @@ export const texasHoldemRoomAbi = [
         ],
       },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getEncryptedDeck',
+    outputs: [{ name: '', internalType: 'bytes[]', type: 'bytes[]' }],
     stateMutability: 'view',
   },
   {
@@ -2050,16 +2079,7 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [
-      {
-        name: 'encryptedShuffle',
-        internalType: 'struct BigNumber[]',
-        type: 'tuple[]',
-        components: [
-          { name: 'val', internalType: 'bytes', type: 'bytes' },
-          { name: 'neg', internalType: 'bool', type: 'bool' },
-          { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
+      { name: 'encryptedShuffle', internalType: 'bytes[]', type: 'bytes[]' },
     ],
     name: 'submitEncryptedShuffle',
     outputs: [],
@@ -2279,7 +2299,7 @@ export const texasHoldemRoomAbi = [
  *
  */
 export const texasHoldemRoomAddress = {
-  31337: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
+  31337: '0x59b670e9fA9D0A427751Af201D676719a970857b',
 } as const
 
 /**
@@ -3092,6 +3112,18 @@ export const useReadTexasHoldemRoomEncryptedDeck =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getAllSimpleProperties"`
+ *
+ *
+ */
+export const useReadTexasHoldemRoomGetAllSimpleProperties =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'getAllSimpleProperties',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getEncrypedCard"`
  *
  *
@@ -3101,6 +3133,18 @@ export const useReadTexasHoldemRoomGetEncrypedCard =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'getEncrypedCard',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getEncryptedDeck"`
+ *
+ *
+ */
+export const useReadTexasHoldemRoomGetEncryptedDeck =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'getEncryptedDeck',
   })
 
 /**

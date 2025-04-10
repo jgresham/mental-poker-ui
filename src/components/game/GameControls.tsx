@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { GameState, Player } from "@/lib/types";
 // import { dealCommunityCards, getNextStage, nextPlayer } from "@/lib/poker-utils";
 import { useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import {
   DECK,
   formatCardDeckForShuffleAndEncrypt,
@@ -11,6 +11,7 @@ import {
 } from "../../lib/encrypted-poker-1chunk";
 import {
   useReadTexasHoldemRoomEncryptedDeck,
+  useReadTexasHoldemRoomGetEncryptedDeck,
   useWriteTexasHoldemRoomSubmitEncryptedShuffle,
 } from "../../generated";
 interface GameControlsProps {
@@ -25,16 +26,34 @@ export function GameControls({ gameState, isPlayerTurn, player }: GameControlsPr
   const [betAmount, setBetAmount] = useState<number>(gameState?.currentStageBet || 0);
   const router = useRouter();
   const { address } = useAccount();
-  const { data: encryptedDeck } = useReadTexasHoldemRoomEncryptedDeck({});
+  const { data: encryptedDeck } = useReadTexasHoldemRoomGetEncryptedDeck({});
+  console.log("encryptedDeck", encryptedDeck);
   const {
     writeContractAsync: submitEncryptedDeck,
     isPending: isSubmittingEncryptedDeck,
     isSuccess: isSubmittingEncryptedDeckSuccess,
     isError: isSubmittingEncryptedDeckError,
+    error: txError,
   } = useWriteTexasHoldemRoomSubmitEncryptedShuffle();
+  console.log("txError", txError);
+  const [txHash2, setTxHash2] = useState<string | undefined>(undefined);
+  const {
+    data: txResult,
+    isLoading: isWaitingForTx,
+    isSuccess: isTxSuccess,
+    isError: isTxError,
+    error: txError2,
+  } = useWaitForTransactionReceipt({
+    hash: txHash2 as `0x${string}`,
+  });
   console.log("isSubmittingEncryptedDeck", isSubmittingEncryptedDeck);
   console.log("isSubmittingEncryptedDeckSuccess", isSubmittingEncryptedDeckSuccess);
   console.log("isSubmittingEncryptedDeckError", isSubmittingEncryptedDeckError);
+  console.log("txReceipt", txResult);
+  console.log("txReceipt2", isWaitingForTx);
+  console.log("isTxSuccess", isTxSuccess);
+  console.log("isTxError", isTxError);
+  console.log("txError2", txError2);
   // const currentPlayer = currentPlayerId
   //   ? gameState.players.find((p) => p.id === currentPlayerId)
   //   : undefined;
@@ -205,8 +224,8 @@ export function GameControls({ gameState, isPlayerTurn, player }: GameControlsPr
   //   currentPlayer.bet < gameState.currentStageBet;
   // const canRaise = currentPlayer && currentPlayer.chips > 0;
 
-  function handleShuffle() {
-    console.log("handleShuffle");
+  async function handleShuffle() {
+    console.log("handleShuffle", encryptedDeck);
     if (encryptedDeck === undefined) {
       // new encrypted deck from unencrypted deck
       const r = BigInt(
@@ -222,16 +241,68 @@ export function GameControls({ gameState, isPlayerTurn, player }: GameControlsPr
         c1: bigint;
         c2: bigint;
       }[] = formatCardDeckForShuffleAndEncrypt({ deck: DECK, r });
-      const encryptedDeck = shuffleAndEncryptDeck({
+      const encryptedDeckBlock = shuffleAndEncryptDeck({
         encryptedDeck: deck,
         publicKey,
         r,
       });
-      submitEncryptedDeck({
-        args: [encryptedDeck],
+      // const encryptedDeckArray = encryptedDeckBlock.map((card) => ({
+      //   val: `0x${card.c2.toString(16)}` as `0x${string}`,
+      //   neg: false,
+      //   bitlen: BigInt(256),
+      // }));
+      const encryptedDeckArray = encryptedDeckBlock.map((card) => {
+        const hexstring = `0x${card.c2.toString(16).padStart(512, "0")}` as `0x${string}`;
+        if (hexstring.length % 2 !== 0) {
+          console.log("hexstring not even", hexstring);
+        }
+        return hexstring;
       });
+      console.log("submitEncryptedDeck encryptedDeckArray", encryptedDeckArray);
+      const txHash2 = await submitEncryptedDeck({
+        args: [encryptedDeckArray],
+      });
+      console.log("txHash2", txHash2);
+      setTxHash2(txHash2);
     } else {
+      console.log("handleShuffle: encrypting and shuffling existing encrypted deck");
       // encrypt and shuffle the existing encrypted deck
+      const r = BigInt(
+        "0x6f7374f6984a5cacf37ae19ba3c3ada7b4b8c5c6aa772bd32b359b1861d7161f11093300a6aca0e3615874369d89cd64f65dec586a272bf2e3ecf0ad0ef5059c4f42487901661f32c9f9abf5716505467fad3363888746e054ff93782c35320940ed140ebd4543b1b0ef2ea321b0de1351af33b47fc49c808eb07523eca5be7b09dfab97c8f2c8f413a3ab5390e62aff0fa333729f36179eaefbb69b8d2ca3b4e8179afdc5eeb021e92c42aea21f8179d76288870975bf05b9caa4e8219b6c61d8b7fc04109e2734f50bbbb470b70a0269177472c95dd26130d0f1133c760a146eafff567afa75588bdde14aeacd51680299ab32423c67d3723a195787accac7",
+      );
+      const publicKey = BigInt(
+        "0xdb24a5cd01c51e96022355d1eefba6450bcb5e5eb7bf63e9cc65edb689c3767e1f385675d59642b4cab1b35899116715219de479814f8d968f2281d68205b11dc2cb5e27634c256feaabc81d5f8bacd734c42a6001517beed16a5c348a81ae372cb9637f54b496e28f04f7f20c852973888436053fa84e00cd512b477550beff3c1231b0fa2b505feca3d18ebf1dd3d70690558c179ae271e5b38ae06969b260962b2b008924e283b53ce8126509c0c19090621f960a3ce7cf5eb175246f08625854d438514c2a6842439f91fd693c6540b33f2a3d60907d201f97abeede6556f1ade44d2071ecb609857bbb65a8797d713f8c5e2097f2c9ead14e13037ed3cc",
+      );
+      const privateKey = BigInt(
+        "0xab3bdb680cf7a5d81d32b1a3d6114c57803ef26b1a9451a24653f1b146560f423c35cdeb8ee4fcbd1df5cbf6643b9f544cdf2cc779fc6f9cc28929eaa38eb1a8742b84c24947e254f3c5434e34b2daf71efa1f6326128cc7d6d6500c8d963d4759189e4bae75e34d84945beb541a9b9cb441de2522066d057e0562a16d71b26a1406d054790885d3dbd8fda8f311b4c60c2e8fa7b73dbc288177925f16a98308448d58186500d21ab42c4a0678e7ec63c5a59aa30e2091363c21b09dee1740f6289a75917c29e9aeca8d835ad599fe8a21dd5c910302c6c25ce50b6d16f16799ca6552ee5148d92ee34a69e188dc4161df1237b28861810f05b43d13f47ba333",
+      );
+      const encryptedDeckBlock = shuffleAndEncryptDeck({
+        encryptedDeck: encryptedDeck.map((card) => ({
+          c1: BigInt(0),
+          c2: BigInt(card),
+        })),
+        publicKey,
+        r,
+      });
+      // const encryptedDeckArray = encryptedDeckBlock.map((card) => ({
+      //   val: `0x${card.c2.toString(16)}` as `0x${string}`,
+      //   neg: false,
+      //   bitlen: BigInt(256),
+      // }));
+      // }));
+      const encryptedDeckArray = encryptedDeckBlock.map((card) => {
+        const hexstring = `0x${card.c2.toString(16).padStart(512, "0")}` as `0x${string}`;
+        if (hexstring.length % 2 !== 0) {
+          console.log("hexstring not even", hexstring);
+        }
+        return hexstring;
+      });
+      console.log("submitEncryptedDeck encryptedDeckArray", encryptedDeckArray);
+      const txHash2 = await submitEncryptedDeck({
+        args: [encryptedDeckArray],
+      });
+      console.log("txHash2", txHash2);
+      setTxHash2(txHash2);
     }
     // if (!player) return;
     // onGameStateChange?.(newState);
