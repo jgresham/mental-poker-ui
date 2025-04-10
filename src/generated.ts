@@ -2061,16 +2061,7 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [
       { name: 'cardIndexes', internalType: 'uint8[]', type: 'uint8[]' },
-      {
-        name: 'decryptionValues',
-        internalType: 'struct BigNumber[]',
-        type: 'tuple[]',
-        components: [
-          { name: 'val', internalType: 'bytes', type: 'bytes' },
-          { name: 'neg', internalType: 'bool', type: 'bool' },
-          { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
+      { name: 'decryptionValues', internalType: 'bytes[]', type: 'bytes[]' },
     ],
     name: 'submitDecryptionValues',
     outputs: [],
@@ -2103,13 +2094,8 @@ export const texasHoldemRoomAbi = [
       },
       {
         name: 'decryptionValues',
-        internalType: 'struct BigNumber[]',
-        type: 'tuple[]',
-        components: [
-          { name: 'val', internalType: 'bytes', type: 'bytes' },
-          { name: 'neg', internalType: 'bool', type: 'bool' },
-          { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-        ],
+        internalType: 'bytes[]',
+        type: 'bytes[]',
         indexed: false,
       },
     ],
@@ -2127,13 +2113,8 @@ export const texasHoldemRoomAbi = [
       },
       {
         name: 'encryptedShuffle',
-        internalType: 'struct BigNumber[]',
-        type: 'tuple[]',
-        components: [
-          { name: 'val', internalType: 'bytes', type: 'bytes' },
-          { name: 'neg', internalType: 'bool', type: 'bool' },
-          { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-        ],
+        internalType: 'bytes[]',
+        type: 'bytes[]',
         indexed: false,
       },
     ],
@@ -2299,7 +2280,7 @@ export const texasHoldemRoomAbi = [
  *
  */
 export const texasHoldemRoomAddress = {
-  31337: '0x59b670e9fA9D0A427751Af201D676719a970857b',
+  31337: '0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f',
 } as const
 
 /**
