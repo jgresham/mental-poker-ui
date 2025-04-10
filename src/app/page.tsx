@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useCreateRoom } from "../api/mocks";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -120,6 +122,25 @@ export default function Home() {
               <h3 className="font-bold text-xl mb-2">Private & Secure</h3>
               <p>Your cards remain hidden from everyone else, just like in real poker.</p>
             </div>
+          </div>
+
+          <div className="pt-8 row-start-3 flex gap-6 flex-wrap items-center justify-center pb-8">
+            <Link
+              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+              href="https://github.com/jgresham/mental-poker-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                aria-hidden
+                className="dark:invert"
+                src="/github.svg"
+                alt="Github icon"
+                width={16}
+                height={16}
+              />
+              Github
+            </Link>
           </div>
         </div>
 
