@@ -9,17 +9,22 @@ import {
   useReadTexasHoldemRoomStage,
   useReadTexasHoldemRoomIsPrivate,
   useReadTexasHoldemRoomSmallBlind,
-  useReadTexasHoldemRoomGetPlayersIndexFromAddress,
   useWriteTexasHoldemRoomJoinGame,
-  useReadTexasHoldemRoomGetPlayerByIndex,
-  useReadTexasHoldemRoomGetPlayers,
+  useReadTexasHoldemRoomBigBlind,
+  useReadTexasHoldemRoomDealerPosition,
+  useReadTexasHoldemRoomCurrentPlayerIndex,
+  useReadTexasHoldemRoomLastRaiseIndex,
+  useReadTexasHoldemRoomEncryptedDeck,
+  useReadTexasHoldemRoomCommunityCards,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
-import { useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useState } from "react";
+import { useGetPlayers } from "../../../wagmi/wrapper";
 
 export default function Room() {
   const params = useParams();
+  const { address } = useAccount();
   const roomId = params.roomId as string;
   const [txStatus, setTxStatus] = useState<string | null>(null);
 
@@ -30,30 +35,29 @@ export default function Room() {
   //   functionName: "getRoom",
   //   args: [roomId],
   // });
-  const { data: gameStage } = useReadTexasHoldemRoomStage({});
-  console.log("/room/[roomId] useReadTexasHoldemRoomStage gameStage", gameStage);
-  const { data: isPrivate } = useReadTexasHoldemRoomIsPrivate({
-    // address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
-    // args: [],
-  });
-  console.log("/room/[roomId] useReadTexasHoldemRoomIsPrivate isPrivate", isPrivate);
+  const { data: stage } = useReadTexasHoldemRoomStage({});
+  const { data: isPrivate } = useReadTexasHoldemRoomIsPrivate({});
   const { data: smallBlind } = useReadTexasHoldemRoomSmallBlind({});
-  console.log("/room/[roomId] useReadTexasHoldemRoomSmallBlind smallBlind", smallBlind);
-  const { data: playerIndex } = useReadTexasHoldemRoomGetPlayersIndexFromAddress({
-    args: ["0xa0Ee7A142d267C1f36714E4a8F75612F20a79720"],
-  });
+  const { data: bigBlind } = useReadTexasHoldemRoomBigBlind({});
+  const { data: dealerPosition } = useReadTexasHoldemRoomDealerPosition({});
+  const { data: currentPlayerIndex } = useReadTexasHoldemRoomCurrentPlayerIndex({});
+  const { data: lastRaiseIndex } = useReadTexasHoldemRoomLastRaiseIndex({});
+  const { data: communityCards } = useReadTexasHoldemRoomCommunityCards({});
+  const { data: encryptedDeck } = useReadTexasHoldemRoomEncryptedDeck({});
+  const { data: players } = useGetPlayers();
   console.log(
-    "/room/[roomId] useReadTexasHoldemRoomGetPlayersIndexFromAddress playerIndex",
-    playerIndex,
+    "/room/[roomId] useReadTexasHoldemRoom all properties",
+    stage,
+    isPrivate,
+    smallBlind,
+    bigBlind,
+    dealerPosition,
+    currentPlayerIndex,
+    lastRaiseIndex,
+    communityCards,
+    encryptedDeck,
+    players,
   );
-  const { data: player } = useReadTexasHoldemRoomGetPlayerByIndex({
-    args: [playerIndex || BigInt(0)],
-  });
-  console.log("/room/[roomId] useReadTexasHoldemRoomGetPlayerByIndex player", player);
-  const { data: players } = useReadTexasHoldemRoomGetPlayers({
-    args: [],
-  });
-  console.log("/room/[roomId] useReadTexasHoldemRoomGetPlayers players", players);
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
     useWriteTexasHoldemRoomJoinGame();
@@ -91,8 +95,6 @@ export default function Room() {
   //     string[5] communityCards;
   //     BigNumber[] encryptedDeck;
 
-  console.log("/room/[roomId] gameStage", gameStage);
-  console.log("/room/[roomId] smallBlind", smallBlind);
   if (isError) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -165,14 +167,20 @@ export default function Room() {
             </div>
 
             <PokerTable
-              room={room}
-              currentPlayerId={room.players[0]?.id}
+              room={{
+                stage,
+                isPrivate,
+                smallBlind,
+                pot: room.pot,
+                ...room,
+              }}
+              players={players || []}
               roomId={roomId || ""}
             />
             <GameControls
               gameState={room?.gameState}
-              currentPlayerId={room.players?.[0]?.id}
               isPlayerTurn={true}
+              player={players?.find((player) => player.addr === address)}
             />
           </>
         )}

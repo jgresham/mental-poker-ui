@@ -1,18 +1,19 @@
 import React from "react";
-import { type Room } from "@/lib/types";
-import { Player } from "./Player";
+import { type Room, type Player, MAX_PLAYERS, GameStageToString } from "@/lib/types";
+import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
+import { useAccount } from "wagmi";
 
 interface PokerTableProps {
   room: Room;
-  currentPlayerId?: string;
+  players: Player[];
   roomId?: string;
 }
 
-export function PokerTable({ room, currentPlayerId, roomId }: PokerTableProps) {
-  const { players, gameState } = room;
-  const { communityCards, pot, stage } = gameState;
-
+export function PokerTable({ room, players, roomId }: PokerTableProps) {
+  const { address } = useAccount();
+  const { communityCards, pot, stage } = room;
+  console.log("/components/game/PokerTable room", room);
   // Calculate positions for players around the table
   const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {
     // For mobile optimization, we'll arrange players in a circular pattern
@@ -45,11 +46,10 @@ export function PokerTable({ room, currentPlayerId, roomId }: PokerTableProps) {
   };
 
   // Find the current player's index
-  const currentPlayerIndex = currentPlayerId
-    ? players.findIndex((player) => player.id === currentPlayerId)
-    : -1;
+  const currentPlayerIndex = players.findIndex((player) => player.addr === address);
 
-  const positions = getPlayerPositions(players.length, currentPlayerIndex);
+  // not using players.length here. We don't want players to move around
+  const positions = getPlayerPositions(MAX_PLAYERS, currentPlayerIndex);
 
   return (
     <div className="relative w-full h-[calc(100vh-4rem)] bg-green-800 rounded-3xl overflow-hidden">
@@ -69,7 +69,7 @@ export function PokerTable({ room, currentPlayerId, roomId }: PokerTableProps) {
             <Card key={index} card={card} className="w-12 h-16 sm:w-14 sm:h-20" />
           ))}
           {/* Placeholder for missing community cards */}
-          {Array.from({ length: 5 - communityCards.length }).map((_, index) => (
+          {Array.from({ length: 5 - communityCards?.length || 0 }).map((_, index) => (
             <div
               key={`placeholder-${index}`}
               className="w-12 h-16 sm:w-14 sm:h-20 rounded-md border-2 border-dashed border-white/20"
@@ -79,26 +79,26 @@ export function PokerTable({ room, currentPlayerId, roomId }: PokerTableProps) {
 
         {/* Game stage indicator */}
         <div className="absolute top-[20%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-xs uppercase">
-          {stage}
+          {GameStageToString[stage]}
         </div>
       </div>
 
       {/* Players positioned around the table */}
       <div className="absolute inset-0">
-        {players.map((player, index) => {
-          const position = positions[index];
-          const isCurrentUser = player.id === currentPlayerId;
+        {players.map((player) => {
+          const position = positions[player.seatPosition];
+          const isCurrentUser = player.addr === address;
 
           return (
             <div
-              key={player.id}
+              key={player.addr}
               className="z-10 absolute w-[110px] transform -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${position.x}%`,
                 top: `${position.y}%`,
               }}
             >
-              <Player player={player} isCurrentUser={isCurrentUser} />
+              <PlayerUI player={player} isCurrentUser={isCurrentUser} />
             </div>
           );
         })}

@@ -1,19 +1,21 @@
 import React from "react";
-import { Player as PlayerType } from "@/lib/types";
+import type { Player } from "@/lib/types";
 import { Card } from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { useEnsAvatar } from "wagmi";
+import { useEnsName } from "wagmi";
 
 interface PlayerProps {
-  player: PlayerType;
+  player: Player;
   isCurrentUser?: boolean;
 }
 
-export function Player({ player, isCurrentUser = false }: PlayerProps) {
+export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
   const {
     name,
-    address,
+    addr,
     chips,
     cards,
     isActive,
@@ -26,14 +28,18 @@ export function Player({ player, isCurrentUser = false }: PlayerProps) {
     avatarUrl,
   } = player;
 
+  const { data: ensName } = useEnsName({ address: addr as `0x${string}` });
+  const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "" });
+
   // Get initials for avatar fallback
-  const initials = name
-    ? name
+  const displayName = ensName ?? name;
+  const initials = displayName
+    ? displayName
         ?.split(" ")
         .map((n) => n[0])
         .join("")
         .toUpperCase()
-    : address?.slice(2, 4).toUpperCase();
+    : addr?.slice(2, 4);
 
   return (
     <div
@@ -48,10 +54,11 @@ export function Player({ player, isCurrentUser = false }: PlayerProps) {
     >
       <div className="flex items-center gap-1 mb-1 w-full">
         <Avatar className="h-8 w-8 border-2 border-white">
-          <AvatarImage src={avatarUrl} alt={name} />
+          <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
           <AvatarFallback className="text-xs">{initials}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col overflow-hidden">
+          {isCurrentUser && <span className="text-xs font-medium truncate">ME</span>}
           <span className="text-xs font-medium truncate">{name}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">${chips}</span>
         </div>

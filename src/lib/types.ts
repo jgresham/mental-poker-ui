@@ -33,10 +33,11 @@ export interface Card {
 // }
 export interface Player {
   id: string;
-  address: string;
+  addr: string;
   seatPosition: number;
   chips: number;
-  currentBet: number;
+  currentStageBet: number;
+  totalRoundBet: number;
   cards: Card[];
   isActive: boolean;
   isDealer: boolean;
@@ -71,8 +72,17 @@ export interface Room {
   players: Player[];
   seatPositionToPlayerIndex: number[];
   numPlayers: number;
-  gameState: GameState;
   isPrivate: boolean;
+  stage: GameStage;
+  pot: number;
+  currentStageBet: number;
+  smallBlind: number;
+  bigBlind: number;
+  dealerPosition: number;
+  currentPlayerIndex: number;
+  lastRaiseIndex: number;
+  communityCards: Card[];
+  encryptedDeck: bigint[];
 }
 
 // Solidity contract GameStage
@@ -117,7 +127,7 @@ export enum GameStage {
 
 export const GameStageToString = {
   [GameStage.Idle]: "waiting to start",
-  [GameStage.Shuffle]: "encypting shuffle",
+  [GameStage.Shuffle]: "encrypting shuffle",
   [GameStage.RevealDeal]: "revealing deal",
   [GameStage.Preflop]: "preflop betting",
   [GameStage.RevealFlop]: "revealing flop",
@@ -154,17 +164,4 @@ export const GameStageToString = {
 //   bytes32[5] communityCards;
 //   uint256 revealedCommunityCards;
 //   BigNumber[] encryptedDeck;
-// }
-
-export interface GameState {
-  stage: GameStage;
-  pot: number;
-  currentStageBet: number;
-  smallBlind: number;
-  bigBlind: number;
-  dealerPosition: number;
-  currentPlayerIndex: number;
-  lastRaiseIndex: number;
-  communityCards: Card[];
-  encryptedDeck: bigint[];
-}
+//}

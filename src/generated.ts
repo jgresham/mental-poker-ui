@@ -1801,29 +1801,6 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: 'playerIndex', internalType: 'uint256', type: 'uint256' }],
-    name: 'getPlayerByIndex',
-    outputs: [
-      {
-        name: '',
-        internalType: 'struct TexasHoldemRoom.Player',
-        type: 'tuple',
-        components: [
-          { name: 'addr', internalType: 'address', type: 'address' },
-          { name: 'chips', internalType: 'uint256', type: 'uint256' },
-          { name: 'currentStageBet', internalType: 'uint256', type: 'uint256' },
-          { name: 'totalRoundBet', internalType: 'uint256', type: 'uint256' },
-          { name: 'hasFolded', internalType: 'bool', type: 'bool' },
-          { name: 'isAllIn', internalType: 'bool', type: 'bool' },
-          { name: 'cards', internalType: 'string[2]', type: 'string[2]' },
-          { name: 'seatPosition', internalType: 'uint8', type: 'uint8' },
-        ],
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     inputs: [],
     name: 'getPlayers',
     outputs: [
@@ -1843,22 +1820,6 @@ export const texasHoldemRoomAbi = [
         ],
       },
     ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'playerAddress', internalType: 'address', type: 'address' },
-    ],
-    name: 'getPlayersIndexFromAddress',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'playerIndex', internalType: 'uint256', type: 'uint256' }],
-    name: 'getPlayersSeatPosition',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -3155,18 +3116,6 @@ export const useReadTexasHoldemRoomGetNextActivePlayer =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayerByIndex"`
- *
- *
- */
-export const useReadTexasHoldemRoomGetPlayerByIndex =
-  /*#__PURE__*/ createUseReadContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'getPlayerByIndex',
-  })
-
-/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayers"`
  *
  *
@@ -3176,30 +3125,6 @@ export const useReadTexasHoldemRoomGetPlayers =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'getPlayers',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersIndexFromAddress"`
- *
- *
- */
-export const useReadTexasHoldemRoomGetPlayersIndexFromAddress =
-  /*#__PURE__*/ createUseReadContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'getPlayersIndexFromAddress',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersSeatPosition"`
- *
- *
- */
-export const useReadTexasHoldemRoomGetPlayersSeatPosition =
-  /*#__PURE__*/ createUseReadContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'getPlayersSeatPosition',
   })
 
 /**

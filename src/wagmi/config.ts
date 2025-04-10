@@ -19,7 +19,7 @@ const walletConnectors = connectorsForWallets(
   ],
   {
     appName: "Mental Poker",
-    projectId: "a815842691b86a9283207242ab753402",
+    projectId: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
   },
 );
 
