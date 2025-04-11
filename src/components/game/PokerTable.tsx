@@ -1,8 +1,15 @@
 import React from "react";
-import { type Room, type Player, MAX_PLAYERS, GameStageToString } from "@/lib/types";
+import {
+  type Room,
+  type Player,
+  MAX_PLAYERS,
+  GameStageToString,
+  stringCardsToCards,
+} from "@/lib/types";
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
 import { useAccount } from "wagmi";
+import { usePlayerCards } from "../../hooks/localRoomState";
 
 interface PokerTableProps {
   room: Room;
@@ -12,10 +19,12 @@ interface PokerTableProps {
 
 export function PokerTable({ room, players, roomId }: PokerTableProps) {
   const { address } = useAccount();
-  const { communityCards, pot, stage } = room;
+  const { data: playerCards } = usePlayerCards();
+  const { communityCards, pot, stage, dealerPosition, currentPlayerIndex } = room;
   console.log("/components/game/PokerTable room", room);
   // Calculate positions for players around the table
-  const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {
+  // const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {
+  const getPlayerPositions = (playerCount: number) => {
     // For mobile optimization, we'll arrange players in a circular pattern
     const positions = [];
     // Reduce the radius to bring players closer to the center
@@ -24,7 +33,8 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
     const centerY = 50;
 
     // Find the current player's index
-    const currentIndex = currentPlayerIndex !== -1 ? currentPlayerIndex : 0;
+    // const currentIndex = currentPlayerIndex !== -1 ? currentPlayerIndex : 0;
+    const currentIndex = 0;
 
     for (let i = 0; i < playerCount; i++) {
       // Calculate the position relative to the current player
@@ -46,11 +56,11 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
   };
 
   // Find the current player's index
-  const currentPlayerIndex = players.findIndex((player) => player.addr === address);
+  // const currentPlayerIndex = players.findIndex((player) => player.addr === address);
 
   // not using players.length here. We don't want players to move around
-  const positions = getPlayerPositions(MAX_PLAYERS, currentPlayerIndex);
-
+  // const positions = getPlayerPositions(MAX_PLAYERS, currentPlayerIndex);
+  const positions = getPlayerPositions(MAX_PLAYERS);
   return (
     <div className="relative w-full h-[calc(100vh-4rem)] bg-green-800 rounded-3xl overflow-hidden">
       {/* Poker table felt */}
@@ -78,7 +88,7 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
         </div>
 
         {/* Game stage indicator */}
-        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-xs uppercase">
+        <div className="absolute top-[22%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-xs uppercase">
           {GameStageToString[stage]}
         </div>
       </div>
@@ -88,6 +98,17 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
         {players.map((player) => {
           const position = positions[player.seatPosition];
           const isCurrentUser = player.addr === address;
+          if (playerCards[0] !== "" && playerCards[1] !== "" && isCurrentUser) {
+            player.cards = stringCardsToCards(playerCards);
+          }
+          console.log("player.seatPosition", player.seatPosition);
+          console.log("dealerPosition", dealerPosition);
+          if (player.seatPosition === dealerPosition) {
+            player.isDealer = true;
+          }
+          if (player.seatPosition === currentPlayerIndex) {
+            player.isTurn = true;
+          }
 
           return (
             <div

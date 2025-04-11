@@ -20,8 +20,8 @@ export const DECK = [...Array(52).keys()].map((i) => i.toString());
 
 const p2048str =
   "0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3BE39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF695581718399549CCEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF";
-const p2048 = BigInt(p2048str);
-const g2048 = BigInt(2);
+export const p2048 = BigInt(p2048str);
+export const g2048 = BigInt(2);
 
 // Modular multiplicative inverse
 export function modInverse(a: bigint, m: bigint): bigint {
@@ -66,7 +66,9 @@ export function decryptCard({
   );
   console.log(`decryptCard modInverseResult: ${modInverseResult.toString(16)}`);
   const result = (encryptedCard.c2 * modInverseResult) % p;
-  console.log(`decryptCard result: ${result.toString(16)}`);
+  console.log(
+    `decryptCard result (hex) (dec): ${result.toString(16)} ${result.toString(10)}`,
+  );
   return result;
 }
 
@@ -134,6 +136,8 @@ export function shuffleAndEncryptDeck({
   r?: bigint;
   noShuffle?: boolean;
 }): { c1: bigint; c2: bigint }[] {
+  const startTime = performance.now();
+
   // shuffle the deck
   let shuffledEncryptedDeck = shuffleArray([
     ...encryptedDeck,
@@ -150,6 +154,10 @@ export function shuffleAndEncryptDeck({
         r,
       }),
   );
+
+  const endTime = performance.now();
+  console.log(`shuffleAndEncryptDeck execution time: ${endTime - startTime}ms`);
+
   return doubleOrMoreEncryptedDeck;
 }
 

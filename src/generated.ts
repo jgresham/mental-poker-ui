@@ -1830,6 +1830,13 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
+    inputs: [{ name: 'addr', internalType: 'address', type: 'address' }],
+    name: 'getPlayerIndexFromAddr',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [],
     name: 'getPlayers',
     outputs: [
@@ -2280,7 +2287,7 @@ export const texasHoldemRoomAbi = [
  *
  */
 export const texasHoldemRoomAddress = {
-  31337: '0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f',
+  31337: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
 } as const
 
 /**
@@ -3138,6 +3145,18 @@ export const useReadTexasHoldemRoomGetNextActivePlayer =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'getNextActivePlayer',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayerIndexFromAddr"`
+ *
+ *
+ */
+export const useReadTexasHoldemRoomGetPlayerIndexFromAddr =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'getPlayerIndexFromAddr',
   })
 
 /**

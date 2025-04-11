@@ -20,6 +20,49 @@ export interface Card {
   faceUp: boolean;
 }
 
+export function stringCardsToCards(cards: string[]): Card[] {
+  return cards.map((cardStr) => {
+    const cardNum = Number.parseInt(cardStr);
+    if (Number.isNaN(cardNum) || cardNum >= 52) {
+      console.error("Invalid card number:", cardStr);
+      throw new Error(`Invalid card number: ${cardStr}`);
+    }
+
+    const suitNum = Math.floor(cardNum / 13);
+    const rankNum = (cardNum % 13) + 2; // Add 2 because ranks start at 2
+
+    let suit: Suit;
+    if (suitNum === 0) {
+      suit = "hearts";
+    } else if (suitNum === 1) {
+      suit = "diamonds";
+    } else if (suitNum === 2) {
+      suit = "clubs";
+    } else {
+      suit = "spades";
+    }
+
+    let rank: Rank;
+    if (rankNum <= 10) {
+      rank = rankNum.toString() as Rank;
+    } else if (rankNum === 11) {
+      rank = "J";
+    } else if (rankNum === 12) {
+      rank = "Q";
+    } else if (rankNum === 13) {
+      rank = "K";
+    } else {
+      rank = "A";
+    }
+
+    return {
+      suit,
+      rank,
+      faceUp: true,
+    };
+  });
+}
+
 // Solidity contract Player
 // struct Player {
 //   address addr;

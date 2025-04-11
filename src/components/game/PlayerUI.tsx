@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useEnsAvatar } from "wagmi";
 import { useEnsName } from "wagmi";
+import { Clock } from "lucide-react";
 
 interface PlayerProps {
   player: Player;
@@ -18,13 +19,15 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
     addr,
     chips,
     cards,
+    hasFolded,
     isActive,
     isDealer,
     isSmallBlind,
     isBigBlind,
     isTurn,
     isAllIn,
-    bet,
+    currentStageBet,
+    totalRoundBet,
     avatarUrl,
   } = player;
 
@@ -48,10 +51,17 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
         isTurn
           ? "bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500"
           : "bg-gray-100 dark:bg-gray-800/30",
-        !isActive && "opacity-50",
+        isActive && "opacity-50",
         isCurrentUser && "bg-green-100 dark:bg-green-900/30",
       )}
     >
+      {isTurn && (
+        <div className="fixed bottom-[-10px] right-[-10px]">
+          <span className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full ring-1 ring-blue-500">
+            <Clock size={16} />
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-1 mb-1 w-full">
         <Avatar className="h-8 w-8 border-2 border-white">
           <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
@@ -103,9 +113,14 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
             All-In
           </Badge>
         )}
-        {bet > 0 && (
+        {currentStageBet > 0 && (
           <Badge variant="secondary" className="text-xs py-0 px-1 h-5">
-            Bet: ${bet}
+            Bet: ${currentStageBet}
+          </Badge>
+        )}
+        {hasFolded && (
+          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+            F
           </Badge>
         )}
       </div>
