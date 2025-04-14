@@ -16,6 +16,51 @@ export function shuffleArray<T>(array: T[]): T[] {
 }
 
 /**
+ * Get the indexes of the other players' cards
+ * Examples: myindex = 0, numOfPlayers = 2
+ * Returns: [0 - 4] without [0, 2]
+ * Examples: myindex = 1, numOfPlayers = 2
+ * Returns: [0 thru 4] without [1, 3]
+ * Examples: myindex = 0, numOfPlayers = 10
+ * Returns: [0 thru 19] without [0, 10]
+ * Examples: myindex = 9, numOfPlayers = 10
+ * Returns: [0 thru 19] without [9, 19]
+ * @param myIndex - The index of the player
+ * @param numOfPlayers - The number of players
+ * @returns The indexes of the other players' cards
+ */
+export function getOtherPlayersCardsIndexes(myIndex: number, numOfPlayers: number) {
+  if (myIndex >= numOfPlayers) {
+    throw new Error("myIndex must be less than numOfPlayers");
+  }
+  const otherPlayersIndexes = Array.from({ length: numOfPlayers * 2 }, (_, i) => i);
+  otherPlayersIndexes.splice(myIndex + numOfPlayers, 1); // remove my 2nd card
+  otherPlayersIndexes.splice(myIndex, 1); // remove my 1st card
+  return otherPlayersIndexes;
+}
+
+/**
+ * Get the indexes of the other players' cards
+ * Examples: myindex = 0, numOfPlayers = 2
+ * Returns: [0, 2]
+ * Examples: myindex = 1, numOfPlayers = 2
+ * Returns: [1, 3]
+ * Examples: myindex = 0, numOfPlayers = 10
+ * Returns: [0, 10]
+ * Examples: myindex = 9, numOfPlayers = 10
+ * Returns: [9, 19]
+ * @param myIndex - The index of the player
+ * @param numOfPlayers - The number of players
+ * @returns The indexes of the other players' cards
+ */
+export function getMyCardsIndexes(myIndex: number, numOfPlayers: number) {
+  if (myIndex >= numOfPlayers) {
+    throw new Error("myIndex must be less than numOfPlayers");
+  }
+  return [myIndex, myIndex + numOfPlayers];
+}
+
+/**
  * Get the indexes of the community cards for the given stage
  * Just returns the individual stage indexes for the reveal stages
  * @param stage - The stage of the game
@@ -118,4 +163,5 @@ export const getCommunityCards = ({
       bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
     ]);
   }
+  return [];
 };

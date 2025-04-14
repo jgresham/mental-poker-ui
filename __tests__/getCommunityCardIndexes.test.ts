@@ -1,5 +1,9 @@
 import { GameStage } from "../src/lib/types";
-import { getCommunityCardIndexes } from "./../src/lib/utils";
+import {
+  getCommunityCardIndexes,
+  getMyCardsIndexes,
+  getOtherPlayersCardsIndexes,
+} from "./../src/lib/utils";
 import { expect, test, vi } from "vitest";
 
 test("testGetCommunityCardIndexes_3Players", () => {
@@ -33,4 +37,64 @@ test("testGetCommunityCardIndexes_10Players", () => {
   expect(turnIndexes).toEqual([25]);
   const riverIndexes = getCommunityCardIndexes(GameStage.RevealRiver, 10);
   expect(riverIndexes).toEqual([27]);
+});
+
+test("testGetOtherPlayersCardsIndexes_2Players", () => {
+  let indexes = getOtherPlayersCardsIndexes(0, 2);
+  expect(indexes).toEqual([1, 3]);
+  indexes = getOtherPlayersCardsIndexes(1, 2);
+  expect(indexes).toEqual([0, 2]);
+});
+
+test("testGetOtherPlayersCardsIndexes_3Players", () => {
+  let indexes = getOtherPlayersCardsIndexes(0, 3);
+  expect(indexes).toEqual([1, 2, 4, 5]);
+  indexes = getOtherPlayersCardsIndexes(1, 3);
+  expect(indexes).toEqual([0, 2, 3, 5]);
+  indexes = getOtherPlayersCardsIndexes(2, 3);
+  expect(indexes).toEqual([0, 1, 3, 4]);
+});
+
+test("testGetOtherPlayersCardsIndexes_10Players", () => {
+  let indexes = getOtherPlayersCardsIndexes(0, 10);
+  expect(indexes).toEqual([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+  ]);
+  // position "5"
+  indexes = getOtherPlayersCardsIndexes(4, 10);
+  expect(indexes).toEqual([
+    0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19,
+  ]);
+  // position "10"
+  indexes = getOtherPlayersCardsIndexes(9, 10);
+  expect(indexes).toEqual([
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+  ]);
+});
+
+test("testGetMyCardsIndexes_2Players", () => {
+  let indexes = getMyCardsIndexes(0, 2);
+  expect(indexes).toEqual([0, 2]);
+  indexes = getMyCardsIndexes(1, 2);
+  expect(indexes).toEqual([1, 3]);
+});
+
+test("testGetMyCardsIndexes_3Players", () => {
+  let indexes = getMyCardsIndexes(0, 3);
+  expect(indexes).toEqual([0, 3]);
+  indexes = getMyCardsIndexes(1, 3);
+  expect(indexes).toEqual([1, 4]);
+  indexes = getMyCardsIndexes(2, 3);
+  expect(indexes).toEqual([2, 5]);
+});
+
+test("testGetMyCardsIndexes_10Players", () => {
+  let indexes = getMyCardsIndexes(0, 10);
+  expect(indexes).toEqual([0, 10]);
+  // position "5"
+  indexes = getMyCardsIndexes(4, 10);
+  expect(indexes).toEqual([4, 14]);
+  // position "10"
+  indexes = getMyCardsIndexes(9, 10);
+  expect(indexes).toEqual([9, 19]);
 });

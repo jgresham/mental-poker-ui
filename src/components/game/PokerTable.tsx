@@ -20,7 +20,8 @@ interface PokerTableProps {
 export function PokerTable({ room, players, roomId }: PokerTableProps) {
   const { address } = useAccount();
   const { data: playerCards } = usePlayerCards();
-  const { communityCards, pot, stage, dealerPosition, currentPlayerIndex } = room;
+  const { communityCards, pot, stage, dealerPosition, currentPlayerIndex, roundNumber } =
+    room;
   console.log("/components/game/PokerTable room", room);
   // Calculate positions for players around the table
   // const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {
@@ -66,6 +67,8 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
       {/* Poker table felt */}
       <div className="z-10 absolute top-2 left-2 text-[8px] text-gray-400">
         Room: {roomId}
+        <br />
+        Round: {roundNumber}
       </div>
       <div className="absolute inset-[5%] bg-green-700 rounded-[40%] border-8 border-brown-800 shadow-inner">
         {/* Pot amount */}
@@ -75,8 +78,12 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
 
         {/* Community cards */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-1 sm:gap-2">
-          {communityCards?.map((card, index) => (
-            <Card key={index} card={card} className="w-12 h-16 sm:w-14 sm:h-20" />
+          {communityCards?.map((card) => (
+            <Card
+              key={card.suit + card.rank}
+              card={card}
+              className="w-12 h-16 sm:w-14 sm:h-20"
+            />
           ))}
           {/* Placeholder for missing community cards */}
           {Array.from({ length: 5 - communityCards?.length || 0 }).map((_, index) => (
@@ -99,7 +106,11 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
           const position = positions[player.seatPosition];
           const isCurrentUser = player.addr === address;
           if (playerCards[0] !== "" && playerCards[1] !== "" && isCurrentUser) {
-            player.cards = stringCardsToCards(playerCards);
+            try {
+              player.cards = stringCardsToCards(playerCards);
+            } catch (error) {
+              console.error("Error converting player cards to cards", error);
+            }
           }
           console.log("player.seatPosition", player.seatPosition);
           console.log("dealerPosition", dealerPosition);

@@ -112,6 +112,7 @@ export const EMPTY_SEAT = 255;
 
 export interface Room {
   id: string;
+  roundNumber: number;
   players: Player[];
   seatPositionToPlayerIndex: number[];
   numPlayers: number;
@@ -167,6 +168,12 @@ export enum GameStage {
   Break = 11,
   Ended = 12,
 }
+
+export const REVEAL_COMMUNITY_CARDS_STAGE = [
+  GameStage.RevealFlop,
+  GameStage.RevealTurn,
+  GameStage.RevealRiver,
+];
 
 export const GameStageToString = {
   [GameStage.Idle]: "waiting to start",

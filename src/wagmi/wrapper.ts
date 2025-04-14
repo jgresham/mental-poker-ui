@@ -3,7 +3,12 @@ import { useReadTexasHoldemRoomGetPlayers } from "../generated";
 
 export function useGetPlayers() {
   // Get raw data from wagmi hook
-  const { data: rawData, isLoading, error } = useReadTexasHoldemRoomGetPlayers({});
+  const {
+    data: rawData,
+    isLoading,
+    error,
+    refetch,
+  } = useReadTexasHoldemRoomGetPlayers({});
 
   // Format data when it's available
   const formattedData = useMemo(() => {
@@ -16,5 +21,5 @@ export function useGetPlayers() {
     }));
   }, [rawData]);
 
-  return { data: formattedData, isLoading, error };
+  return { data: formattedData, isLoading, error, refetch };
 }

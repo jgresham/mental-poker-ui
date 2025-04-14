@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PokerTable } from "@/components/game/PokerTable";
 import { GameControls } from "@/components/game/GameControls";
-import { useGetRoom } from "../../../api/mocks";
 import {
   useReadTexasHoldemRoomStage,
   useReadTexasHoldemRoomIsPrivate,
@@ -14,19 +13,21 @@ import {
   useReadTexasHoldemRoomDealerPosition,
   useReadTexasHoldemRoomCurrentPlayerIndex,
   useReadTexasHoldemRoomLastRaiseIndex,
-  useReadTexasHoldemRoomEncryptedDeck,
   useReadTexasHoldemRoomCommunityCards,
   useReadTexasHoldemRoomPot,
   useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useReadTexasHoldemRoomCurrentStageBet,
   useReadTexasHoldemRoomNumPlayers,
   useReadTexasHoldemRoomGetEncryptedDeck,
+  useReadTexasHoldemRoomRoundNumber,
+  useWatchTexasHoldemRoomEvent,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useState } from "react";
 import { useGetPlayers } from "../../../wagmi/wrapper";
 import { getCommunityCards } from "../../../lib/utils";
+import { useRoundKeys } from "../../../hooks/localRoomState";
 
 export default function Room() {
   const params = useParams();
@@ -34,29 +35,35 @@ export default function Room() {
   const roomId = params.roomId as string;
   const [txStatus, setTxStatus] = useState<string | null>(null);
 
-  // const { data: room, isLoading, isError } = useGetRoom(roomId);
-  // const { data: room } = watchContractEvent(config, {
-  //   address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-  //   abi: [],
-  //   functionName: "getRoom",
-  //   args: [roomId],
-  // });
-  const { data: stage } = useReadTexasHoldemRoomStage({});
-  const { data: isPrivate } = useReadTexasHoldemRoomIsPrivate({});
-  const { data: smallBlind } = useReadTexasHoldemRoomSmallBlind({});
-  const { data: bigBlind } = useReadTexasHoldemRoomBigBlind({});
-  const { data: pot } = useReadTexasHoldemRoomPot({});
-  const { data: currentStageBet } = useReadTexasHoldemRoomCurrentStageBet({});
-  const { data: dealerPosition } = useReadTexasHoldemRoomDealerPosition({});
-  const { data: currentPlayerIndex } = useReadTexasHoldemRoomCurrentPlayerIndex({});
-  const { data: lastRaiseIndex } = useReadTexasHoldemRoomLastRaiseIndex({});
-  const { data: communityCards } = useReadTexasHoldemRoomCommunityCards({});
-  const { data: encryptedDeck } = useReadTexasHoldemRoomGetEncryptedDeck({});
-  const { data: getPlayerIndexFromAddr } = useReadTexasHoldemRoomGetPlayerIndexFromAddr({
-    args: [address as `0x${string}`],
-  });
-  const { data: numPlayers } = useReadTexasHoldemRoomNumPlayers({});
-  const { data: players } = useGetPlayers();
+  const { data: stage, refetch: refetchStage } = useReadTexasHoldemRoomStage({});
+  const { data: isPrivate, refetch: refetchIsPrivate } = useReadTexasHoldemRoomIsPrivate(
+    {},
+  );
+  const { data: smallBlind, refetch: refetchSmallBlind } =
+    useReadTexasHoldemRoomSmallBlind({});
+  const { data: bigBlind, refetch: refetchBigBlind } = useReadTexasHoldemRoomBigBlind({});
+  const { data: pot, refetch: refetchPot } = useReadTexasHoldemRoomPot({});
+  const { data: currentStageBet, refetch: refetchCurrentStageBet } =
+    useReadTexasHoldemRoomCurrentStageBet({});
+  const { data: dealerPosition, refetch: refetchDealerPosition } =
+    useReadTexasHoldemRoomDealerPosition({});
+  const { data: currentPlayerIndex, refetch: refetchCurrentPlayerIndex } =
+    useReadTexasHoldemRoomCurrentPlayerIndex({});
+  const { data: lastRaiseIndex, refetch: refetchLastRaiseIndex } =
+    useReadTexasHoldemRoomLastRaiseIndex({});
+  const { data: communityCards, refetch: refetchCommunityCards } =
+    useReadTexasHoldemRoomCommunityCards({});
+  const { data: encryptedDeck, refetch: refetchEncryptedDeck } =
+    useReadTexasHoldemRoomGetEncryptedDeck({});
+  const { data: roundNumber, refetch: refetchRoundNumber } =
+    useReadTexasHoldemRoomRoundNumber({});
+  const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
+    useReadTexasHoldemRoomGetPlayerIndexFromAddr({
+      args: [address as `0x${string}`],
+    });
+  const { data: numPlayers, refetch: refetchNumPlayers } =
+    useReadTexasHoldemRoomNumPlayers({});
+  const { data: players, refetch: refetchPlayers } = useGetPlayers();
   console.log(
     "/room/[roomId] useReadTexasHoldemRoom all properties",
     stage,
@@ -67,12 +74,14 @@ export default function Room() {
     currentPlayerIndex,
     lastRaiseIndex,
     communityCards,
-    encryptedDeck,
+    // encryptedDeck,
     players,
     getPlayerIndexFromAddr,
     currentStageBet,
     pot,
+    roundNumber,
   );
+  const { data: roundKeys } = useRoundKeys(roomId, Number(roundNumber));
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
     useWriteTexasHoldemRoomJoinGame();
@@ -88,6 +97,33 @@ export default function Room() {
   } = useWaitForTransactionReceipt({
     hash: txHash,
   });
+
+  useWatchTexasHoldemRoomEvent({
+    onLogs: (logs) => {
+      console.log("Texas Holdem Room event logs", logs);
+      // refretch all contract data
+      refetchNumPlayers();
+      refetchStage();
+      refetchIsPrivate();
+      refetchSmallBlind();
+      refetchBigBlind();
+      refetchPot();
+      refetchCurrentStageBet();
+      refetchDealerPosition();
+      refetchCurrentPlayerIndex();
+      refetchLastRaiseIndex();
+      refetchCommunityCards();
+      refetchEncryptedDeck();
+      refetchRoundNumber();
+      refetchGetPlayerIndexFromAddr();
+      refetchPlayers();
+    },
+  });
+
+  // setTimeout(() => {
+  //   console.log("refetching numPlayers", numPlayersUpdatedAt, numPlayers);
+  //   refetchNumPlayers();
+  // }, 5000);
 
   console.log("/room/[roomId] joinGame txResult", txResult); // txResult.status === "success", txResult.logs = []
   console.log("/room/[roomId] transaction error", txError);
@@ -163,8 +199,6 @@ export default function Room() {
           </div>
           {/* Dev view: Display all the properties of the game state */}
           <div className="flex flex-row gap-2">
-            <span>Stage: {stage}</span>
-            <span>Is Private: {isPrivate}</span>
             <span>Small Blind: {smallBlind}</span>
             <span>Big Blind: {bigBlind}</span>
             <span>Pot: {pot}</span>
@@ -173,14 +207,30 @@ export default function Room() {
             <span>Current Player Index: {currentPlayerIndex}</span>
             <span>Last Raise Index: {lastRaiseIndex}</span>
             <span>Community Cards: {communityCards}</span>
-            <span>Encrypted Deck: {encryptedDeck}</span>
+            {/* <span>Encrypted Deck: {encryptedDeck}</span> */}
             <span>Logged in Player Index: {getPlayerIndexFromAddr}</span>
-            <span>Players: {JSON.stringify(players)}</span>
+            {/* <span>Players: {JSON.stringify(players)}</span> */}
+            <span>
+              Round Keys. priv. r. pub.
+              <br />
+              {JSON.stringify(roundKeys.privateKey, (key, value) =>
+                typeof value === "bigint" ? value.toString() : value,
+              )}
+              <br />
+              {JSON.stringify(roundKeys.r, (key, value) =>
+                typeof value === "bigint" ? value.toString() : value,
+              )}
+              <br />
+              {JSON.stringify(roundKeys.publicKey, (key, value) =>
+                typeof value === "bigint" ? value.toString() : value,
+              )}
+            </span>
           </div>
           <PokerTable
             room={{
               stage,
               isPrivate,
+              roundNumber: Number(roundNumber),
               smallBlind: Number(smallBlind),
               bigBlind: Number(bigBlind),
               pot: Number(pot),
@@ -200,6 +250,8 @@ export default function Room() {
           />
           <GameControls
             room={{
+              id: roomId,
+              roundNumber: Number(roundNumber),
               stage,
               isPrivate,
               smallBlind: Number(smallBlind),
@@ -211,7 +263,10 @@ export default function Room() {
               currentPlayerIndex: Number(currentPlayerIndex),
               lastRaiseIndex: Number(lastRaiseIndex),
             }}
-            isPlayerTurn={true}
+            isPlayerTurn={
+              Number(currentPlayerIndex) ===
+              Number(players?.find((player) => player.addr === address)?.seatPosition)
+            }
             player={players?.find((player) => player.addr === address)}
           />
         </>

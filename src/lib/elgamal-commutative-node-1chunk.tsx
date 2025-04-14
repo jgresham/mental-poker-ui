@@ -34,6 +34,13 @@ export function generateKeys(): { publicKey: bigint; privateKey: bigint } {
   return { publicKey, privateKey };
 }
 
+export function generateKeysAndR(): { publicKey: bigint; privateKey: bigint; r: bigint } {
+  const privateKey = randomBigIntInRange(BigInt(3), p2048);
+  const publicKey = bigintModArith.modPow(g2048, privateKey, p2048);
+  const r = randomBigIntInRange(BigInt(3), p2048);
+  return { publicKey, privateKey, r };
+}
+
 /**
  * Maximum size in bytes of a message that can be encrypted with the given prime
  */

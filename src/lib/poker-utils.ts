@@ -39,66 +39,6 @@ export function shuffleDeck(deck: Card[]): Card[] {
   return shuffledDeck;
 }
 
-// Deal cards to players
-// export function dealCards(gameState: GameState): GameState {
-//   const { players, deck } = gameState;
-//   const newDeck = [...deck];
-//   const updatedPlayers = [...players];
-
-//   // Deal 2 cards to each active player
-//   for (let i = 0; i < 2; i++) {
-//     for (let j = 0; j < updatedPlayers.length; j++) {
-//       if (updatedPlayers[j].isActive) {
-//         const card = newDeck.pop();
-//         if (card) {
-//           // Cards are dealt face down by default
-//           updatedPlayers[j].cards.push({ ...card, faceUp: false });
-//         }
-//       }
-//     }
-//   }
-
-//   return {
-//     ...gameState,
-//     players: updatedPlayers,
-//     deck: newDeck,
-//   };
-// }
-
-// Deal community cards based on the game stage
-// export function dealCommunityCards(gameState: GameState): GameState {
-//   const { stage, deck, communityCards } = gameState;
-//   const newDeck = [...deck];
-//   const newCommunityCards = [...communityCards];
-
-//   let cardsToAdd = 0;
-
-//   switch (stage) {
-//     case "flop":
-//       cardsToAdd = 3;
-//       break;
-//     case "turn":
-//     case "river":
-//       cardsToAdd = 1;
-//       break;
-//     default:
-//       return gameState;
-//   }
-
-//   for (let i = 0; i < cardsToAdd; i++) {
-//     const card = newDeck.pop();
-//     if (card) {
-//       newCommunityCards.push({ ...card, faceUp: true });
-//     }
-//   }
-
-//   return {
-//     ...gameState,
-//     communityCards: newCommunityCards,
-//     deck: newDeck,
-//   };
-// }
-
 // Initialize a new game state
 // export function initializeGame(
 //   playerCount: number,
