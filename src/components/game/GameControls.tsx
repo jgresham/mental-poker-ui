@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Action,
@@ -17,11 +17,11 @@ import {
   shuffleAndEncryptDeck,
 } from "../../lib/encrypted-poker-1chunk";
 import {
-  useReadTexasHoldemRoomEncryptedDeck,
-  useReadTexasHoldemRoomGetEncryptedDeck,
+  useReadTexasHoldemRoomCurrentPlayerIndex,
+  useReadDeckHandlerGetEncryptedDeck,
   useWriteTexasHoldemRoomSubmitAction,
-  useWriteTexasHoldemRoomSubmitDecryptionValues,
-  useWriteTexasHoldemRoomSubmitEncryptedShuffle,
+  useWriteDeckHandlerSubmitDecryptionValues,
+  useWriteDeckHandlerSubmitEncryptedShuffle,
 } from "../../generated";
 import {
   bigintToString,
@@ -44,16 +44,17 @@ interface GameControlsProps {
   room: Room;
   player?: Player;
   currentPlayerId?: string;
-  isPlayerTurn?: boolean;
 }
 
 const PLAYER1_ADDRESS = "0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f";
 const PLAYER2_ADDRESS = "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720";
 
-export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) {
+export function GameControls({ room, player }: GameControlsProps) {
   console.log("GameControls room", room);
-  console.log("GameControls isPlayerTurn", isPlayerTurn);
   console.log("GameControls player", player);
+  const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(false);
+  console.log("GameControls isPlayerTurn", isPlayerTurn);
+
   const [hasPromptedStageObligation, setHasPromptedStageObligation] =
     useState<GameStage | null>(null);
   const [betAmount, setBetAmount] = useState<number>(room?.currentStageBet || 0);
@@ -62,7 +63,11 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
   const { data: roundKeys } = useRoundKeys(room.id, Number(room.roundNumber));
   console.log("/room/[roomId] roundKeys", roundKeys);
 
-  const { data: encryptedDeck } = useReadTexasHoldemRoomGetEncryptedDeck({});
+  const {
+    data: encryptedDeck,
+    refetch: refetchEncryptedDeck,
+    dataUpdatedAt: encryptedDeckUpdatedAt,
+  } = useReadDeckHandlerGetEncryptedDeck({});
   // console.log("encryptedDeck", encryptedDeck);
   const {
     writeContractAsync: submitEncryptedDeck,
@@ -70,7 +75,7 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
     isSuccess: isSubmittingEncryptedDeckSuccess,
     isError: isSubmittingEncryptedDeckError,
     error: txError,
-  } = useWriteTexasHoldemRoomSubmitEncryptedShuffle();
+  } = useWriteDeckHandlerSubmitEncryptedShuffle();
   console.log("txError", txError);
   const [txHash2, setTxHash2] = useState<string | undefined>(undefined);
   const {
@@ -101,7 +106,7 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
     isSuccess: isSubmittingDecryptionValuesSuccess,
     isError: isSubmittingDecryptionValuesError,
     error: txErrorSubmittingDecryptionValues,
-  } = useWriteTexasHoldemRoomSubmitDecryptionValues();
+  } = useWriteDeckHandlerSubmitDecryptionValues();
   console.log("isSubmittingDecryptionValues", isSubmittingDecryptionValues);
   console.log("isSubmittingDecryptionValuesSuccess", isSubmittingDecryptionValuesSuccess);
   console.log("isSubmittingDecryptionValuesError", isSubmittingDecryptionValuesError);
@@ -109,7 +114,9 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
   const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
   const { writeContractAsync: submitAction } = useWriteTexasHoldemRoomSubmitAction();
-
+  const { data: currentPlayerIndex, dataUpdatedAt: currentPlayerIndexUpdatedAt } =
+    useReadTexasHoldemRoomCurrentPlayerIndex({});
+  console.log("GC: currentPlayerIndexUpdatedAt", currentPlayerIndexUpdatedAt);
   useEffect(() => {
     if (room?.currentStageBet) {
       setBetAmount(room?.currentStageBet * 2);
@@ -157,6 +164,12 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
   }, [playerCards, room.stage, encryptedDeck, player?.seatPosition, roundKeys]);
 
   useEffect(() => {
+    if (currentPlayerIndex !== undefined) {
+      setIsPlayerTurn(Number(currentPlayerIndex) === Number(player?.seatPosition));
+    }
+  }, [currentPlayerIndex, player?.seatPosition]);
+
+  useEffect(() => {
     if (!isPlayerTurn || hasPromptedStageObligation !== null) {
       return;
     }
@@ -176,6 +189,15 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
       console.error("handleRevealPlayerCards: null round key found");
       return;
     }
+    // handle race condition where currentPlayerIndex is updated before the encrypted deck is updated
+    if (currentPlayerIndexUpdatedAt > encryptedDeckUpdatedAt) {
+      console.log(
+        "handleRevealPlayerCards: encrypted deck updated before current player index. fetching encrypted deck",
+      );
+      refetchEncryptedDeck();
+      return;
+    }
+
     // if shuffle, call submitEncryptedDeck
     if (room.stage === GameStage.Shuffle && !isSubmittingEncryptedDeck) {
       console.log("BACKGROUND OBLIGATION: SHUFFLE");
@@ -276,7 +298,7 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
   //   currentPlayer.bet < gameState.currentStageBet;
   // const canRaise = currentPlayer && currentPlayer.chips > 0;
 
-  async function handleShuffle() {
+  const handleShuffle = useCallback(async () => {
     console.log("handleShuffle", encryptedDeck);
     let deck: {
       c1: bigint;
@@ -331,7 +353,7 @@ export function GameControls({ room, isPlayerTurn, player }: GameControlsProps) 
     });
     console.log("txHash2", txHash2);
     setTxHash2(txHash2);
-  }
+  }, [encryptedDeck, isPlayerTurn, roundKeys, submitEncryptedDeck, player]);
 
   async function handleRevealPlayerCards() {
     console.log("handleRevealPlayerCards", encryptedDeck);

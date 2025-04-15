@@ -5,27 +5,15 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PokerTable } from "@/components/game/PokerTable";
 import { GameControls } from "@/components/game/GameControls";
 import {
-  useReadTexasHoldemRoomStage,
-  useReadTexasHoldemRoomIsPrivate,
-  useReadTexasHoldemRoomSmallBlind,
   useWriteTexasHoldemRoomJoinGame,
-  useReadTexasHoldemRoomBigBlind,
-  useReadTexasHoldemRoomDealerPosition,
-  useReadTexasHoldemRoomCurrentPlayerIndex,
-  useReadTexasHoldemRoomLastRaiseIndex,
   useReadTexasHoldemRoomCommunityCards,
-  useReadTexasHoldemRoomPot,
   useReadTexasHoldemRoomGetPlayerIndexFromAddr,
-  useReadTexasHoldemRoomCurrentStageBet,
-  useReadTexasHoldemRoomNumPlayers,
-  useReadTexasHoldemRoomGetEncryptedDeck,
-  useReadTexasHoldemRoomRoundNumber,
   useWatchTexasHoldemRoomEvent,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useState } from "react";
-import { useGetPlayers } from "../../../wagmi/wrapper";
+import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { getCommunityCards } from "../../../lib/utils";
 import { useRoundKeys } from "../../../hooks/localRoomState";
 
@@ -35,53 +23,26 @@ export default function Room() {
   const roomId = params.roomId as string;
   const [txStatus, setTxStatus] = useState<string | null>(null);
 
-  const { data: stage, refetch: refetchStage } = useReadTexasHoldemRoomStage({});
-  const { data: isPrivate, refetch: refetchIsPrivate } = useReadTexasHoldemRoomIsPrivate(
-    {},
-  );
-  const { data: smallBlind, refetch: refetchSmallBlind } =
-    useReadTexasHoldemRoomSmallBlind({});
-  const { data: bigBlind, refetch: refetchBigBlind } = useReadTexasHoldemRoomBigBlind({});
-  const { data: pot, refetch: refetchPot } = useReadTexasHoldemRoomPot({});
-  const { data: currentStageBet, refetch: refetchCurrentStageBet } =
-    useReadTexasHoldemRoomCurrentStageBet({});
-  const { data: dealerPosition, refetch: refetchDealerPosition } =
-    useReadTexasHoldemRoomDealerPosition({});
-  const { data: currentPlayerIndex, refetch: refetchCurrentPlayerIndex } =
-    useReadTexasHoldemRoomCurrentPlayerIndex({});
-  const { data: lastRaiseIndex, refetch: refetchLastRaiseIndex } =
-    useReadTexasHoldemRoomLastRaiseIndex({});
   const { data: communityCards, refetch: refetchCommunityCards } =
     useReadTexasHoldemRoomCommunityCards({});
-  const { data: encryptedDeck, refetch: refetchEncryptedDeck } =
-    useReadTexasHoldemRoomGetEncryptedDeck({});
-  const { data: roundNumber, refetch: refetchRoundNumber } =
-    useReadTexasHoldemRoomRoundNumber({});
   const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
     useReadTexasHoldemRoomGetPlayerIndexFromAddr({
       args: [address as `0x${string}`],
     });
-  const { data: numPlayers, refetch: refetchNumPlayers } =
-    useReadTexasHoldemRoomNumPlayers({});
   const { data: players, refetch: refetchPlayers } = useGetPlayers();
+  const { data: roomData, refetch: refetchRoomData } = useGetBulkRoomData();
   console.log(
-    "/room/[roomId] useReadTexasHoldemRoom all properties",
-    stage,
-    isPrivate,
-    smallBlind,
-    bigBlind,
-    dealerPosition,
-    currentPlayerIndex,
-    lastRaiseIndex,
+    "/room/[roomId] useReadTexasHoldemRoom non-bulk properties",
     communityCards,
     // encryptedDeck,
     players,
     getPlayerIndexFromAddr,
-    currentStageBet,
-    pot,
-    roundNumber,
   );
-  const { data: roundKeys } = useRoundKeys(roomId, Number(roundNumber));
+  console.log(
+    "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties",
+    roomData,
+  );
+  const { data: roundKeys } = useRoundKeys(roomId, roomData?.roundNumber);
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
     useWriteTexasHoldemRoomJoinGame();
@@ -102,23 +63,27 @@ export default function Room() {
     onLogs: (logs) => {
       console.log("Texas Holdem Room event logs", logs);
       // refretch all contract data
-      refetchNumPlayers();
-      refetchStage();
-      refetchIsPrivate();
-      refetchSmallBlind();
-      refetchBigBlind();
-      refetchPot();
-      refetchCurrentStageBet();
-      refetchDealerPosition();
-      refetchCurrentPlayerIndex();
-      refetchLastRaiseIndex();
+      refetchRoomData();
       refetchCommunityCards();
-      refetchEncryptedDeck();
-      refetchRoundNumber();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
     },
   });
+
+  const {
+    stage,
+    isPrivate,
+    smallBlind,
+    bigBlind,
+    pot,
+    currentStageBet,
+    dealerPosition,
+    currentPlayerIndex,
+    lastRaiseIndex,
+    numPlayers,
+    roundNumber,
+    encryptedDeck,
+  } = roomData ?? {};
 
   // setTimeout(() => {
   //   console.log("refetching numPlayers", numPlayersUpdatedAt, numPlayers);
@@ -145,7 +110,6 @@ export default function Room() {
   //     uint256 lastRaiseIndex;
   //     string[5] communityCards;
   //     BigNumber[] encryptedDeck;
-
   const handleJoinGame = async () => {
     try {
       setTxStatus("Submitting transaction...");
@@ -263,10 +227,6 @@ export default function Room() {
               currentPlayerIndex: Number(currentPlayerIndex),
               lastRaiseIndex: Number(lastRaiseIndex),
             }}
-            isPlayerTurn={
-              Number(currentPlayerIndex) ===
-              Number(players?.find((player) => player.addr === address)?.seatPosition)
-            }
             player={players?.find((player) => player.addr === address)}
           />
         </>

@@ -146,22 +146,27 @@ export const getCommunityCards = ({
     "getCommunityCards revealCommunityCardsIndexes",
     revealCommunityCardsIndexes,
   );
-  if (stage === GameStage.Flop) {
-    return stringCardsToCards([
-      bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
-      bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[1]])),
-      bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[2]])),
-    ]);
+  try {
+    if (stage === GameStage.Flop) {
+      return stringCardsToCards([
+        bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
+        bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[1]])),
+        bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[2]])),
+      ]);
+    }
+    if (stage === GameStage.Turn) {
+      return stringCardsToCards([
+        bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
+      ]);
+    }
+    if (stage === GameStage.River) {
+      return stringCardsToCards([
+        bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
+      ]);
+    }
+    return [];
+  } catch (error) {
+    console.error("Error getting community cards", error);
+    return [];
   }
-  if (stage === GameStage.Turn) {
-    return stringCardsToCards([
-      bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
-    ]);
-  }
-  if (stage === GameStage.River) {
-    return stringCardsToCards([
-      bigintToString(BigInt(encryptedDeck[revealCommunityCardsIndexes[0]])),
-    ]);
-  }
-  return [];
 };

@@ -119,6 +119,8 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
           }
           if (player.seatPosition === currentPlayerIndex) {
             player.isTurn = true;
+          } else {
+            player.isTurn = false;
           }
 
           return (
