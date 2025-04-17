@@ -25,11 +25,11 @@ export const g2048 = BigInt(2);
 
 // Modular multiplicative inverse
 export function modInverse(a: bigint, m: bigint): bigint {
-  console.log(
-    `Computing modular inverse of ${a} or hex: ${a.toString(16)} % mod ${m} or hex: ${m.toString(16)}`,
-  );
+  // console.log(
+  //   `Computing modular inverse of ${a} or hex: ${a.toString(16)} % mod ${m} or hex: ${m.toString(16)}`,
+  // );
   const result = bigintModArith.modInv(a, m);
-  console.log(`Modular inverse result: ${result} or hex: ${result.toString(16)}`);
+  // console.log(`Modular inverse result: ${result} or hex: ${result.toString(16)}`);
   return result;
 }
 
@@ -56,15 +56,15 @@ export function decryptCard({
   // constant 2048 bit prime
   const p = p2048;
   // For every chunk in the encrypted card, decrypt it
-  console.log(`decryptCard encryptedCard.c1: ${encryptedCard.c1.toString(16)}`);
-  console.log(`decryptCard encryptedCard.c2: ${encryptedCard.c2.toString(16)}`);
-  console.log(`decryptCard privateKey: ${privateKey.toString(16)}`);
-  console.log(`decryptCard p: ${p.toString(16)}`);
+  // console.log(`decryptCard encryptedCard.c1: ${encryptedCard.c1.toString(16)}`);
+  // console.log(`decryptCard encryptedCard.c2: ${encryptedCard.c2.toString(16)}`);
+  // console.log(`decryptCard privateKey: ${privateKey.toString(16)}`);
+  // console.log(`decryptCard p: ${p.toString(16)}`);
   const modInverseResult = modInverse(
     bigintModArith.modPow(encryptedCard.c1, privateKey, p),
     p,
   );
-  console.log(`decryptCard modInverseResult: ${modInverseResult.toString(16)}`);
+  // console.log(`decryptCard modInverseResult: ${modInverseResult.toString(16)}`);
   const result = (encryptedCard.c2 * modInverseResult) % p;
   console.log(
     `decryptCard result (hex) (dec): ${result.toString(16)} ${result.toString(10)}`,
@@ -89,18 +89,18 @@ export function encryptMessageBigint({
   p?: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
-  console.log(`Encrypting messageBigint: ${messageBigint}`);
+  // console.log(`Encrypting messageBigint: ${messageBigint}`);
 
   // Generate a random value r if not provided
   const rToUse = r ?? randomBigIntInRange(BigInt(3), p);
-  console.log(`Random value r: ${rToUse}`);
+  // console.log(`Random value r: ${rToUse}`);
 
   // Compute c1 = g^r mod p
   const c1 = bigintModArith.modPow(g, rToUse, p);
-  console.log(`c1 = g^r mod p = ${c1}`);
+  // console.log(`c1 = g^r mod p = ${c1}`);
 
   const c2 = (bigintModArith.modPow(publicKey, rToUse, p) * messageBigint) % p;
-  console.log(`c2 = (Y^r * m) mod p = ${c2}`);
+  // console.log(`c2 = (Y^r * m) mod p = ${c2}`);
 
   return { c1, c2 };
 }

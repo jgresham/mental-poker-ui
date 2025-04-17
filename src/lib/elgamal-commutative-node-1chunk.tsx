@@ -116,13 +116,13 @@ export function bigintToString(chunk: bigint): string {
 
 // Modular multiplicative inverse
 export function modInverse(a: bigint, m: bigint): bigint {
-  console.log(
-    `${getTimestamp()} Computing modular inverse of ${a} or hex: ${a.toString(16)} % mod ${m} or hex: ${m.toString(16)}`,
-  );
+  // console.log(
+  //   `${getTimestamp()} Computing modular inverse of ${a} or hex: ${a.toString(16)} % mod ${m} or hex: ${m.toString(16)}`,
+  // );
   const result = bigintModArith.modInv(a, m);
-  console.log(
-    `${getTimestamp()} Modular inverse result: ${result} or hex: ${result.toString(16)}`,
-  );
+  // console.log(
+  //   `${getTimestamp()} Modular inverse result: ${result} or hex: ${result.toString(16)}`,
+  // );
   return result;
 }
 
@@ -187,14 +187,14 @@ export function encryptMessageBigint({
 
   // Generate a random value r if not provided
   const rToUse = r ?? randomBigIntInRange(BigInt(3), p);
-  console.log(`${getTimestamp()} Random value r: ${rToUse}`);
+  // console.log(`${getTimestamp()} Random value r: ${rToUse}`);
 
   // Compute c1 = g^r mod p
   const c1 = generateC1(g, rToUse, p);
-  console.log(`${getTimestamp()} c1 = g^r mod p = ${c1}`);
+  // console.log(`${getTimestamp()} c1 = g^r mod p = ${c1}`);
 
   const c2 = (bigintModArith.modPow(publicKey, rToUse, p) * messageBigint) % p;
-  console.log(`${getTimestamp()} c2 = (Y^r * m) mod p = ${c2}`);
+  // console.log(`${getTimestamp()} c2 = (Y^r * m) mod p = ${c2}`);
 
   return { c1, c2 };
 }

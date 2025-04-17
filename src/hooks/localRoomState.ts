@@ -39,7 +39,7 @@ export function useSetPlayerCards() {
  * @param roundNumber - The round number
  * @returns private key, public key, and r
  */
-export function useRoundKeys(roomId: string, roundNumber: number) {
+export function useRoundKeys(roomId: string, roundNumber?: number) {
   return useQuery<{
     privateKey: bigint | null;
     publicKey: bigint | null;
