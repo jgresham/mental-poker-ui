@@ -9,7 +9,7 @@ import {
 } from "@/lib/types";
 // import { dealCommunityCards, getNextStage, nextPlayer } from "@/lib/poker-utils";
 import { useRouter } from "next/navigation";
-import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useConnections, useWaitForTransactionReceipt } from "wagmi";
 import {
   DECK,
   decryptCard,
@@ -18,7 +18,6 @@ import {
 } from "../../lib/encrypted-poker-1chunk";
 import {
   useReadTexasHoldemRoomCurrentPlayerIndex,
-  useReadDeckHandlerGetEncryptedDeck,
   useWriteTexasHoldemRoomSubmitAction,
   useWriteDeckHandlerSubmitDecryptionValues,
   useWriteDeckHandlerSubmitEncryptedShuffle,
@@ -46,12 +45,10 @@ interface GameControlsProps {
   currentPlayerId?: string;
 }
 
-const PLAYER1_ADDRESS = "0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f";
-const PLAYER2_ADDRESS = "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720";
-
 export function GameControls({ room, player }: GameControlsProps) {
   console.log("GameControls room", room);
   console.log("GameControls player", player);
+  const connections = useConnections();
   const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(false);
   console.log("GameControls isPlayerTurn", isPlayerTurn);
 
@@ -61,13 +58,13 @@ export function GameControls({ room, player }: GameControlsProps) {
   const router = useRouter();
   const { address } = useAccount();
   const { data: roundKeys } = useRoundKeys(room.id, Number(room.roundNumber));
-  console.log("/room/[roomId] roundKeys", roundKeys);
+  console.log("GameControls roundKeys", roundKeys);
 
-  const {
-    data: encryptedDeck,
-    refetch: refetchEncryptedDeck,
-    dataUpdatedAt: encryptedDeckUpdatedAt,
-  } = useReadDeckHandlerGetEncryptedDeck({});
+  // const {
+  //   data: encryptedDeck,
+  //   refetch: refetchEncryptedDeck,
+  //   dataUpdatedAt: encryptedDeckUpdatedAt,
+  // } = useReadDeckHandlerGetEncryptedDeck({});
   // console.log("encryptedDeck", encryptedDeck);
   const {
     writeContractAsync: submitEncryptedDeck,
@@ -114,9 +111,7 @@ export function GameControls({ room, player }: GameControlsProps) {
   const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
   const { writeContractAsync: submitAction } = useWriteTexasHoldemRoomSubmitAction();
-  const { data: currentPlayerIndex, dataUpdatedAt: currentPlayerIndexUpdatedAt } =
-    useReadTexasHoldemRoomCurrentPlayerIndex({});
-  console.log("GC: currentPlayerIndexUpdatedAt", currentPlayerIndexUpdatedAt);
+
   useEffect(() => {
     if (room?.currentStageBet) {
       setBetAmount(room?.currentStageBet * 2);
@@ -148,10 +143,11 @@ export function GameControls({ room, player }: GameControlsProps) {
     if (
       playerCards[0] === "" &&
       playerCards[1] === "" &&
+      room &&
       room.stage > GameStage.RevealDeal
     ) {
       if (
-        encryptedDeck !== undefined &&
+        room.encryptedDeck !== undefined &&
         player?.seatPosition !== undefined &&
         roundKeys.privateKey !== null &&
         roundKeys.publicKey !== null &&
@@ -161,24 +157,35 @@ export function GameControls({ room, player }: GameControlsProps) {
         handleRevealMyCards();
       }
     }
-  }, [playerCards, room.stage, encryptedDeck, player?.seatPosition, roundKeys]);
+  }, [playerCards, room.stage, room.encryptedDeck, player?.seatPosition, roundKeys]);
 
   useEffect(() => {
-    if (currentPlayerIndex !== undefined) {
-      setIsPlayerTurn(Number(currentPlayerIndex) === Number(player?.seatPosition));
+    console.log(
+      "GC: setIsPlayerTurn",
+      room.currentPlayerIndex,
+      player?.playerIndex,
+      room.currentPlayerIndex === player?.playerIndex,
+    );
+    if (room.currentPlayerIndex !== undefined && player?.playerIndex !== undefined) {
+      setIsPlayerTurn(room.currentPlayerIndex === player?.playerIndex);
     }
-  }, [currentPlayerIndex, player?.seatPosition]);
+  }, [player?.playerIndex, room.currentPlayerIndex]);
 
   useEffect(() => {
+    if (connections.length === 0) {
+      console.log("no wagmi connections yet");
+      return;
+    }
     if (!isPlayerTurn || hasPromptedStageObligation !== null) {
       return;
     }
-    if (encryptedDeck === undefined) {
+    // First shuffler uses the unencrypted deck
+    if (room.encryptedDeck === undefined && room.stage !== GameStage.Shuffle) {
       console.log("no encrypted deck");
       return;
     }
     if (player?.seatPosition === undefined) {
-      console.error("handleRevealPlayerCards: player seat position is undefined");
+      console.log("handleRevealPlayerCards: player seat position is undefined");
       return;
     }
     if (
@@ -186,18 +193,30 @@ export function GameControls({ room, player }: GameControlsProps) {
       roundKeys.publicKey === null ||
       roundKeys.r === null
     ) {
-      console.error("handleRevealPlayerCards: null round key found");
+      console.log("handleRevealPlayerCards: null round key found");
       return;
     }
-    // handle race condition where currentPlayerIndex is updated before the encrypted deck is updated
-    if (currentPlayerIndexUpdatedAt > encryptedDeckUpdatedAt) {
-      console.log(
-        "handleRevealPlayerCards: encrypted deck updated before current player index. fetching encrypted deck",
-      );
-      refetchEncryptedDeck();
+    if (
+      room.stage !== GameStage.Shuffle &&
+      room.stage !== GameStage.RevealDeal &&
+      !REVEAL_COMMUNITY_CARDS_STAGE.includes(room.stage)
+    ) {
+      console.log("not a valid stage for obligation");
       return;
     }
+    console.log("calling handleObligation");
+    handleObligation();
+  }, [
+    room.stage,
+    room.encryptedDeck,
+    isPlayerTurn,
+    hasPromptedStageObligation,
+    player?.seatPosition,
+    roundKeys,
+    connections
+  ]);
 
+  const handleObligation = () => {
     // if shuffle, call submitEncryptedDeck
     if (room.stage === GameStage.Shuffle && !isSubmittingEncryptedDeck) {
       console.log("BACKGROUND OBLIGATION: SHUFFLE");
@@ -220,16 +239,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       setHasPromptedStageObligation(room.stage);
       handleRevealCommunityCards();
     }
-  }, [
-    room,
-    isPlayerTurn,
-    isSubmittingDecryptionValues,
-    isSubmittingEncryptedDeck,
-    hasPromptedStageObligation,
-    encryptedDeck,
-    player?.seatPosition,
-    roundKeys,
-  ]);
+  };
 
   // Handle fold action
   const handleFold = () => {
@@ -298,8 +308,9 @@ export function GameControls({ room, player }: GameControlsProps) {
   //   currentPlayer.bet < gameState.currentStageBet;
   // const canRaise = currentPlayer && currentPlayer.chips > 0;
 
-  const handleShuffle = useCallback(async () => {
-    console.log("handleShuffle", encryptedDeck);
+      // const handleShuffle = useCallback(async () => {
+  const handleShuffle = async () => {
+    console.log("handleShuffle", room.encryptedDeck);
     let deck: {
       c1: bigint;
       c2: bigint;
@@ -323,11 +334,11 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.log("Deck before encrypted shuffle, formatted deck: ", deck);
     } else {
       console.log("handleShuffle: encrypting and shuffling existing encrypted deck");
-      if (!encryptedDeck) {
+      if (!room.encryptedDeck) {
         console.error("handleShuffle: no encrypted deck");
         return;
       }
-      deck = encryptedDeck.map((card) => ({
+      deck = room.encryptedDeck.map((card) => ({
         c1: BigInt(0), // this c1 is not used in the encryption process
         c2: BigInt(card),
       }));
@@ -353,11 +364,12 @@ export function GameControls({ room, player }: GameControlsProps) {
     });
     console.log("txHash2", txHash2);
     setTxHash2(txHash2);
-  }, [encryptedDeck, isPlayerTurn, roundKeys, submitEncryptedDeck, player]);
+  };
+  // , [encryptedDeck, isPlayerTurn, roundKeys, submitEncryptedDeck, player]);
 
   async function handleRevealPlayerCards() {
-    console.log("handleRevealPlayerCards", encryptedDeck);
-    if (encryptedDeck === undefined) {
+    console.log("handleRevealPlayerCards", room.encryptedDeck);
+    if (room.encryptedDeck === undefined) {
       console.log("no encrypted deck");
       return;
     }
@@ -386,7 +398,7 @@ export function GameControls({ room, player }: GameControlsProps) {
     const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealOtherPlayersCardsIndexes.map((index) => {
-      const card = encryptedDeck[index];
+      const card = room.encryptedDeck[index];
       const decryptedCard = decryptCard({
         encryptedCard: {
           c1,
@@ -417,8 +429,8 @@ export function GameControls({ room, player }: GameControlsProps) {
   }
 
   async function handleRevealMyCards() {
-    console.log("handleRevealMyCards", encryptedDeck);
-    if (encryptedDeck === undefined) {
+    console.log("handleRevealMyCards", room.encryptedDeck);
+    if (room.encryptedDeck === undefined) {
       console.log("no encrypted deck");
       return;
     }
@@ -440,7 +452,7 @@ export function GameControls({ room, player }: GameControlsProps) {
     const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealMyCardsIndexes.map((index) => {
-      const card = encryptedDeck[index];
+      const card = room.encryptedDeck[index];
       const decryptedCard = decryptCard({
         encryptedCard: {
           c1,
@@ -456,8 +468,8 @@ export function GameControls({ room, player }: GameControlsProps) {
   }
 
   async function handleRevealCommunityCards() {
-    console.log("handleRevealCommunityCards", encryptedDeck);
-    if (encryptedDeck === undefined) {
+    console.log("handleRevealCommunityCards", room.encryptedDeck);
+    if (room.encryptedDeck === undefined) {
       console.log("no encrypted deck");
       return;
     }
@@ -486,7 +498,7 @@ export function GameControls({ room, player }: GameControlsProps) {
     const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealCommunityCardsIndexes.map((index) => {
-      const card = encryptedDeck[index];
+      const card = room.encryptedDeck[index];
       const decryptedCard = decryptCard({
         encryptedCard: {
           c1,
@@ -525,9 +537,22 @@ export function GameControls({ room, player }: GameControlsProps) {
           <span className="text-xs sm:text-sm ml-2 sm:ml-4">Chips: ${player.chips}</span>
         </div>
       </div>
-
+      {(isSubmittingEncryptedDeckError || isSubmittingDecryptionValuesError) && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            className="h-8 text-xs sm:text-sm"
+            disabled={!isPlayerTurn}
+            onClick={handleObligation}
+          >
+            Submit
+            {isSubmittingEncryptedDeckError ? "Encrypted Deck" : "Decryption Values"}
+          </Button>
+        </div>
+      )}
       {/* Player actions */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2">
+      {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2">
         <Button
           variant="secondary"
           size="sm"
@@ -564,7 +589,7 @@ export function GameControls({ room, player }: GameControlsProps) {
         >
           Reveal community cards
         </Button>
-      </div>
+      </div> */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2">
         <Button
           variant="destructive"

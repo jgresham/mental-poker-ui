@@ -6,25 +6,26 @@ import { PokerTable } from "@/components/game/PokerTable";
 import { GameControls } from "@/components/game/GameControls";
 import {
   useWriteTexasHoldemRoomJoinGame,
-  useReadTexasHoldemRoomCommunityCards,
   useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useWatchTexasHoldemRoomEvent,
+  useWatchDeckHandlerEvent,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { getCommunityCards } from "../../../lib/utils";
 import { useRoundKeys } from "../../../hooks/localRoomState";
+import { Card, GameStage } from "../../../lib/types";
+import { toast } from "sonner";
 
 export default function Room() {
   const params = useParams();
   const { address } = useAccount();
   const roomId = params.roomId as string;
   const [txStatus, setTxStatus] = useState<string | null>(null);
+  const [communityCards, setCommunityCards] = useState<Card[]>([]);
 
-  const { data: communityCards, refetch: refetchCommunityCards } =
-    useReadTexasHoldemRoomCommunityCards({});
   const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
     useReadTexasHoldemRoomGetPlayerIndexFromAddr({
       args: [address as `0x${string}`],
@@ -33,8 +34,6 @@ export default function Room() {
   const { data: roomData, refetch: refetchRoomData } = useGetBulkRoomData();
   console.log(
     "/room/[roomId] useReadTexasHoldemRoom non-bulk properties",
-    communityCards,
-    // encryptedDeck,
     players,
     getPlayerIndexFromAddr,
   );
@@ -64,7 +63,16 @@ export default function Room() {
       console.log("Texas Holdem Room event logs", logs);
       // refretch all contract data
       refetchRoomData();
-      refetchCommunityCards();
+      refetchGetPlayerIndexFromAddr();
+      refetchPlayers();
+    },
+  });
+
+  useWatchDeckHandlerEvent({
+    onLogs: (logs) => {
+      console.log("Deck Handler event logs", logs);
+      // refretch all contract data
+      refetchRoomData();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
     },
@@ -124,6 +132,31 @@ export default function Room() {
     }
   };
 
+  useEffect(() => {
+    if(roomData && roomData.stage !== undefined && roomData.encryptedDeck !== undefined && roomData.numPlayers !== undefined) {
+      if (roomData.stage >= GameStage.Flop) {
+        try {
+          const communityCards = getCommunityCards({
+            stage: roomData.stage,
+            numOfPlayers: roomData.numPlayers,
+            encryptedDeck: roomData.encryptedDeck,
+          });
+          console.log("communityCards", communityCards);
+          setCommunityCards(communityCards);
+        } catch (error) {
+          console.error("Error getting community cards:", error);
+          toast.error("Error decrypting table cards");
+          setCommunityCards([]);
+        }
+
+        return;
+      }
+    } else {
+      console.log("roomData is not ready yet", roomData);
+    }
+    setCommunityCards([]);
+  }, [roomData]);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
       <div className="absolute top-5 right-5 z-20">
@@ -162,7 +195,7 @@ export default function Room() {
             )}
           </div>
           {/* Dev view: Display all the properties of the game state */}
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 text-[8px]">
             <span>Small Blind: {smallBlind}</span>
             <span>Big Blind: {bigBlind}</span>
             <span>Pot: {pot}</span>
@@ -170,7 +203,7 @@ export default function Room() {
             <span>Dealer Position: {dealerPosition}</span>
             <span>Current Player Index: {currentPlayerIndex}</span>
             <span>Last Raise Index: {lastRaiseIndex}</span>
-            <span>Community Cards: {communityCards}</span>
+            <span>Community Cards: {JSON.stringify(communityCards)}</span>
             {/* <span>Encrypted Deck: {encryptedDeck}</span> */}
             <span>Logged in Player Index: {getPlayerIndexFromAddr}</span>
             {/* <span>Players: {JSON.stringify(players)}</span> */}
@@ -192,22 +225,10 @@ export default function Room() {
           </div>
           <PokerTable
             room={{
-              stage,
-              isPrivate,
-              roundNumber: Number(roundNumber),
-              smallBlind: Number(smallBlind),
-              bigBlind: Number(bigBlind),
-              pot: Number(pot),
-              currentStageBet: Number(currentStageBet),
-              dealerPosition: Number(dealerPosition),
-              currentPlayerIndex: Number(currentPlayerIndex),
-              lastRaiseIndex: Number(lastRaiseIndex),
-              communityCards: getCommunityCards({
-                stage,
-                numOfPlayers: Number(numPlayers),
-                encryptedDeck,
-              }),
-              encryptedDeck,
+              ...roomData,
+              id: roomId,
+              communityCards,
+              encryptedDeck: roomData?.encryptedDeck,
             }}
             players={players || []}
             roomId={roomId || ""}
@@ -226,6 +247,7 @@ export default function Room() {
               dealerPosition: Number(dealerPosition),
               currentPlayerIndex: Number(currentPlayerIndex),
               lastRaiseIndex: Number(lastRaiseIndex),
+              encryptedDeck: roomData?.encryptedDeck,
             }}
             player={players?.find((player) => player.addr === address)}
           />

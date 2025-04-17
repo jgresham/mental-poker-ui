@@ -16,11 +16,12 @@ export function useGetPlayers() {
   // Format data when it's available
   const formattedData = useMemo(() => {
     if (!rawData) return null;
-    return rawData.map((player) => ({
+    return rawData.map((player, playerIndex) => ({
       ...player,
       chips: Number(player.chips),
       currentStageBet: Number(player.currentStageBet),
       totalRoundBet: Number(player.totalRoundBet),
+      playerIndex,
     }));
   }, [rawData]);
 

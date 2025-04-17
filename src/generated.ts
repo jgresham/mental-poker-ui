@@ -1272,6 +1272,13 @@ export const deckHandlerAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'resetDeck',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: 'cardIndexes', internalType: 'uint8[]', type: 'uint8[]' },
       { name: 'decryptionValues', internalType: 'bytes[]', type: 'bytes[]' },
@@ -1392,7 +1399,7 @@ export const deckHandlerAbi = [
  *
  */
 export const deckHandlerAddress = {
-  31337: '0x9A676e781A523b5d0C0e43731313A708CB607508',
+  31337: '0x67d269191c92Caf3cD7723F116c85e6E9bf55933',
 } as const
 
 /**
@@ -1974,13 +1981,6 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'communityCards',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     inputs: [],
     name: 'countActivePlayers',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
@@ -2055,6 +2055,7 @@ export const texasHoldemRoomAbi = [
           { name: 'totalRoundBet', internalType: 'uint256', type: 'uint256' },
           { name: 'hasFolded', internalType: 'bool', type: 'bool' },
           { name: 'isAllIn', internalType: 'bool', type: 'bool' },
+          { name: 'hasChecked', internalType: 'bool', type: 'bool' },
           { name: 'cards', internalType: 'string[2]', type: 'string[2]' },
           { name: 'seatPosition', internalType: 'uint8', type: 'uint8' },
         ],
@@ -2114,6 +2115,7 @@ export const texasHoldemRoomAbi = [
       { name: 'totalRoundBet', internalType: 'uint256', type: 'uint256' },
       { name: 'hasFolded', internalType: 'bool', type: 'bool' },
       { name: 'isAllIn', internalType: 'bool', type: 'bool' },
+      { name: 'hasChecked', internalType: 'bool', type: 'bool' },
       { name: 'seatPosition', internalType: 'uint8', type: 'uint8' },
     ],
     stateMutability: 'view',
@@ -2230,16 +2232,6 @@ export const texasHoldemRoomAbi = [
     name: 'seatPositionToPlayerIndex',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'index', internalType: 'uint8', type: 'uint8' },
-      { name: 'card', internalType: 'string', type: 'string' },
-    ],
-    name: 'setCommunityCards',
-    outputs: [],
-    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2413,7 +2405,7 @@ export const texasHoldemRoomAbi = [
  *
  */
 export const texasHoldemRoomAddress = {
-  31337: '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82',
+  31337: '0xc5a5C42992dECbae36851359345FE25997F5C42d',
 } as const
 
 /**
@@ -2826,6 +2818,18 @@ export const useWriteDeckHandler = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"resetDeck"`
+ *
+ *
+ */
+export const useWriteDeckHandlerResetDeck =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'resetDeck',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitDecryptionValues"`
  *
  *
@@ -2858,6 +2862,18 @@ export const useSimulateDeckHandler = /*#__PURE__*/ createUseSimulateContract({
   abi: deckHandlerAbi,
   address: deckHandlerAddress,
 })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"resetDeck"`
+ *
+ *
+ */
+export const useSimulateDeckHandlerResetDeck =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'resetDeck',
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitDecryptionValues"`
@@ -3386,18 +3402,6 @@ export const useReadTexasHoldemRoomBigBlind =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"communityCards"`
- *
- *
- */
-export const useReadTexasHoldemRoomCommunityCards =
-  /*#__PURE__*/ createUseReadContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'communityCards',
-  })
-
-/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countActivePlayers"`
  *
  *
@@ -3670,18 +3674,6 @@ export const useWriteTexasHoldemRoomRevealMyCards =
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setCommunityCards"`
- *
- *
- */
-export const useWriteTexasHoldemRoomSetCommunityCards =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'setCommunityCards',
-  })
-
-/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setCurrentPlayerIndex"`
  *
  *
@@ -3798,18 +3790,6 @@ export const useSimulateTexasHoldemRoomRevealMyCards =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'revealMyCards',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setCommunityCards"`
- *
- *
- */
-export const useSimulateTexasHoldemRoomSetCommunityCards =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'setCommunityCards',
   })
 
 /**

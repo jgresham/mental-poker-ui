@@ -9,7 +9,8 @@ import {
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
 import { useAccount } from "wagmi";
-import { usePlayerCards } from "../../hooks/localRoomState";
+import { usePlayerCards, useRoundKeys } from "../../hooks/localRoomState";
+import { toast } from "sonner";
 
 interface PokerTableProps {
   room: Room;
@@ -20,6 +21,7 @@ interface PokerTableProps {
 export function PokerTable({ room, players, roomId }: PokerTableProps) {
   const { address } = useAccount();
   const { data: playerCards } = usePlayerCards();
+  const { data: roundKeys } = useRoundKeys(room.id, room.roundNumber);
   const { communityCards, pot, stage, dealerPosition, currentPlayerIndex, roundNumber } =
     room;
   console.log("/components/game/PokerTable room", room);
@@ -69,6 +71,14 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
         Room: {roomId}
         <br />
         Round: {roundNumber}
+        <br />
+        Keys:
+        <br />
+        r: {roundKeys?.r?.toString().substring(0, 5)}
+        <br />
+        pub: {roundKeys?.publicKey?.toString().substring(0, 5)}
+        <br />
+        priv: {roundKeys?.privateKey?.toString().substring(0, 5)}
       </div>
       <div className="absolute inset-[5%] bg-green-700 rounded-[40%] border-8 border-brown-800 shadow-inner">
         {/* Pot amount */}
@@ -110,14 +120,15 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
               player.cards = stringCardsToCards(playerCards);
             } catch (error) {
               console.error("Error converting player cards to cards", error);
+              toast.error("Error decrypting player cards");
             }
           }
           console.log("player.seatPosition", player.seatPosition);
           console.log("dealerPosition", dealerPosition);
-          if (player.seatPosition === dealerPosition) {
+          if (player.playerIndex === dealerPosition) {
             player.isDealer = true;
           }
-          if (player.seatPosition === currentPlayerIndex) {
+          if (player.playerIndex === currentPlayerIndex) {
             player.isTurn = true;
           } else {
             player.isTurn = false;

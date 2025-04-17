@@ -23,7 +23,7 @@ export interface Card {
 export function stringCardsToCards(cards: string[]): Card[] {
   return cards.map((cardStr) => {
     const cardNum = Number.parseInt(cardStr);
-    if (Number.isNaN(cardNum) || cardNum >= 52) {
+    if (Number.isNaN(cardNum) || cardNum >= 52 || cardNum < 0) {
       console.error("Invalid card number:", cardStr);
       throw new Error(`Invalid card number: ${cardStr}`);
     }
@@ -77,6 +77,7 @@ export function stringCardsToCards(cards: string[]): Card[] {
 export interface Player {
   id: string;
   addr: string;
+  playerIndex: number;
   seatPosition: number;
   chips: number;
   currentStageBet: number;
