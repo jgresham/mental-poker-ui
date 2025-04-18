@@ -17,15 +17,17 @@ import {
   shuffleAndEncryptDeck,
 } from "../../lib/encrypted-poker-1chunk";
 import {
-  useReadTexasHoldemRoomCurrentPlayerIndex,
   useWriteTexasHoldemRoomSubmitAction,
   useWriteDeckHandlerSubmitDecryptionValues,
   useWriteDeckHandlerSubmitEncryptedShuffle,
+  useWriteTexasHoldemRoomRevealMyCards,
 } from "../../generated";
 import {
+  bigintToHexString,
   bigintToString,
   g2048,
   generateC1,
+  modInverse,
   p2048,
 } from "../../lib/elgamal-commutative-node-1chunk";
 import { toast } from "sonner";
@@ -111,6 +113,13 @@ export function GameControls({ room, player }: GameControlsProps) {
   const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
   const { writeContractAsync: submitAction } = useWriteTexasHoldemRoomSubmitAction();
+  const {
+    writeContractAsync: submitRevealMyCards,
+    isPending: isSubmittingRevealMyCards,
+    isSuccess: isSubmittingRevealMyCardsSuccess,
+    isError: isSubmittingRevealMyCardsError,
+    error: txErrorSubmittingRevealMyCards,
+  } = useWriteTexasHoldemRoomRevealMyCards();
 
   useEffect(() => {
     if (room?.currentStageBet) {
@@ -154,7 +163,7 @@ export function GameControls({ room, player }: GameControlsProps) {
         roundKeys.r !== null
       ) {
         console.log("revealing my cards, stage is past reveal deal");
-        handleRevealMyCards();
+        handleDecryptMyCardsLocally();
       }
     }
   }, [playerCards, room.stage, room.encryptedDeck, player?.seatPosition, roundKeys]);
@@ -176,7 +185,8 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.log("no wagmi connections yet");
       return;
     }
-    if (!isPlayerTurn || hasPromptedStageObligation !== null) {
+    // For showdown, any active player can submit reveal their cards in any order
+    if ((!isPlayerTurn && room.stage !== GameStage.Showdown) || hasPromptedStageObligation !== null) {
       return;
     }
     // First shuffler uses the unencrypted deck
@@ -199,7 +209,8 @@ export function GameControls({ room, player }: GameControlsProps) {
     if (
       room.stage !== GameStage.Shuffle &&
       room.stage !== GameStage.RevealDeal &&
-      !REVEAL_COMMUNITY_CARDS_STAGE.includes(room.stage)
+      !REVEAL_COMMUNITY_CARDS_STAGE.includes(room.stage) &&
+      room.stage !== GameStage.Showdown
     ) {
       console.log("not a valid stage for obligation");
       return;
@@ -239,7 +250,75 @@ export function GameControls({ room, player }: GameControlsProps) {
       setHasPromptedStageObligation(room.stage);
       handleRevealCommunityCards();
     }
+
+    // if we enter showdown and are still active, then we need to reveal our cards on the smart contract
+    if (!player?.hasFolded && !player?.joinedAndWaitingForNextRound && room.stage === GameStage.Showdown && !isSubmittingRevealMyCards) {
+      console.log("BACKGROUND OBLIGATION: SHOWDOWN REVEAL MY CARDS");
+      setHasPromptedStageObligation(room.stage);
+      handleSubmitRevealMyCards();
+    }
   };
+
+  async function handleSubmitRevealMyCards() {
+    console.log("handleSubmitRevealMyCards", room.encryptedDeck);
+    if (room.encryptedDeck === undefined) {
+      console.log("no encrypted deck");
+      return;
+    }
+    if (player?.seatPosition === undefined) {
+      console.error("handleRevealPlayerCards: player seat position is undefined");
+      return;
+    }
+    if (
+      roundKeys.privateKey === null ||
+      roundKeys.publicKey === null ||
+      roundKeys.r === null
+    ) {
+      console.error("handleRevealPlayerCards: null round key found");
+      return;
+    }
+
+    const revealMyCardsIndexes = getMyCardsIndexes(
+      player.seatPosition,
+      room.numPlayers,
+    );
+    console.log(
+      "handleSubmitRevealMyCards revealMyCardsIndexes",
+      revealMyCardsIndexes,
+    );
+
+    const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
+    console.log("generated c1", c1.toString(16));
+    const c1Inverse = modInverse(c1, p2048);
+    console.log("generated c1Inverse", c1Inverse.toString(16));
+    // solidity:
+  //   function revealMyCards(
+  //     CryptoUtils.EncryptedCard memory encryptedCard1,
+  //     CryptoUtils.EncryptedCard memory encryptedCard2,
+  //     BigNumber memory privateKey,
+  //     BigNumber memory c1Inverse
+  // ) external returns (string memory card1, string memory card2)
+  const encryptedCard1 = room.encryptedDeck[revealMyCardsIndexes[0]];
+  const encryptedCard2 = room.encryptedDeck[revealMyCardsIndexes[1]];
+    const txHash2 = await submitRevealMyCards({
+      args: [{c1: {
+        val: bigintToHexString(c1), neg: false, bitlen: BigInt(2048)
+      }, c2: {
+        val: bigintToHexString(encryptedCard1), neg: false, bitlen: BigInt(2048)
+      }}, {c1: {
+        val: bigintToHexString(c1), neg: false, bitlen: BigInt(2048)
+      }, c2: {
+        val: bigintToHexString(encryptedCard2), neg: false, bitlen: BigInt(2048)
+      }}, {
+        val: bigintToHexString(roundKeys.privateKey), neg: false, bitlen: BigInt(2048)
+      }, {
+        val: bigintToHexString(c1Inverse), neg: false, bitlen: BigInt(2048)
+      }],
+    });
+    console.log("txHash2", txHash2);
+    setTxHash2(txHash2);
+  }
+
 
   // Handle fold action
   const handleFold = () => {
@@ -428,8 +507,8 @@ export function GameControls({ room, player }: GameControlsProps) {
     setTxHash2(txHash2);
   }
 
-  async function handleRevealMyCards() {
-    console.log("handleRevealMyCards", room.encryptedDeck);
+  async function handleDecryptMyCardsLocally() {
+    console.log("handleDecryptMyCardsLocally", room.encryptedDeck);
     if (room.encryptedDeck === undefined) {
       console.log("no encrypted deck");
       return;
@@ -576,7 +655,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           size="sm"
           className="h-8 text-xs sm:text-sm"
           disabled={!isPlayerTurn}
-          onClick={handleRevealMyCards}
+          onClick={handleDecryptMyCardsLocally}
         >
           Reveal my cards
         </Button>

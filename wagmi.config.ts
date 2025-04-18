@@ -16,10 +16,10 @@ export default defineConfig({
       deployments: {
         // chain id to address
         TexasHoldemRoom: {
-          31337: "0xc5a5C42992dECbae36851359345FE25997F5C42d",
+          31337: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
         },
         DeckHandler: {
-          31337: "0x67d269191c92Caf3cD7723F116c85e6E9bf55933",
+          31337: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
         },
       },
     }),

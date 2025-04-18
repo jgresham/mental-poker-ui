@@ -1192,6 +1192,13 @@ export const deckHandlerAbi = [
   },
   {
     type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'communityCards',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [],
     name: 'cryptoUtils',
     outputs: [
@@ -1239,10 +1246,22 @@ export const deckHandlerAbi = [
           { name: 'currentStageBet', internalType: 'uint256', type: 'uint256' },
           { name: 'numPlayers', internalType: 'uint256', type: 'uint256' },
           { name: 'isPrivate', internalType: 'bool', type: 'bool' },
+          {
+            name: 'communityCards',
+            internalType: 'string[5]',
+            type: 'string[5]',
+          },
           { name: 'encryptedDeck', internalType: 'bytes[]', type: 'bytes[]' },
         ],
       },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getCommunityCards',
+    outputs: [{ name: '', internalType: 'string[5]', type: 'string[5]' }],
     stateMutability: 'view',
   },
   {
@@ -1399,7 +1418,7 @@ export const deckHandlerAbi = [
  *
  */
 export const deckHandlerAddress = {
-  31337: '0x67d269191c92Caf3cD7723F116c85e6E9bf55933',
+  31337: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
 } as const
 
 /**
@@ -1955,14 +1974,14 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'MAX_PLAYERS',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [],
     name: 'MIN_PLAYERS',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
@@ -1983,6 +2002,13 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'countActivePlayers',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'countOfHandsRevealed',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
@@ -2058,6 +2084,13 @@ export const texasHoldemRoomAbi = [
           { name: 'hasChecked', internalType: 'bool', type: 'bool' },
           { name: 'cards', internalType: 'string[2]', type: 'string[2]' },
           { name: 'seatPosition', internalType: 'uint8', type: 'uint8' },
+          { name: 'handScore', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'joinedAndWaitingForNextRound',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          { name: 'leavingAfterRoundEnds', internalType: 'bool', type: 'bool' },
         ],
       },
     ],
@@ -2100,6 +2133,13 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'leaveGame',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'numPlayers',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -2117,6 +2157,13 @@ export const texasHoldemRoomAbi = [
       { name: 'isAllIn', internalType: 'bool', type: 'bool' },
       { name: 'hasChecked', internalType: 'bool', type: 'bool' },
       { name: 'seatPosition', internalType: 'uint8', type: 'uint8' },
+      { name: 'handScore', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'joinedAndWaitingForNextRound',
+        internalType: 'bool',
+        type: 'bool',
+      },
+      { name: 'leavingAfterRoundEnds', internalType: 'bool', type: 'bool' },
     ],
     stateMutability: 'view',
   },
@@ -2245,15 +2292,6 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_dealerPosition', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'setDealerPosition',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
       { name: '_deckHandler', internalType: 'address', type: 'address' },
     ],
     name: 'setDeckHandler',
@@ -2292,13 +2330,6 @@ export const texasHoldemRoomAbi = [
       },
     ],
     stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'startNewHand',
-    outputs: [],
-    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2352,6 +2383,18 @@ export const texasHoldemRoomAbi = [
       },
       { name: 'card1', internalType: 'string', type: 'string', indexed: false },
       { name: 'card2', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'rank',
+        internalType: 'enum PokerHandEvaluatorv2.HandRank',
+        type: 'uint8',
+        indexed: false,
+      },
+      {
+        name: 'handScore',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
     ],
     name: 'PlayerCardsRevealed',
   },
@@ -2385,10 +2428,16 @@ export const texasHoldemRoomAbi = [
     anonymous: false,
     inputs: [
       {
-        name: 'winner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
+        name: 'winners',
+        internalType: 'address[]',
+        type: 'address[]',
+        indexed: false,
+      },
+      {
+        name: 'winnerPlayerIndexes',
+        internalType: 'uint8[]',
+        type: 'uint8[]',
+        indexed: false,
       },
       {
         name: 'amount',
@@ -2405,7 +2454,7 @@ export const texasHoldemRoomAbi = [
  *
  */
 export const texasHoldemRoomAddress = {
-  31337: '0xc5a5C42992dECbae36851359345FE25997F5C42d',
+  31337: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
 } as const
 
 /**
@@ -2736,6 +2785,18 @@ export const useReadDeckHandler = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"communityCards"`
+ *
+ *
+ */
+export const useReadDeckHandlerCommunityCards =
+  /*#__PURE__*/ createUseReadContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'communityCards',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"cryptoUtils"`
  *
  *
@@ -2769,6 +2830,18 @@ export const useReadDeckHandlerGetBulkRoomData =
     abi: deckHandlerAbi,
     address: deckHandlerAddress,
     functionName: 'getBulkRoomData',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getCommunityCards"`
+ *
+ *
+ */
+export const useReadDeckHandlerGetCommunityCards =
+  /*#__PURE__*/ createUseReadContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'getCommunityCards',
   })
 
 /**
@@ -3414,6 +3487,18 @@ export const useReadTexasHoldemRoomCountActivePlayers =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
+ *
+ *
+ */
+export const useReadTexasHoldemRoomCountOfHandsRevealed =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'countOfHandsRevealed',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"cryptoUtils"`
  *
  *
@@ -3650,6 +3735,18 @@ export const useWriteTexasHoldemRoomJoinGame =
   })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"leaveGame"`
+ *
+ *
+ */
+export const useWriteTexasHoldemRoomLeaveGame =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'leaveGame',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"progressGame"`
  *
  *
@@ -3686,18 +3783,6 @@ export const useWriteTexasHoldemRoomSetCurrentPlayerIndex =
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDealerPosition"`
- *
- *
- */
-export const useWriteTexasHoldemRoomSetDealerPosition =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'setDealerPosition',
-  })
-
-/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
  *
@@ -3719,18 +3804,6 @@ export const useWriteTexasHoldemRoomSetStage =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'setStage',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"startNewHand"`
- *
- *
- */
-export const useWriteTexasHoldemRoomStartNewHand =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'startNewHand',
   })
 
 /**
@@ -3766,6 +3839,18 @@ export const useSimulateTexasHoldemRoomJoinGame =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'joinGame',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"leaveGame"`
+ *
+ *
+ */
+export const useSimulateTexasHoldemRoomLeaveGame =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'leaveGame',
   })
 
 /**
@@ -3805,18 +3890,6 @@ export const useSimulateTexasHoldemRoomSetCurrentPlayerIndex =
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDealerPosition"`
- *
- *
- */
-export const useSimulateTexasHoldemRoomSetDealerPosition =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'setDealerPosition',
-  })
-
-/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
  *
@@ -3838,18 +3911,6 @@ export const useSimulateTexasHoldemRoomSetStage =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'setStage',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"startNewHand"`
- *
- *
- */
-export const useSimulateTexasHoldemRoomStartNewHand =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'startNewHand',
   })
 
 /**
