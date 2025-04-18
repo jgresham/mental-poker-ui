@@ -21,6 +21,7 @@ export function useGetPlayers() {
       chips: Number(player.chips),
       currentStageBet: Number(player.currentStageBet),
       totalRoundBet: Number(player.totalRoundBet),
+      handScore: Number(player.handScore),
       playerIndex,
     }));
   }, [rawData]);

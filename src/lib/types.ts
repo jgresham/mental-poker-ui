@@ -83,16 +83,19 @@ export interface Player {
   currentStageBet: number;
   totalRoundBet: number;
   cards: Card[];
-  isActive: boolean;
   isDealer: boolean;
   isSmallBlind: boolean;
   isBigBlind: boolean;
   isTurn: boolean;
   isAllIn: boolean;
   hasFolded: boolean;
+  joinedAndWaitingForNextRound: boolean;
+  leavingAfterRoundEnds: boolean;
+  handScore: number;
   bet: number;
   name?: string;
   avatarUrl?: string;
+
 }
 
 // Solidity Room contract constants
@@ -192,27 +195,21 @@ export const GameStageToString = {
   [GameStage.Ended]: "ended",
 };
 
-// export type GameStage =
-//   | "waiting to start"
-//   | "waiting for players"
-//   | "preflop"
-//   | "flop"
-//   | "turn"
-//   | "river"
-//   | "showdown"
-//   | "ended";
 
-// Solidity contract GameState
-// struct GameState {
-//   GameStage stage;
-//   uint256 pot;
-//   uint256 currentStageBet;
-//   uint256 smallBlind;
-//   uint256 bigBlind;
-//   uint256 dealerPosition;
-//   uint256 currentPlayerIndex;
-//   uint256 lastRaiseIndex;
-//   bytes32[5] communityCards;
-//   uint256 revealedCommunityCards;
-//   BigNumber[] encryptedDeck;
-//}
+// struct BigNumber {
+//   bytes val;
+//   bool neg;
+//   uint256 bitlen;
+// }
+
+// struct EncryptedCard {
+//   BigNumber c1; // 2048-bit number
+//   BigNumber c2; // 2048-bit number
+// }
+
+// function revealMyCards(
+//   CryptoUtils.EncryptedCard memory encryptedCard1,
+//   CryptoUtils.EncryptedCard memory encryptedCard2,
+//   BigNumber memory privateKey,
+//   BigNumber memory c1Inverse
+// ) external returns (string memory card1, string memory card2) {
