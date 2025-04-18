@@ -91,6 +91,10 @@ export function stringToBigint(str: string): bigint {
 }
 
 // Convert a single BigInt to string
+/**
+ * @param chunk - The bigint to convert to a human readable string (card string)
+ * @returns The string representation of the bigint 
+ */
 export function bigintToString(chunk: bigint): string {
   console.log(`${getTimestamp()} Converting bigint to string: ${chunk}`);
 
@@ -112,6 +116,14 @@ export function bigintToString(chunk: bigint): string {
   const result = decoder.decode(new Uint8Array(byteArray));
   console.log(`${getTimestamp()} Converted to string: "${result}"`);
   return result;
+}
+
+/**
+ * @param chunk - The bigint to convert to a hex string (512 length)
+ * @returns The hex string representation of the bigint
+ */
+export function bigintToHexString(chunk: bigint): `0x${string}` {
+  return `0x${chunk.toString(16).padStart(512, "0")}` as `0x${string}`;
 }
 
 // Modular multiplicative inverse
@@ -183,7 +195,7 @@ export function encryptMessageBigint({
   p?: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
-  console.log(`${getTimestamp()} Encrypting messageBigint: ${messageBigint}`);
+  // console.log(`${getTimestamp()} Encrypting messageBigint: ${messageBigint}`);
 
   // Generate a random value r if not provided
   const rToUse = r ?? randomBigIntInRange(BigInt(3), p);
