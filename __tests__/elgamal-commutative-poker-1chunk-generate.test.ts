@@ -1,15 +1,7 @@
 import { expect, test, vi } from "vitest";
 import {
   bigintToString,
-  encryptMessageBigint,
-  generateKeys,
-  stringToBigint,
-  p2048,
-  generateC1,
-  g2048,
   generatePermutations,
-  getTimestamp,
-  removeEncryptionLayer,
 } from "../src/lib/elgamal-commutative-node-1chunk";
 // import {
 //   testMultiPartyCommutative,
@@ -17,18 +9,10 @@ import {
 // } from "../src/lib/elgamal-commutative-node";
 import {
   decryptCard,
-  encryptCard,
-  encryptCardDeck,
-  encryptEncryptedCard,
-  encryptEncryptedDeck,
-  shuffleAndEncryptCardDeck,
   shuffleAndEncryptDeck,
-  shuffleAndEncryptEncryptedDeck,
   DECK,
   formatCardDeckForShuffleAndEncrypt,
 } from "../src/lib/encrypted-poker-1chunk";
-import { randomBigIntInRange } from "../src/lib/prime";
-import * as bigintModArith from "bigint-mod-arith";
 
 // vitest set timeout to 1 minute
 // Set timeout for all tests in this file to 60 seconds

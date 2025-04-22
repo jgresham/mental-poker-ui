@@ -1,10 +1,15 @@
-import { useWatchDeckHandlerPlayerCardsRevealedEvent } from "./../generated";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { EMPTY_SEAT, GameStage, MAX_PLAYERS, Player } from "./types";
+import { GameStage, MAX_PLAYERS, type Player } from "./types";
 import { stringCardsToCards } from "./types";
 import { bigintToString } from "./elgamal-commutative-node-1chunk";
 import { zeroAddress } from "viem";
+
+export const ADMIN_ADDRESSES = [
+  "0x2a99EC82d658F7a77DdEbFd83D0f8F591769cB64",
+  "0x101a25d0FDC4E9ACa9fA65584A28781046f1BeEe",
+];
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -43,19 +48,29 @@ export function getOtherPlayersCardsIndexes(
   console.log("getOtherPlayersCardsIndexes players dealerPosition", dealerPosition);
   const countOfPlayersCounterClockwiseToDealer =
     getCountOfPlayersCounterClockwiseToDealer(myPlayerIndex, dealerPosition, players);
+  console.log(
+    "getOtherPlayersCardsIndexes countOfPlayersCounterClockwiseToDealer",
+    countOfPlayersCounterClockwiseToDealer,
+  );
   const numPlayersAtRoundStart = players.filter(
     (player) =>
       player.addr !== zeroAddress && player.joinedAndWaitingForNextRound !== true,
   ).length;
+  console.log(
+    "getOtherPlayersCardsIndexes numPlayersAtRoundStart",
+    numPlayersAtRoundStart,
+  );
   const otherPlayersIndexes = Array.from(
     { length: numPlayersAtRoundStart * 2 },
     (_, i) => i,
   );
+  console.log("getOtherPlayersCardsIndexes otherPlayersIndexes", otherPlayersIndexes);
   otherPlayersIndexes.splice(
     countOfPlayersCounterClockwiseToDealer + numPlayersAtRoundStart,
     1,
   ); // remove my 2nd card
-  otherPlayersIndexes.splice(myPlayerIndex, 1); // remove my 1st card
+  otherPlayersIndexes.splice(countOfPlayersCounterClockwiseToDealer, 1); // remove my 1st card
+  console.log("getOtherPlayersCardsIndexes otherPlayersIndexes", otherPlayersIndexes);
   return otherPlayersIndexes;
 }
 
@@ -91,7 +106,12 @@ function getCountOfPlayersCounterClockwiseToDealer(
       console.log("playerSeatPosition playerIndex", playerIndex);
       iteratePlayerSeatPosition =
         (iteratePlayerSeatPosition - 1 + MAX_PLAYERS) % MAX_PLAYERS;
+      console.log(
+        "playerSeatPosition iteratePlayerSeatPosition",
+        iteratePlayerSeatPosition,
+      );
       if (
+        players[iteratePlayerSeatPosition] !== undefined &&
         players[iteratePlayerSeatPosition].addr !== zeroAddress &&
         players[iteratePlayerSeatPosition].joinedAndWaitingForNextRound !== true
       ) {

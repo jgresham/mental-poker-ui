@@ -1,10 +1,10 @@
-import { GameStage } from "../src/lib/types";
+import { GameStage, type Player } from "../src/lib/types";
 import {
   getCommunityCardIndexes,
   getMyCardsIndexes,
   getOtherPlayersCardsIndexes,
 } from "./../src/lib/utils";
-import { expect, test, vi } from "vitest";
+import { expect, test } from "vitest";
 
 test("testGetCommunityCardIndexes_3Players", () => {
   const flopIndexes = getCommunityCardIndexes(GameStage.RevealFlop, 3);
@@ -40,18 +40,91 @@ test("testGetCommunityCardIndexes_10Players", () => {
 });
 
 test("testGetOtherPlayersCardsIndexes_2Players", () => {
-  let indexes = getOtherPlayersCardsIndexes(0, 2);
+  let myPlayerIndex = 0;
+  let dealerPlayerIndex = 0;
+  const players = [
+    {
+      addr: "0x123",
+      joinedAndWaitingForNextRound: false,
+      seatPosition: 0,
+    },
+    {
+      addr: "0x1234",
+      joinedAndWaitingForNextRound: false,
+      seatPosition: 1,
+    },
+  ];
+  let indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
   expect(indexes).toEqual([1, 3]);
-  indexes = getOtherPlayersCardsIndexes(1, 2);
+  myPlayerIndex = 1;
+  indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
+  expect(indexes).toEqual([0, 2]);
+
+  // dealer is now in seat position 1 (before was 0)
+  myPlayerIndex = 1;
+  dealerPlayerIndex = 1;
+  indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
+  expect(indexes).toEqual([1, 3]);
+  myPlayerIndex = 0;
+  indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
   expect(indexes).toEqual([0, 2]);
 });
 
 test("testGetOtherPlayersCardsIndexes_3Players", () => {
-  let indexes = getOtherPlayersCardsIndexes(0, 3);
+  let myPlayerIndex = 0;
+  const dealerPlayerIndex = 0;
+  const players = [
+    {
+      addr: "0x123",
+      joinedAndWaitingForNextRound: false,
+      seatPosition: 0,
+    },
+    {
+      addr: "0x1234",
+      joinedAndWaitingForNextRound: false,
+      seatPosition: 1,
+    },
+    {
+      addr: "0x12345",
+      joinedAndWaitingForNextRound: false,
+      seatPosition: 2,
+    },
+  ];
+  let indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
   expect(indexes).toEqual([1, 2, 4, 5]);
-  indexes = getOtherPlayersCardsIndexes(1, 3);
+  myPlayerIndex = 1;
+  indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
   expect(indexes).toEqual([0, 2, 3, 5]);
-  indexes = getOtherPlayersCardsIndexes(2, 3);
+  myPlayerIndex = 2;
+  indexes = getOtherPlayersCardsIndexes(
+    myPlayerIndex,
+    dealerPlayerIndex,
+    players as Player[],
+  );
   expect(indexes).toEqual([0, 1, 3, 4]);
 });
 

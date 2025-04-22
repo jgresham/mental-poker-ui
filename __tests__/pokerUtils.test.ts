@@ -1,4 +1,4 @@
-import { expect, test, vi } from "vitest";
+import { expect, test } from "vitest";
 import { getFirstAvailableSeatPosition } from "../src/lib/poker-utils";
 
 const roomEmpty = {

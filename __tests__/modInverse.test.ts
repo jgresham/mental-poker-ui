@@ -6,7 +6,7 @@ test("bigint-arith modInv", () => {
   const m = BigInt(5);
   const result = bigintModArith.modInv(a, m);
   console.log("result", result);
-  expect(result).toBe(3n);
+  expect(result).toBe(BigInt(3));
 });
 
 test("bigint-arith modInv large numbers", () => {
