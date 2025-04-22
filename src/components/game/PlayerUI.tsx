@@ -20,14 +20,13 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
     chips,
     cards,
     hasFolded,
-    isActive,
     isDealer,
     isSmallBlind,
     isBigBlind,
     isTurn,
     isAllIn,
     currentStageBet,
-    totalRoundBet,
+    // totalRoundBet,
     avatarUrl,
   } = player;
 
@@ -51,7 +50,7 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
         isTurn
           ? "bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500"
           : "bg-gray-100 dark:bg-gray-800/30",
-        isActive && "opacity-50",
+        // isActive && "opacity-50",
         isCurrentUser && "bg-green-100 dark:bg-green-900/30",
       )}
     >

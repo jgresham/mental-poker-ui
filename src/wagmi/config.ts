@@ -8,7 +8,6 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { http, createConfig } from "@wagmi/core";
 import { base, baseSepolia, type Chain, foundry } from "@wagmi/core/chains";
-import { walletConnect } from "wagmi/connectors";
 
 const walletConnectors = connectorsForWallets(
   [
@@ -19,7 +18,7 @@ const walletConnectors = connectorsForWallets(
   ],
   {
     appName: "Mental Poker",
-    projectId: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+    projectId: "a815842691b86a9283207242ab753402",
   },
 );
 

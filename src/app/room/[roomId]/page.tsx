@@ -9,12 +9,13 @@ import {
   useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useWatchTexasHoldemRoomEvent,
   useWatchDeckHandlerEvent,
+  useWriteTexasHoldemRoomResetRound,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useEffect, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
-import { getCommunityCards } from "../../../lib/utils";
+import { ADMIN_ADDRESSES, getCommunityCards } from "../../../lib/utils";
 import { useRoundKeys } from "../../../hooks/localRoomState";
 import { Card, GameStage } from "../../../lib/types";
 import { toast } from "sonner";
@@ -45,6 +46,9 @@ export default function Room() {
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
     useWriteTexasHoldemRoomJoinGame();
+
+  const { writeContractAsync: resetRound, isPending: isResettingRound } =
+    useWriteTexasHoldemRoomResetRound();
 
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
 
@@ -90,7 +94,6 @@ export default function Room() {
     lastRaiseIndex,
     numPlayers,
     roundNumber,
-    encryptedDeck,
   } = roomData ?? {};
 
   // setTimeout(() => {
@@ -132,8 +135,27 @@ export default function Room() {
     }
   };
 
+  const handleResetRound = async () => {
+    try {
+      setTxStatus("Submitting reset round transaction...");
+      const hash = await resetRound({
+        args: [],
+      });
+      setTxHash(hash);
+      setTxStatus("Transaction submitted, waiting for confirmation...");
+    } catch (error) {
+      console.error("Error joining game:", error);
+      setTxStatus(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
+
   useEffect(() => {
-    if(roomData && roomData.stage !== undefined && roomData.encryptedDeck !== undefined && roomData.numPlayers !== undefined) {
+    if (
+      roomData &&
+      roomData.stage !== undefined &&
+      roomData.encryptedDeck !== undefined &&
+      roomData.numPlayers !== undefined
+    ) {
       if (roomData.stage >= GameStage.Flop) {
         try {
           const communityCards = getCommunityCards({
@@ -172,6 +194,19 @@ export default function Room() {
                   ? "Confirming..."
                   : "Join Game"}
             </Button>
+
+            {ADMIN_ADDRESSES.includes(address) && (
+              <Button
+                onClick={handleResetRound}
+                disabled={isResettingRound || isWaitingForTx}
+              >
+                {isResettingRound
+                  ? "Submitting..."
+                  : isWaitingForTx
+                    ? "Resetting..."
+                    : "Reset Round"}
+              </Button>
+            )}
 
             {txStatus && (
               <div className="text-sm p-2 bg-gray-100 rounded">Status: {txStatus}</div>

@@ -15,7 +15,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { useCreateRoom } from "../api/mocks";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -26,8 +25,6 @@ export default function Home() {
   const [showSetup, setShowSetup] = useState<boolean>(true);
   // const [currentPlayerId, setCurrentPlayerId] = useState<string>("player-0");
   const [isPublic, setIsPublic] = useState<boolean>(true);
-
-  const { mutate: createRoom, isPending: isCreatingRoom } = useCreateRoom();
 
   // Initialize game when player count changes
   // useEffect(() => {
@@ -40,14 +37,14 @@ export default function Home() {
 
   // Handle starting a new game
   const handleStartGame = () => {
-    createRoom(
-      { isPrivate: !isPublic },
-      {
-        onSuccess: (createdRoom) => {
-          router.push(`/room/${createdRoom.id}`);
-        },
-      },
-    );
+    // createRoom(
+    //   { isPrivate: !isPublic },
+    //   {
+    //     onSuccess: (createdRoom) => {
+    //       router.push(`/room/${createdRoom.id}`);
+    //     },
+    //   },
+    // );
   };
 
   return (
@@ -57,7 +54,8 @@ export default function Home() {
         <div className="absolute inset-0 opacity-5">
           <div className="grid grid-cols-8 gap-2">
             {Array.from({ length: 64 }).map((_, i) => (
-              <div key={i} className="aspect-[2/3] bg-white rounded-md"></div>
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              <div key={i} className="aspect-[2/3] bg-white rounded-md" />
             ))}
           </div>
         </div>
@@ -146,10 +144,10 @@ export default function Home() {
 
         {/* Decorative cards */}
         <div className="absolute -bottom-10 -left-10 transform rotate-12 opacity-30">
-          <div className="w-32 h-44 bg-white rounded-lg shadow-lg"></div>
+          <div className="w-32 h-44 bg-white rounded-lg shadow-lg" />
         </div>
         <div className="absolute -top-10 -right-10 transform -rotate-12 opacity-30">
-          <div className="w-32 h-44 bg-white rounded-lg shadow-lg"></div>
+          <div className="w-32 h-44 bg-white rounded-lg shadow-lg" />
         </div>
       </div>
       {/* Game setup dialog */}
@@ -208,8 +206,11 @@ export default function Home() {
           </div>
 
           <DialogFooter>
-            <Button onClick={handleStartGame} disabled={isCreatingRoom}>
+            {/* <Button onClick={handleStartGame} disabled={isCreatingRoom}>
               Start Game {isCreatingRoom && "loading..."}
+            </Button> */}
+            <Button onClick={handleStartGame} disabled={true}>
+              {"Start Game (Coming soon)"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -46,6 +46,11 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
+5. Deploy
+```
+vercel deploy --prod
+```
+
 ## How to Play
 
 1. Start by selecting the number of players (2-10) and your position at the table.

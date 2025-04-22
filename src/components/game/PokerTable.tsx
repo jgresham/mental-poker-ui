@@ -12,7 +12,6 @@ import { useAccount } from "wagmi";
 import { usePlayerCards, useRoundKeys } from "../../hooks/localRoomState";
 import { toast } from "sonner";
 import { zeroAddress } from "viem";
-import { useReadTexasHoldemRoomSeatPositionToPlayerIndex } from "../../generated";
 
 interface PokerTableProps {
   room: Room;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Action,
@@ -9,7 +9,7 @@ import {
 } from "@/lib/types";
 // import { dealCommunityCards, getNextStage, nextPlayer } from "@/lib/poker-utils";
 import { useRouter } from "next/navigation";
-import { useAccount, useConnections, useWaitForTransactionReceipt } from "wagmi";
+import { useConnections, useWaitForTransactionReceipt } from "wagmi";
 import {
   DECK,
   decryptCard,
@@ -61,7 +61,6 @@ export function GameControls({ room, player }: GameControlsProps) {
     useState<GameStage | null>(null);
   const [betAmount, setBetAmount] = useState<number>(room?.currentStageBet || 0);
   const router = useRouter();
-  const { address } = useAccount();
   const { data: roundKeys } = useRoundKeys(room.id, Number(room.roundNumber));
   const { data: players } = useGetPlayers();
   console.log("GameControls roundKeys", roundKeys);
@@ -124,7 +123,10 @@ export function GameControls({ room, player }: GameControlsProps) {
     isError: isSubmittingRevealMyCardsError,
     error: txErrorSubmittingRevealMyCards,
   } = useWriteDeckHandlerRevealMyCards();
-
+  console.log("isSubmittingRevealMyCards", isSubmittingRevealMyCards);
+  console.log("isSubmittingRevealMyCardsSuccess", isSubmittingRevealMyCardsSuccess);
+  console.log("isSubmittingRevealMyCardsError", isSubmittingRevealMyCardsError);
+  console.log("txErrorSubmittingRevealMyCards", txErrorSubmittingRevealMyCards);
   useEffect(() => {
     if (room?.currentStageBet) {
       setBetAmount(room?.currentStageBet * 2);
@@ -401,9 +403,10 @@ export function GameControls({ room, player }: GameControlsProps) {
   };
 
   // Determine which buttons should be enabled
-  const canCheck = true;
-  const canCall = true;
-  const canRaise = true;
+  // todo: set bet buttons based on players chip amount
+  // const canCheck = true;
+  // const canCall = true;
+  // const canRaise = true;
   //   gameState.currentStageBet === 0 ||
   //   (currentPlayer && currentPlayer.bet === gameState.currentStageBet);
   // const canCall =
@@ -488,7 +491,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.error("handleRevealPlayerCards: null round key found");
       return;
     }
-    if (players === undefined) {
+    if (players === undefined || players === null) {
       console.error("handleRevealPlayerCards: players is undefined");
       return;
     }
@@ -719,7 +722,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="secondary"
           size="sm"
           className="h-8 text-xs sm:text-sm"
-          disabled={!isPlayerTurn || !canCheck}
+          disabled={!isPlayerTurn}
           onClick={handleCheck}
         >
           Check
@@ -728,7 +731,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="default"
           size="sm"
           className="h-8 text-xs sm:text-sm bg-green-600"
-          // disabled={!isPlayerTurn || !canCall}
+          disabled={!isPlayerTurn}
           onClick={handleCall}
         >
           Call ${room?.currentStageBet !== undefined ? room.currentStageBet : 0}
@@ -737,7 +740,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="default"
           size="sm"
           className="h-8 text-xs sm:text-sm bg-green-700"
-          disabled={!isPlayerTurn || !canRaise}
+          disabled={!isPlayerTurn}
           onClick={handleRaise}
         >
           Raise ${betAmount}
@@ -745,7 +748,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       </div>
 
       {/* Bet slider */}
-      {isPlayerTurn && canRaise && player && (
+      {isPlayerTurn && player && (
         <div className="mt-1">
           <label htmlFor="betAmount" className="text-xs sm:text-sm text-white">
             Bet amount ${betAmount}
