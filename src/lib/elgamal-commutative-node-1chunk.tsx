@@ -93,7 +93,7 @@ export function stringToBigint(str: string): bigint {
 // Convert a single BigInt to string
 /**
  * @param chunk - The bigint to convert to a human readable string (card string)
- * @returns The string representation of the bigint 
+ * @returns The string representation of the bigint
  */
 export function bigintToString(chunk: bigint): string {
   console.log(`${getTimestamp()} Converting bigint to string: ${chunk}`);
@@ -123,7 +123,10 @@ export function bigintToString(chunk: bigint): string {
  * @returns The hex string representation of the bigint
  */
 export function bigintToHexString(chunk: bigint): `0x${string}` {
-  return `0x${chunk.toString(16).padStart(512, "0")}` as `0x${string}`;
+  const strippedPrefix = chunk.toString(16).startsWith("0x")
+    ? chunk.toString(16).slice(2)
+    : chunk.toString(16);
+  return `0x${strippedPrefix.padStart(512, "0")}` as `0x${string}`;
 }
 
 // Modular multiplicative inverse

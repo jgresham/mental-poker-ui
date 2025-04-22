@@ -1147,7 +1147,7 @@ export const cryptoUtilsAbi = [
         ],
       },
       {
-        name: 'c1Inverse',
+        name: 'c1InversePowPrivateKey',
         internalType: 'struct BigNumber',
         type: 'tuple',
         components: [
@@ -1170,7 +1170,20 @@ export const cryptoUtilsAbi = [
         ],
       },
     ],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'message',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'CULog',
   },
 ] as const
 
@@ -1187,6 +1200,7 @@ export const deckHandlerAbi = [
     inputs: [
       { name: '_texasHoldemRoom', internalType: 'address', type: 'address' },
       { name: '_cryptoUtils', internalType: 'address', type: 'address' },
+      { name: '_handEvaluator', internalType: 'address', type: 'address' },
     ],
     stateMutability: 'nonpayable',
   },
@@ -1235,16 +1249,12 @@ export const deckHandlerAbi = [
           },
           { name: 'smallBlind', internalType: 'uint256', type: 'uint256' },
           { name: 'bigBlind', internalType: 'uint256', type: 'uint256' },
-          { name: 'dealerPosition', internalType: 'uint256', type: 'uint256' },
-          {
-            name: 'currentPlayerIndex',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          { name: 'lastRaiseIndex', internalType: 'uint256', type: 'uint256' },
+          { name: 'dealerPosition', internalType: 'uint8', type: 'uint8' },
+          { name: 'currentPlayerIndex', internalType: 'uint8', type: 'uint8' },
+          { name: 'lastRaiseIndex', internalType: 'uint8', type: 'uint8' },
           { name: 'pot', internalType: 'uint256', type: 'uint256' },
           { name: 'currentStageBet', internalType: 'uint256', type: 'uint256' },
-          { name: 'numPlayers', internalType: 'uint256', type: 'uint256' },
+          { name: 'numPlayers', internalType: 'uint8', type: 'uint8' },
           { name: 'isPrivate', internalType: 'bool', type: 'bool' },
           {
             name: 'communityCards',
@@ -1292,8 +1302,35 @@ export const deckHandlerAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'handEvaluator',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract PokerHandEvaluatorv2',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'resetDeck',
     outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'c1', internalType: 'bytes', type: 'bytes' },
+      { name: 'privateKey', internalType: 'bytes', type: 'bytes' },
+      { name: 'c1InversePowPrivateKey', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'revealMyCards',
+    outputs: [
+      { name: 'card1', internalType: 'string', type: 'string' },
+      { name: 'card2', internalType: 'string', type: 'string' },
+    ],
     stateMutability: 'nonpayable',
   },
   {
@@ -1395,6 +1432,59 @@ export const deckHandlerAbi = [
         indexed: true,
       },
       { name: 'card1', internalType: 'string', type: 'string', indexed: false },
+      { name: 'card2', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'rank',
+        internalType: 'enum PokerHandEvaluatorv2.HandRank',
+        type: 'uint8',
+        indexed: false,
+      },
+      {
+        name: 'handScore',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'PlayerCardsRevealed',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'player',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'c1', internalType: 'bytes', type: 'bytes', indexed: false },
+      {
+        name: 'privateKey',
+        internalType: 'bytes',
+        type: 'bytes',
+        indexed: false,
+      },
+      {
+        name: 'c1InversePowPrivateKey',
+        internalType: 'bytes',
+        type: 'bytes',
+        indexed: false,
+      },
+    ],
+    name: 'PlayerRevealingCards',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'player',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'card1', internalType: 'string', type: 'string', indexed: false },
     ],
     name: 'RiverRevealed',
   },
@@ -1418,7 +1508,7 @@ export const deckHandlerAbi = [
  *
  */
 export const deckHandlerAddress = {
-  31337: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
+  31337: '0x2bdCC0de6bE1f7D2ee689a0342D76F52E8EFABa3',
 } as const
 
 /**
@@ -1957,7 +2047,6 @@ export const texasHoldemRoomAbi = [
     type: 'constructor',
     inputs: [
       { name: '_cryptoUtils', internalType: 'address', type: 'address' },
-      { name: '_handEvaluator', internalType: 'address', type: 'address' },
       { name: '_smallBlind', internalType: 'uint256', type: 'uint256' },
       { name: '_isPrivate', internalType: 'bool', type: 'bool' },
     ],
@@ -2015,6 +2104,13 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'countPlayersAtRoundStart',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'cryptoUtils',
     outputs: [
       { name: '', internalType: 'contract CryptoUtils', type: 'address' },
@@ -2025,7 +2121,7 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'currentPlayerIndex',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
@@ -2039,7 +2135,7 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'dealerPosition',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
@@ -2055,14 +2151,45 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [{ name: 'requireActive', internalType: 'bool', type: 'bool' }],
     name: 'getNextActivePlayer',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'playerIndex', internalType: 'uint8', type: 'uint8' }],
+    name: 'getPlayer',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct TexasHoldemRoom.Player',
+        type: 'tuple',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'chips', internalType: 'uint256', type: 'uint256' },
+          { name: 'currentStageBet', internalType: 'uint256', type: 'uint256' },
+          { name: 'totalRoundBet', internalType: 'uint256', type: 'uint256' },
+          { name: 'hasFolded', internalType: 'bool', type: 'bool' },
+          { name: 'isAllIn', internalType: 'bool', type: 'bool' },
+          { name: 'hasChecked', internalType: 'bool', type: 'bool' },
+          { name: 'cards', internalType: 'string[2]', type: 'string[2]' },
+          { name: 'seatPosition', internalType: 'uint8', type: 'uint8' },
+          { name: 'handScore', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'joinedAndWaitingForNextRound',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          { name: 'leavingAfterRoundEnds', internalType: 'bool', type: 'bool' },
+        ],
+      },
+    ],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [{ name: 'addr', internalType: 'address', type: 'address' }],
     name: 'getPlayerIndexFromAddr',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
@@ -2098,14 +2225,10 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'handEvaluator',
+    inputs: [{ name: 'playerIndex', internalType: 'uint8', type: 'uint8' }],
+    name: 'getPlayersCardIndexes',
     outputs: [
-      {
-        name: '',
-        internalType: 'contract PokerHandEvaluatorv2',
-        type: 'address',
-      },
+      { name: 'playerCardIndexes', internalType: 'uint8[2]', type: 'uint8[2]' },
     ],
     stateMutability: 'view',
   },
@@ -2127,7 +2250,7 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'lastRaiseIndex',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
@@ -2141,7 +2264,7 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'numPlayers',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
   },
   {
@@ -2183,91 +2306,6 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'encryptedCard1',
-        internalType: 'struct CryptoUtils.EncryptedCard',
-        type: 'tuple',
-        components: [
-          {
-            name: 'c1',
-            internalType: 'struct BigNumber',
-            type: 'tuple',
-            components: [
-              { name: 'val', internalType: 'bytes', type: 'bytes' },
-              { name: 'neg', internalType: 'bool', type: 'bool' },
-              { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-            ],
-          },
-          {
-            name: 'c2',
-            internalType: 'struct BigNumber',
-            type: 'tuple',
-            components: [
-              { name: 'val', internalType: 'bytes', type: 'bytes' },
-              { name: 'neg', internalType: 'bool', type: 'bool' },
-              { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'encryptedCard2',
-        internalType: 'struct CryptoUtils.EncryptedCard',
-        type: 'tuple',
-        components: [
-          {
-            name: 'c1',
-            internalType: 'struct BigNumber',
-            type: 'tuple',
-            components: [
-              { name: 'val', internalType: 'bytes', type: 'bytes' },
-              { name: 'neg', internalType: 'bool', type: 'bool' },
-              { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-            ],
-          },
-          {
-            name: 'c2',
-            internalType: 'struct BigNumber',
-            type: 'tuple',
-            components: [
-              { name: 'val', internalType: 'bytes', type: 'bytes' },
-              { name: 'neg', internalType: 'bool', type: 'bool' },
-              { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'privateKey',
-        internalType: 'struct BigNumber',
-        type: 'tuple',
-        components: [
-          { name: 'val', internalType: 'bytes', type: 'bytes' },
-          { name: 'neg', internalType: 'bool', type: 'bool' },
-          { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-      {
-        name: 'c1Inverse',
-        internalType: 'struct BigNumber',
-        type: 'tuple',
-        components: [
-          { name: 'val', internalType: 'bytes', type: 'bytes' },
-          { name: 'neg', internalType: 'bool', type: 'bool' },
-          { name: 'bitlen', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
-    name: 'revealMyCards',
-    outputs: [
-      { name: 'card1', internalType: 'string', type: 'string' },
-      { name: 'card2', internalType: 'string', type: 'string' },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     inputs: [],
     name: 'roundNumber',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
@@ -2283,15 +2321,6 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [
-      { name: '_currentPlayerIndex', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'setCurrentPlayerIndex',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
       { name: '_deckHandler', internalType: 'address', type: 'address' },
     ],
     name: 'setDeckHandler',
@@ -2301,13 +2330,10 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [
-      {
-        name: '_stage',
-        internalType: 'enum TexasHoldemRoom.GameStage',
-        type: 'uint8',
-      },
+      { name: 'playerIndex', internalType: 'uint8', type: 'uint8' },
+      { name: 'handScore', internalType: 'uint256', type: 'uint256' },
     ],
-    name: 'setStage',
+    name: 'setPlayerHandScore',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -2381,33 +2407,6 @@ export const texasHoldemRoomAbi = [
         type: 'address',
         indexed: true,
       },
-      { name: 'card1', internalType: 'string', type: 'string', indexed: false },
-      { name: 'card2', internalType: 'string', type: 'string', indexed: false },
-      {
-        name: 'rank',
-        internalType: 'enum PokerHandEvaluatorv2.HandRank',
-        type: 'uint8',
-        indexed: false,
-      },
-      {
-        name: 'handScore',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'PlayerCardsRevealed',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'player',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
       {
         name: 'action',
         internalType: 'enum TexasHoldemRoom.Action',
@@ -2454,7 +2453,7 @@ export const texasHoldemRoomAbi = [
  *
  */
 export const texasHoldemRoomAddress = {
-  31337: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+  31337: '0x82e01223d51Eb87e16A03E24687EDF0F294da6f1',
 } as const
 
 /**
@@ -2766,12 +2765,50 @@ export const useReadCryptoUtilsStrEq = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `functionName` set to `"verifyDecryptCard"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cryptoUtilsAbi}__
  */
-export const useReadCryptoUtilsVerifyDecryptCard =
-  /*#__PURE__*/ createUseReadContract({
+export const useWriteCryptoUtils = /*#__PURE__*/ createUseWriteContract({
+  abi: cryptoUtilsAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `functionName` set to `"verifyDecryptCard"`
+ */
+export const useWriteCryptoUtilsVerifyDecryptCard =
+  /*#__PURE__*/ createUseWriteContract({
     abi: cryptoUtilsAbi,
     functionName: 'verifyDecryptCard',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cryptoUtilsAbi}__
+ */
+export const useSimulateCryptoUtils = /*#__PURE__*/ createUseSimulateContract({
+  abi: cryptoUtilsAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `functionName` set to `"verifyDecryptCard"`
+ */
+export const useSimulateCryptoUtilsVerifyDecryptCard =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: cryptoUtilsAbi,
+    functionName: 'verifyDecryptCard',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cryptoUtilsAbi}__
+ */
+export const useWatchCryptoUtilsEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: cryptoUtilsAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `eventName` set to `"CULog"`
+ */
+export const useWatchCryptoUtilsCuLogEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: cryptoUtilsAbi,
+    eventName: 'CULog',
   })
 
 /**
@@ -2869,6 +2906,18 @@ export const useReadDeckHandlerGetEncryptedDeck =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"handEvaluator"`
+ *
+ *
+ */
+export const useReadDeckHandlerHandEvaluator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'handEvaluator',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"texasHoldemRoom"`
  *
  *
@@ -2900,6 +2949,18 @@ export const useWriteDeckHandlerResetDeck =
     abi: deckHandlerAbi,
     address: deckHandlerAddress,
     functionName: 'resetDeck',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"revealMyCards"`
+ *
+ *
+ */
+export const useWriteDeckHandlerRevealMyCards =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'revealMyCards',
   })
 
 /**
@@ -2946,6 +3007,18 @@ export const useSimulateDeckHandlerResetDeck =
     abi: deckHandlerAbi,
     address: deckHandlerAddress,
     functionName: 'resetDeck',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"revealMyCards"`
+ *
+ *
+ */
+export const useSimulateDeckHandlerRevealMyCards =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    functionName: 'revealMyCards',
   })
 
 /**
@@ -3017,6 +3090,30 @@ export const useWatchDeckHandlerFlopRevealedEvent =
     abi: deckHandlerAbi,
     address: deckHandlerAddress,
     eventName: 'FlopRevealed',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"PlayerCardsRevealed"`
+ *
+ *
+ */
+export const useWatchDeckHandlerPlayerCardsRevealedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    eventName: 'PlayerCardsRevealed',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"PlayerRevealingCards"`
+ *
+ *
+ */
+export const useWatchDeckHandlerPlayerRevealingCardsEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    eventName: 'PlayerRevealingCards',
   })
 
 /**
@@ -3499,6 +3596,18 @@ export const useReadTexasHoldemRoomCountOfHandsRevealed =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countPlayersAtRoundStart"`
+ *
+ *
+ */
+export const useReadTexasHoldemRoomCountPlayersAtRoundStart =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'countPlayersAtRoundStart',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"cryptoUtils"`
  *
  *
@@ -3571,6 +3680,18 @@ export const useReadTexasHoldemRoomGetNextActivePlayer =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayer"`
+ *
+ *
+ */
+export const useReadTexasHoldemRoomGetPlayer =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'getPlayer',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayerIndexFromAddr"`
  *
  *
@@ -3595,15 +3716,15 @@ export const useReadTexasHoldemRoomGetPlayers =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"handEvaluator"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersCardIndexes"`
  *
  *
  */
-export const useReadTexasHoldemRoomHandEvaluator =
+export const useReadTexasHoldemRoomGetPlayersCardIndexes =
   /*#__PURE__*/ createUseReadContract({
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
-    functionName: 'handEvaluator',
+    functionName: 'getPlayersCardIndexes',
   })
 
 /**
@@ -3759,30 +3880,6 @@ export const useWriteTexasHoldemRoomProgressGame =
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"revealMyCards"`
- *
- *
- */
-export const useWriteTexasHoldemRoomRevealMyCards =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'revealMyCards',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setCurrentPlayerIndex"`
- *
- *
- */
-export const useWriteTexasHoldemRoomSetCurrentPlayerIndex =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'setCurrentPlayerIndex',
-  })
-
-/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
  *
@@ -3795,15 +3892,15 @@ export const useWriteTexasHoldemRoomSetDeckHandler =
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setStage"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setPlayerHandScore"`
  *
  *
  */
-export const useWriteTexasHoldemRoomSetStage =
+export const useWriteTexasHoldemRoomSetPlayerHandScore =
   /*#__PURE__*/ createUseWriteContract({
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
-    functionName: 'setStage',
+    functionName: 'setPlayerHandScore',
   })
 
 /**
@@ -3866,30 +3963,6 @@ export const useSimulateTexasHoldemRoomProgressGame =
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"revealMyCards"`
- *
- *
- */
-export const useSimulateTexasHoldemRoomRevealMyCards =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'revealMyCards',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setCurrentPlayerIndex"`
- *
- *
- */
-export const useSimulateTexasHoldemRoomSetCurrentPlayerIndex =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'setCurrentPlayerIndex',
-  })
-
-/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
  *
@@ -3902,15 +3975,15 @@ export const useSimulateTexasHoldemRoomSetDeckHandler =
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setStage"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setPlayerHandScore"`
  *
  *
  */
-export const useSimulateTexasHoldemRoomSetStage =
+export const useSimulateTexasHoldemRoomSetPlayerHandScore =
   /*#__PURE__*/ createUseSimulateContract({
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
-    functionName: 'setStage',
+    functionName: 'setPlayerHandScore',
   })
 
 /**
@@ -3958,18 +4031,6 @@ export const useWatchTexasHoldemRoomNewStageEvent =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     eventName: 'NewStage',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerCardsRevealed"`
- *
- *
- */
-export const useWatchTexasHoldemRoomPlayerCardsRevealedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    eventName: 'PlayerCardsRevealed',
   })
 
 /**
