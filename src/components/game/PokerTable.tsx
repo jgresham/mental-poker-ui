@@ -11,6 +11,8 @@ import { Card } from "./Card";
 import { useAccount } from "wagmi";
 import { usePlayerCards, useRoundKeys } from "../../hooks/localRoomState";
 import { toast } from "sonner";
+import { zeroAddress } from "viem";
+import { useReadTexasHoldemRoomSeatPositionToPlayerIndex } from "../../generated";
 
 interface PokerTableProps {
   room: Room;
@@ -24,7 +26,7 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
   const { data: roundKeys } = useRoundKeys(room.id, room.roundNumber);
   const { communityCards, pot, stage, dealerPosition, currentPlayerIndex, roundNumber } =
     room;
-  console.log("/components/game/PokerTable room", room);
+  console.log("/components/game/PokerTable room, players", room, players);
   // Calculate positions for players around the table
   // const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {
   const getPlayerPositions = (playerCount: number) => {
@@ -113,6 +115,9 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
       {/* Players positioned around the table */}
       <div className="absolute inset-0">
         {players.map((player) => {
+          if (player.addr === zeroAddress) {
+            return null;
+          }
           const position = positions[player.seatPosition];
           const isCurrentUser = player.addr === address;
           if (playerCards[0] !== "" && playerCards[1] !== "" && isCurrentUser) {

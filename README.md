@@ -66,3 +66,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Built with Next.js and shadcn/ui components
 - Designed for mobile-first experience
+
+
+### Test specific file
+```npm test -- __tests__/modInverse.test.ts```

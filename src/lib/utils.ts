@@ -1,8 +1,10 @@
+import { useWatchDeckHandlerPlayerCardsRevealedEvent } from "./../generated";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { GameStage } from "./types";
+import { EMPTY_SEAT, GameStage, MAX_PLAYERS, Player } from "./types";
 import { stringCardsToCards } from "./types";
 import { bigintToString } from "./elgamal-commutative-node-1chunk";
+import { zeroAddress } from "viem";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -29,35 +31,113 @@ export function shuffleArray<T>(array: T[]): T[] {
  * @param numOfPlayers - The number of players
  * @returns The indexes of the other players' cards
  */
-export function getOtherPlayersCardsIndexes(myIndex: number, numOfPlayers: number) {
-  if (myIndex >= numOfPlayers) {
-    throw new Error("myIndex must be less than numOfPlayers");
+export function getOtherPlayersCardsIndexes(
+  myPlayerIndex: number,
+  dealerPosition: number,
+  players: Player[],
+) {
+  if (players === undefined) {
+    console.error("getOtherPlayersCardsIndexes: players is undefined");
+    return [];
   }
-  const otherPlayersIndexes = Array.from({ length: numOfPlayers * 2 }, (_, i) => i);
-  otherPlayersIndexes.splice(myIndex + numOfPlayers, 1); // remove my 2nd card
-  otherPlayersIndexes.splice(myIndex, 1); // remove my 1st card
+  console.log("getOtherPlayersCardsIndexes players dealerPosition", dealerPosition);
+  const countOfPlayersCounterClockwiseToDealer =
+    getCountOfPlayersCounterClockwiseToDealer(myPlayerIndex, dealerPosition, players);
+  const numPlayersAtRoundStart = players.filter(
+    (player) =>
+      player.addr !== zeroAddress && player.joinedAndWaitingForNextRound !== true,
+  ).length;
+  const otherPlayersIndexes = Array.from(
+    { length: numPlayersAtRoundStart * 2 },
+    (_, i) => i,
+  );
+  otherPlayersIndexes.splice(
+    countOfPlayersCounterClockwiseToDealer + numPlayersAtRoundStart,
+    1,
+  ); // remove my 2nd card
+  otherPlayersIndexes.splice(myPlayerIndex, 1); // remove my 1st card
   return otherPlayersIndexes;
 }
 
 /**
- * Get the indexes of the other players' cards
- * Examples: myindex = 0, numOfPlayers = 2
+ * Useful for determining which cards are for a specific player.
+ * Does not count empty seats or players who joined (sat down) after
+ * the round started.
+ * @param playerIndex - The index of the player
+ * @param dealerPosition - The position of the dealer
+ * @param players - The players in the game
+ * @returns The count of players counter clockwise to the dealer
+ */
+function getCountOfPlayersCounterClockwiseToDealer(
+  playerIndex: number,
+  dealerPosition: number,
+  players: Player[],
+) {
+  let countOfPlayersCounterClockwiseToDealer = 0;
+  if (
+    playerIndex !== undefined &&
+    dealerPosition !== undefined &&
+    Array.isArray(players)
+  ) {
+    console.log("players", players);
+    const playerSeatPosition = players[playerIndex].seatPosition;
+    const dealerSeatPosition = players[dealerPosition].seatPosition;
+    console.log("playerSeatPosition dealerPosition", dealerPosition);
+    console.log("playerSeatPosition players[dealerPosition]", players[dealerPosition]);
+    console.log("playerSeatPosition dealerSeatPosition", dealerSeatPosition);
+    let iteratePlayerSeatPosition = playerSeatPosition;
+    while (iteratePlayerSeatPosition !== dealerSeatPosition) {
+      console.log("playerSeatPosition playerSeatPosition", iteratePlayerSeatPosition);
+      console.log("playerSeatPosition playerIndex", playerIndex);
+      iteratePlayerSeatPosition =
+        (iteratePlayerSeatPosition - 1 + MAX_PLAYERS) % MAX_PLAYERS;
+      if (
+        players[iteratePlayerSeatPosition].addr !== zeroAddress &&
+        players[iteratePlayerSeatPosition].joinedAndWaitingForNextRound !== true
+      ) {
+        countOfPlayersCounterClockwiseToDealer++;
+      }
+    }
+  }
+  return countOfPlayersCounterClockwiseToDealer;
+}
+
+/**
+ * Get the indexes of my cards
+ * Examples: playerCClockwiseDistanceFromDealer = 0, numOfPlayers = 2
  * Returns: [0, 2]
- * Examples: myindex = 1, numOfPlayers = 2
+ * Examples: playerCClockwiseDistanceFromDealer = 1, numOfPlayers = 2
  * Returns: [1, 3]
- * Examples: myindex = 0, numOfPlayers = 10
+ * Examples: playerCClockwiseDistanceFromDealer = 0, numOfPlayers = 10
  * Returns: [0, 10]
- * Examples: myindex = 9, numOfPlayers = 10
+ * Examples: playerCClockwiseDistanceFromDealer = 9, numOfPlayers = 10
  * Returns: [9, 19]
- * @param myIndex - The index of the player
+ * @param playerCClockwiseDistanceFromDealer - The distance from the dealer
  * @param numOfPlayers - The number of players
  * @returns The indexes of the other players' cards
  */
-export function getMyCardsIndexes(myIndex: number, numOfPlayers: number) {
-  if (myIndex >= numOfPlayers) {
-    throw new Error("myIndex must be less than numOfPlayers");
+export function getMyCardsIndexes(
+  playerIndex: number,
+  dealerPosition: number,
+  players: Player[],
+) {
+  console.log("getMyCardsIndexes players dealerPosition", dealerPosition);
+  const countOfPlayersCounterClockwiseToDealer =
+    getCountOfPlayersCounterClockwiseToDealer(playerIndex, dealerPosition, players);
+  const numPlayersAtRoundStart = players.filter(
+    (player) =>
+      player.addr !== zeroAddress && player.joinedAndWaitingForNextRound !== true,
+  ).length;
+  if (countOfPlayersCounterClockwiseToDealer >= numPlayersAtRoundStart) {
+    throw new Error(
+      "countOfPlayersCounterClockwiseToDealer must be less than playersAtRoundStart",
+    );
   }
-  return [myIndex, myIndex + numOfPlayers];
+  const playerCardIndexes = [
+    countOfPlayersCounterClockwiseToDealer,
+    countOfPlayersCounterClockwiseToDealer + numPlayersAtRoundStart,
+  ];
+  return playerCardIndexes;
 }
 
 /**

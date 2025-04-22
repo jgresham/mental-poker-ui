@@ -20,7 +20,7 @@ import {
   useWriteTexasHoldemRoomSubmitAction,
   useWriteDeckHandlerSubmitDecryptionValues,
   useWriteDeckHandlerSubmitEncryptedShuffle,
-  useWriteTexasHoldemRoomRevealMyCards,
+  useWriteDeckHandlerRevealMyCards,
 } from "../../generated";
 import {
   bigintToHexString,
@@ -41,6 +41,9 @@ import {
   getMyCardsIndexes,
   getOtherPlayersCardsIndexes,
 } from "../../lib/utils";
+import * as bigintModArith from "bigint-mod-arith";
+import { useGetPlayers } from "../../wagmi/wrapper";
+
 interface GameControlsProps {
   room: Room;
   player?: Player;
@@ -60,6 +63,7 @@ export function GameControls({ room, player }: GameControlsProps) {
   const router = useRouter();
   const { address } = useAccount();
   const { data: roundKeys } = useRoundKeys(room.id, Number(room.roundNumber));
+  const { data: players } = useGetPlayers();
   console.log("GameControls roundKeys", roundKeys);
 
   // const {
@@ -119,7 +123,7 @@ export function GameControls({ room, player }: GameControlsProps) {
     isSuccess: isSubmittingRevealMyCardsSuccess,
     isError: isSubmittingRevealMyCardsError,
     error: txErrorSubmittingRevealMyCards,
-  } = useWriteTexasHoldemRoomRevealMyCards();
+  } = useWriteDeckHandlerRevealMyCards();
 
   useEffect(() => {
     if (room?.currentStageBet) {
@@ -160,13 +164,21 @@ export function GameControls({ room, player }: GameControlsProps) {
         player?.seatPosition !== undefined &&
         roundKeys.privateKey !== null &&
         roundKeys.publicKey !== null &&
-        roundKeys.r !== null
+        roundKeys.r !== null &&
+        players !== undefined
       ) {
         console.log("revealing my cards, stage is past reveal deal");
         handleDecryptMyCardsLocally();
       }
     }
-  }, [playerCards, room.stage, room.encryptedDeck, player?.seatPosition, roundKeys]);
+  }, [
+    playerCards,
+    room.stage,
+    room.encryptedDeck,
+    player?.seatPosition,
+    roundKeys,
+    players,
+  ]);
 
   useEffect(() => {
     console.log(
@@ -186,7 +198,10 @@ export function GameControls({ room, player }: GameControlsProps) {
       return;
     }
     // For showdown, any active player can submit reveal their cards in any order
-    if ((!isPlayerTurn && room.stage !== GameStage.Showdown) || hasPromptedStageObligation !== null) {
+    if (
+      (!isPlayerTurn && room.stage !== GameStage.Showdown) ||
+      hasPromptedStageObligation !== null
+    ) {
       return;
     }
     // First shuffler uses the unencrypted deck
@@ -224,10 +239,11 @@ export function GameControls({ room, player }: GameControlsProps) {
     hasPromptedStageObligation,
     player?.seatPosition,
     roundKeys,
-    connections
+    connections,
   ]);
 
   const handleObligation = () => {
+    console.log("handleObligation called");
     // if shuffle, call submitEncryptedDeck
     if (room.stage === GameStage.Shuffle && !isSubmittingEncryptedDeck) {
       console.log("BACKGROUND OBLIGATION: SHUFFLE");
@@ -252,10 +268,21 @@ export function GameControls({ room, player }: GameControlsProps) {
     }
 
     // if we enter showdown and are still active, then we need to reveal our cards on the smart contract
-    if (!player?.hasFolded && !player?.joinedAndWaitingForNextRound && room.stage === GameStage.Showdown && !isSubmittingRevealMyCards) {
+    if (
+      !player?.hasFolded &&
+      !player?.joinedAndWaitingForNextRound &&
+      room.stage === GameStage.Showdown &&
+      !isSubmittingRevealMyCards
+    ) {
       console.log("BACKGROUND OBLIGATION: SHOWDOWN REVEAL MY CARDS");
       setHasPromptedStageObligation(room.stage);
       handleSubmitRevealMyCards();
+    } else if (room.stage === GameStage.Showdown) {
+      console.log(
+        "showdown but not submitting my reveal",
+        player,
+        isSubmittingRevealMyCards,
+      );
     }
   };
 
@@ -277,48 +304,46 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.error("handleRevealPlayerCards: null round key found");
       return;
     }
+    if (players === undefined) {
+      console.error("handleRevealPlayerCards: players is undefined");
+      return;
+    }
 
     const revealMyCardsIndexes = getMyCardsIndexes(
-      player.seatPosition,
-      room.numPlayers,
+      player.playerIndex,
+      room.dealerPosition,
+      players,
     );
-    console.log(
-      "handleSubmitRevealMyCards revealMyCardsIndexes",
-      revealMyCardsIndexes,
-    );
+    console.log("handleSubmitRevealMyCards revealMyCardsIndexes", revealMyCardsIndexes);
 
     const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
-    console.log("generated c1", c1.toString(16));
-    const c1Inverse = modInverse(c1, p2048);
-    console.log("generated c1Inverse", c1Inverse.toString(16));
-    // solidity:
-  //   function revealMyCards(
-  //     CryptoUtils.EncryptedCard memory encryptedCard1,
-  //     CryptoUtils.EncryptedCard memory encryptedCard2,
-  //     BigNumber memory privateKey,
-  //     BigNumber memory c1Inverse
-  // ) external returns (string memory card1, string memory card2)
-  const encryptedCard1 = room.encryptedDeck[revealMyCardsIndexes[0]];
-  const encryptedCard2 = room.encryptedDeck[revealMyCardsIndexes[1]];
+    const c1InversePowPrivateKey = modInverse(
+      bigintModArith.modPow(c1, roundKeys.privateKey, p2048),
+      p2048,
+    );
+    const args = [
+      bigintToHexString(c1),
+      bigintToHexString(roundKeys.privateKey),
+      bigintToHexString(c1InversePowPrivateKey),
+    ] as const;
+    console.log("handleSubmitRevealMyCards args", args);
     const txHash2 = await submitRevealMyCards({
-      args: [{c1: {
-        val: bigintToHexString(c1), neg: false, bitlen: BigInt(2048)
-      }, c2: {
-        val: bigintToHexString(encryptedCard1), neg: false, bitlen: BigInt(2048)
-      }}, {c1: {
-        val: bigintToHexString(c1), neg: false, bitlen: BigInt(2048)
-      }, c2: {
-        val: bigintToHexString(encryptedCard2), neg: false, bitlen: BigInt(2048)
-      }}, {
-        val: bigintToHexString(roundKeys.privateKey), neg: false, bitlen: BigInt(2048)
-      }, {
-        val: bigintToHexString(c1Inverse), neg: false, bitlen: BigInt(2048)
-      }],
+      args,
     });
     console.log("txHash2", txHash2);
     setTxHash2(txHash2);
   }
 
+  // gen c1InversePowPrivateKey
+  // const c1T = BigInt(
+  //   "0xf2665a38a624f4842a01609269daac7f5551e117c56297acd911b173c9b9203e8b62e8f3eb936b4848011b7c229a9ff9b57d3f0373a0d3888e5488728568a920b2cd389e19fc1359b009f50951bafe9102433b334c30383fab880e082349182a3c2beef01f923a678d916413eafb730d4d65cdbe5edeec265cc36d12bfa096019aea81a423a94b514086a6c96d13492310d2d6681066b4e97ea0c9de988ef4546aa34a231e76debfab210de0b528d890a434ff656e73d6f6422c692e439b39f37dec20c354e8639f50319298e795e1cdae8aef6473b73704f17f9b5e03538a94f24993eab43dd806ad6baacbbcf51143f789b168a3a732d00e94570f9e42e91a",
+  // );
+  // const pT = BigInt(
+  //   "0xab3bdb680cf7a5d81d32b1a3d6114c57803ef26b1a9451a24653f1b146560f423c35cdeb8ee4fcbd1df5cbf6643b9f544cdf2cc779fc6f9cc28929eaa38eb1a8742b84c24947e254f3c5434e34b2daf71efa1f6326128cc7d6d6500c8d963d4759189e4bae75e34d84945beb541a9b9cb441de2522066d057e0562a16d71b26a1406d054790885d3dbd8fda8f311b4c60c2e8fa7b73dbc288177925f16a98308448d58186500d21ab42c4a0678e7ec63c5a59aa30e2091363c21b09dee1740f6289a75917c29e9aeca8d835ad599fe8a21dd5c910302c6c25ce50b6d16f16799ca6552ee5148d92ee34a69e188dc4161df1237b28861810f05b43d13f47ba333",
+  // );
+  // const c1InversePowPrivateKey = modInverse(bigintModArith.modPow(c1T, pT, p2048), p2048);
+  // console.log("c1InversePowPrivateKey", bigintToHexString(c1InversePowPrivateKey));
+  // console.log("c1InversePowPrivateKey2", bigintToHexString(modInverse(c1T, p2048)));
 
   // Handle fold action
   const handleFold = () => {
@@ -387,7 +412,6 @@ export function GameControls({ room, player }: GameControlsProps) {
   //   currentPlayer.bet < gameState.currentStageBet;
   // const canRaise = currentPlayer && currentPlayer.chips > 0;
 
-      // const handleShuffle = useCallback(async () => {
   const handleShuffle = async () => {
     console.log("handleShuffle", room.encryptedDeck);
     let deck: {
@@ -464,10 +488,15 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.error("handleRevealPlayerCards: null round key found");
       return;
     }
+    if (players === undefined) {
+      console.error("handleRevealPlayerCards: players is undefined");
+      return;
+    }
 
     const revealOtherPlayersCardsIndexes = getOtherPlayersCardsIndexes(
-      player.seatPosition,
-      room.numPlayers,
+      player.playerIndex,
+      room.dealerPosition,
+      players,
     );
     console.log(
       "handleRevealPlayerCards revealOtherPlayersCardsIndexes",
@@ -514,7 +543,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       return;
     }
     if (player?.seatPosition === undefined) {
-      console.error("handleRevealPlayerCards: player seat position is undefined");
+      console.error("handleDecryptMyCardsLocally: player seat position is undefined");
       return;
     }
     if (
@@ -522,11 +551,18 @@ export function GameControls({ room, player }: GameControlsProps) {
       roundKeys.publicKey === null ||
       roundKeys.r === null
     ) {
-      console.error("handleRevealPlayerCards: null round key found");
+      console.error("handleDecryptMyCardsLocally: null round key found");
       return;
     }
-
-    const revealMyCardsIndexes = getMyCardsIndexes(player.seatPosition, room.numPlayers);
+    if (players === undefined) {
+      console.error("handleDecryptMyCardsLocally: players is undefined");
+      return;
+    }
+    const revealMyCardsIndexes = getMyCardsIndexes(
+      player.seatPosition,
+      room.dealerPosition,
+      players,
+    );
     console.log("revealMyCardsIndexes", revealMyCardsIndexes);
     const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
