@@ -142,6 +142,9 @@ export function getMyCardsIndexes(
   players: Player[],
 ) {
   console.log("getMyCardsIndexes players dealerPosition", dealerPosition);
+  if (players[playerIndex].addr === zeroAddress) {
+    return [];
+  }
   const countOfPlayersCounterClockwiseToDealer =
     getCountOfPlayersCounterClockwiseToDealer(playerIndex, dealerPosition, players);
   const numPlayersAtRoundStart = players.filter(

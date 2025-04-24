@@ -6,7 +6,10 @@ const PLAYER_CARDS_KEY = ["playerCards"];
 const ROUND_KEYS_KEY = "roundKeys";
 
 /**
- * A custom hook that retrieves player cards using TanStack Query
+ * A custom hook that retrieves player cards using TanStack Query.
+ * These cards are only known to the local current player.
+ * They differ from player.cards which are publically known if the player
+ * is required to reveal their cards.
  * @returns The current player cards
  */
 export function usePlayerCards() {
@@ -39,7 +42,7 @@ export function useSetPlayerCards() {
  * @param roundNumber - The round number
  * @returns private key, public key, and r
  */
-export function useRoundKeys(roomId: string, roundNumber?: number) {
+export function useRoundKeys(roomId?: string, roundNumber?: number) {
   return useQuery<{
     privateKey: bigint | null;
     publicKey: bigint | null;

@@ -75,27 +75,24 @@ export function stringCardsToCards(cards: string[]): Card[] {
 //   uint8 seatPosition;
 // }
 export interface Player {
-  id: string;
   addr: string;
   playerIndex: number;
   seatPosition: number;
   chips: number;
   currentStageBet: number;
   totalRoundBet: number;
-  cards: Card[];
-  isDealer: boolean;
-  isSmallBlind: boolean;
-  isBigBlind: boolean;
-  isTurn: boolean;
+  cards: string[];
+  isDealer?: boolean;
+  isSmallBlind?: boolean;
+  isBigBlind?: boolean;
+  isTurn?: boolean;
   isAllIn: boolean;
   hasFolded: boolean;
   joinedAndWaitingForNextRound: boolean;
   leavingAfterRoundEnds: boolean;
   handScore: number;
-  bet: number;
   name?: string;
   avatarUrl?: string;
-
 }
 
 // Solidity Room contract constants
@@ -116,10 +113,10 @@ export const EMPTY_SEAT = 255;
 
 export interface Room {
   id: string;
-  roundNumber: number;
-  players: Player[];
-  seatPositionToPlayerIndex: number[];
-  numPlayers: number;
+  roundNumber?: number;
+  // players: Player[];
+  // seatPositionToPlayerIndex: number[];
+  numPlayers?: number;
   isPrivate: boolean;
   stage: GameStage;
   pot: number;
@@ -130,7 +127,7 @@ export interface Room {
   currentPlayerIndex: number;
   lastRaiseIndex: number;
   communityCards: Card[];
-  encryptedDeck: bigint[];
+  encryptedDeck: `0x${string}`[];
 }
 
 // Solidity contract GameStage
@@ -194,7 +191,6 @@ export const GameStageToString = {
   [GameStage.Break]: "break",
   [GameStage.Ended]: "ended",
 };
-
 
 // struct BigNumber {
 //   bytes val;

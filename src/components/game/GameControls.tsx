@@ -7,7 +7,6 @@ import {
   GameStage,
   REVEAL_COMMUNITY_CARDS_STAGE,
 } from "@/lib/types";
-// import { dealCommunityCards, getNextStage, nextPlayer } from "@/lib/poker-utils";
 import { useRouter } from "next/navigation";
 import { useConnections, useWaitForTransactionReceipt } from "wagmi";
 import {
@@ -306,7 +305,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.error("handleRevealPlayerCards: null round key found");
       return;
     }
-    if (players === undefined) {
+    if (players === undefined || players === null) {
       console.error("handleRevealPlayerCards: players is undefined");
       return;
     }
@@ -557,7 +556,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       console.error("handleDecryptMyCardsLocally: null round key found");
       return;
     }
-    if (players === undefined) {
+    if (players === undefined || players === null) {
       console.error("handleDecryptMyCardsLocally: players is undefined");
       return;
     }
@@ -601,6 +600,11 @@ export function GameControls({ room, player }: GameControlsProps) {
       roundKeys.r === null
     ) {
       console.error("handleRevealPlayerCards: null round key found");
+      return;
+    }
+
+    if (room.numPlayers === undefined) {
+      console.error("handleRevealCommunityCards: numPlayers is undefined");
       return;
     }
 

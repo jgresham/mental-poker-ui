@@ -1,5 +1,5 @@
 import React from "react";
-import type { Player } from "@/lib/types";
+import { type Card as CardType, stringCardsToCards, type Player } from "@/lib/types";
 import { Card } from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { useEnsAvatar } from "wagmi";
 import { useEnsName } from "wagmi";
 import { Clock } from "lucide-react";
+import { toast } from "sonner";
+import { usePlayerCards } from "../../hooks/localRoomState";
 
 interface PlayerProps {
   player: Player;
@@ -18,7 +20,7 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
     name,
     addr,
     chips,
-    cards,
+    // cards,
     hasFolded,
     isDealer,
     isSmallBlind,
@@ -32,6 +34,7 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
 
   const { data: ensName } = useEnsName({ address: addr as `0x${string}` });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "" });
+  const { data: playerCards } = usePlayerCards();
 
   // Get initials for avatar fallback
   const displayName = ensName ?? name;
@@ -42,6 +45,16 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
         .join("")
         .toUpperCase()
     : addr?.slice(2, 4);
+
+  let cards: CardType[] = [];
+  if (playerCards[0] !== "" && playerCards[1] !== "" && isCurrentUser) {
+    try {
+      cards = stringCardsToCards(playerCards);
+    } catch (error) {
+      console.error("Error converting player cards to cards", error);
+      toast.error("Error decrypting player cards");
+    }
+  }
 
   return (
     <div
