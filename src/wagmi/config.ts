@@ -23,6 +23,7 @@ const walletConnectors = connectorsForWallets(
 );
 
 const chains: Chain[] = [base];
+chains.push(baseSepolia);
 if (
   process.env.NEXT_PUBLIC_WORKER_DOMAIN?.includes("staging") ||
   process.env.NEXT_PUBLIC_WORKER_DOMAIN?.includes("localhost") ||

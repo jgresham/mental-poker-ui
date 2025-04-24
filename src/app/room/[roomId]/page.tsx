@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { ADMIN_ADDRESSES, getCommunityCards } from "../../../lib/utils";
 import { useRoundKeys } from "../../../hooks/localRoomState";
-import { Card, GameStage } from "../../../lib/types";
+import { type Room as RoomType, type Card, GameStage } from "../../../lib/types";
 import { toast } from "sonner";
 
 export default function Room() {
@@ -81,7 +81,7 @@ export default function Room() {
       refetchPlayers();
     },
   });
-
+  // Destructure all properties except encryptedDeck to keep it mutable
   const {
     stage,
     isPrivate,
@@ -94,7 +94,12 @@ export default function Room() {
     lastRaiseIndex,
     numPlayers,
     roundNumber,
-  } = roomData ?? {};
+  } = roomData ?? {
+    stage: GameStage.Idle,
+  };
+
+  // Access encryptedDeck directly from roomData to keep it mutable
+  const encryptedDeck = roomData?.encryptedDeck.concat() || [];
 
   // setTimeout(() => {
   //   console.log("refetching numPlayers", numPlayersUpdatedAt, numPlayers);
@@ -195,7 +200,7 @@ export default function Room() {
                   : "Join Game"}
             </Button>
 
-            {ADMIN_ADDRESSES.includes(address) && (
+            {address && ADMIN_ADDRESSES.includes(address) && (
               <Button
                 onClick={handleResetRound}
                 disabled={isResettingRound || isWaitingForTx}
@@ -259,12 +264,14 @@ export default function Room() {
             </span>
           </div>
           <PokerTable
-            room={{
-              ...roomData,
-              id: roomId,
-              communityCards,
-              encryptedDeck: roomData?.encryptedDeck,
-            }}
+            room={
+              {
+                ...roomData,
+                id: roomId,
+                communityCards,
+                encryptedDeck: encryptedDeck,
+              } as RoomType
+            }
             players={players || []}
             roomId={roomId || ""}
           />
@@ -273,7 +280,7 @@ export default function Room() {
               id: roomId,
               roundNumber: Number(roundNumber),
               stage,
-              isPrivate,
+              isPrivate: isPrivate ?? false,
               smallBlind: Number(smallBlind),
               bigBlind: Number(bigBlind),
               pot: Number(pot),
@@ -282,7 +289,8 @@ export default function Room() {
               dealerPosition: Number(dealerPosition),
               currentPlayerIndex: Number(currentPlayerIndex),
               lastRaiseIndex: Number(lastRaiseIndex),
-              encryptedDeck: roomData?.encryptedDeck,
+              encryptedDeck: encryptedDeck,
+              communityCards,
             }}
             player={players?.find((player) => player.addr === address)}
           />

@@ -4,7 +4,6 @@ import { useState } from "react";
 // import { PokerTable } from "@/components/game/PokerTable";
 // import { GameControls } from "@/components/game/GameControls";
 // import { GameState } from "@/lib/types";
-// import { initializeGame, dealCards } from "@/lib/poker-utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

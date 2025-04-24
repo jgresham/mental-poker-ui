@@ -18,6 +18,7 @@ export function useGetPlayers() {
     if (!rawData) return null;
     return rawData.map((player, playerIndex) => ({
       ...player,
+      cards: player.cards.concat(), // Make cards mutable
       chips: Number(player.chips),
       currentStageBet: Number(player.currentStageBet),
       totalRoundBet: Number(player.totalRoundBet),

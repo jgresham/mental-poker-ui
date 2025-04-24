@@ -1,28 +1,24 @@
 import React from "react";
-import {
-  type Room,
-  type Player,
-  MAX_PLAYERS,
-  GameStageToString,
-  stringCardsToCards,
-} from "@/lib/types";
+import { type Room, type Player, MAX_PLAYERS, GameStageToString } from "@/lib/types";
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
 import { useAccount } from "wagmi";
-import { usePlayerCards, useRoundKeys } from "../../hooks/localRoomState";
-import { toast } from "sonner";
+import { useRoundKeys } from "../../hooks/localRoomState";
 import { zeroAddress } from "viem";
 
 interface PokerTableProps {
-  room: Room;
+  room?: Room;
   players: Player[];
   roomId?: string;
 }
 
 export function PokerTable({ room, players, roomId }: PokerTableProps) {
   const { address } = useAccount();
-  const { data: playerCards } = usePlayerCards();
-  const { data: roundKeys } = useRoundKeys(room.id, room.roundNumber);
+  const { data: roundKeys } = useRoundKeys(room?.id, room?.roundNumber);
+
+  if (!room) {
+    return <p>Loading...</p>;
+  }
   const { communityCards, pot, stage, dealerPosition, currentPlayerIndex, roundNumber } =
     room;
   console.log("/components/game/PokerTable room, players", room, players);
@@ -119,14 +115,7 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
           }
           const position = positions[player.seatPosition];
           const isCurrentUser = player.addr === address;
-          if (playerCards[0] !== "" && playerCards[1] !== "" && isCurrentUser) {
-            try {
-              player.cards = stringCardsToCards(playerCards);
-            } catch (error) {
-              console.error("Error converting player cards to cards", error);
-              toast.error("Error decrypting player cards");
-            }
-          }
+
           console.log("player.seatPosition", player.seatPosition);
           console.log("dealerPosition", dealerPosition);
           if (player.playerIndex === dealerPosition) {
