@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-// import { PokerTable } from "@/components/game/PokerTable";
-// import { GameControls } from "@/components/game/GameControls";
-// import { GameState } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { sdk } from "@farcaster/frame-sdk";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,10 +19,37 @@ import Image from "next/image";
 export default function Home() {
   const router = useRouter();
   // const [gameState, setGameState] = useState<GameState | null>(null);
+  const [isSDKLoaded, setIsSDKLoaded] = useState<boolean>(false);
   const [playerCount, setPlayerCount] = useState<number>(8);
-  const [showSetup, setShowSetup] = useState<boolean>(true);
+  const [showSetup, setShowSetup] = useState<boolean>(false);
   // const [currentPlayerId, setCurrentPlayerId] = useState<string>("player-0");
   const [isPublic, setIsPublic] = useState<boolean>(true);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    const load = async () => {
+      const context = await sdk.context;
+      if (context) {
+        try {
+          console.log("Calling sdk.actions.ready()");
+          sdk.actions.ready();
+          sdk.actions.addFrame();
+        } catch (error) {
+          console.error("Error frame ready or calling add frame", error);
+        }
+      } else {
+        console.log("No Farcaster context found");
+      }
+    };
+    if (sdk && !isSDKLoaded) {
+      console.log("Calling load");
+      setIsSDKLoaded(true);
+      load();
+      return () => {
+        sdk.removeAllListeners();
+      };
+    }
+  }, []);
 
   // Initialize game when player count changes
   // useEffect(() => {
@@ -47,8 +73,8 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
-      <div className="w-full h-screen bg-green-900 flex flex-col items-center justify-center px-4 relative overflow-hidden">
+    <main className="flex h-screen flex-col items-center justify-between overflow-hidden">
+      <div className="w-full h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
         {/* Card pattern background */}
         <div className="absolute inset-0 opacity-5">
           <div className="grid grid-cols-8 gap-2">
@@ -60,93 +86,91 @@ export default function Home() {
         </div>
 
         {/* Main content */}
-        <div className="z-10 max-w-3xl w-full text-center space-y-8">
-          <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg">
-            Mental Poker
-          </h1>
+        <div className="z-10 w-full flex flex-col items-center text-center overflow-y-auto  pt-5 px-4">
+          <div className="max-w-3xl text-center space-y-8 ">
+            {/* <div> */}
+            <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg">
+              Mental Poker
+            </h1>
 
-          <p className="text-xl md:text-2xl text-green-100">
-            Secure, trustless poker without a third party
-          </p>
-
-          <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl text-white">
-            <h2 className="text-2xl font-semibold mb-4">
-              Play Texas Hold&apos;em Without Trust
-            </h2>
-            <p className="mb-6">
-              Mental Poker uses cryptographic protocols to ensure fair play without
-              requiring a trusted dealer. Your cards remain private, the deck is provably
-              shuffled, and the game is verifiably fair.
+            <p className="text-xl md:text-2xl text-green-100">
+              {"Secure, open poker with no house fees"}
             </p>
+            {/* </div> */}
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                onClick={() => setShowSetup(true)}
-                className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg"
-              >
-                Start Playing
-              </Button>
-
-              <Button
-                variant="outline"
-                className="border-white text-white hover:bg-white/10"
-                onClick={() =>
-                  window.open("https://en.wikipedia.org/wiki/Mental_poker", "_blank")
-                }
-              >
-                Learn More
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
-            <div className="bg-black/30 p-4 rounded-lg">
-              <h3 className="font-bold text-xl mb-2">Provably Fair</h3>
-              <p>
-                Cryptographically verified shuffling and dealing ensures no one can cheat.
+            <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl text-white">
+              <h2 className="text-2xl font-semibold mb-4">Texas Hold&apos;em style</h2>
+              <p className="mb-6">
+                {/* Mental Poker uses cryptographic protocols to ensure fair play without
+                requiring a trusted dealer. The deck is encrypted and shuffled by each
+                player and your cards remain private to you until you reveal them, just
+                like real poker - all with no house fees. */}
+                Your cards remain private to you until they are revealed, just like real
+                poker - all with no house fees.
               </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                {/* <Button
+                  onClick={() => setShowSetup(true)}
+                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg"
+                >
+                  Start Playing
+                </Button> */}
+
+                <Button onClick={() => router.push("/room/0")}>Start Playing</Button>
+              </div>
             </div>
 
-            <div className="bg-black/30 p-4 rounded-lg">
-              <h3 className="font-bold text-xl mb-2">No Middleman</h3>
-              <p>
-                Play directly with other players without a central server controlling the
-                game.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
+              <div className="bg-black/30 p-4 rounded-lg">
+                <h3 className="font-bold text-xl mb-2">Secure</h3>
+                <p>Commutative discrete logarithm encryption ensures no one can cheat.</p>
+              </div>
+
+              <div className="bg-black/30 p-4 rounded-lg">
+                <h3 className="font-bold text-xl mb-2">No Middleman</h3>
+                <p>
+                  Play directly with other players without a central server controlling
+                  the game. No fees.
+                </p>
+              </div>
+
+              <div className="bg-black/30 p-4 rounded-lg">
+                <h3 className="font-bold text-xl mb-2">Public & open</h3>
+                <p>
+                  All actions are recorded onchain, so anyone can verify and build on top
+                  of your history.
+                </p>
+              </div>
             </div>
 
-            <div className="bg-black/30 p-4 rounded-lg">
-              <h3 className="font-bold text-xl mb-2">Private & Secure</h3>
-              <p>Your cards remain hidden from everyone else, just like in real poker.</p>
+            <div className="pt-8 row-start-3 flex gap-6 flex-wrap items-center justify-center pb-8">
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                href="https://github.com/jgresham/mental-poker-ui"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/github.svg"
+                  alt="Github icon"
+                  width={16}
+                  height={16}
+                />
+                Github
+              </Link>
             </div>
           </div>
 
-          <div className="pt-8 row-start-3 flex gap-6 flex-wrap items-center justify-center pb-8">
-            <Link
-              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-              href="https://github.com/jgresham/mental-poker-ui"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                aria-hidden
-                className="dark:invert"
-                src="/github.svg"
-                alt="Github icon"
-                width={16}
-                height={16}
-              />
-              Github
-            </Link>
+          {/* Decorative cards */}
+          <div className="absolute -bottom-10 -left-10 transform rotate-12 opacity-30">
+            <div className="w-32 h-44 bg-white rounded-lg shadow-lg" />
           </div>
-        </div>
-
-        {/* Decorative cards */}
-        <div className="absolute -bottom-10 -left-10 transform rotate-12 opacity-30">
-          <div className="w-32 h-44 bg-white rounded-lg shadow-lg" />
-        </div>
-        <div className="absolute -top-10 -right-10 transform -rotate-12 opacity-30">
-          <div className="w-32 h-44 bg-white rounded-lg shadow-lg" />
+          <div className="absolute -top-10 -right-10 transform -rotate-12 opacity-30">
+            <div className="w-32 h-44 bg-white rounded-lg shadow-lg" />
+          </div>
         </div>
       </div>
       {/* Game setup dialog */}

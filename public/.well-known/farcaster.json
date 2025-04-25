@@ -1,0 +1,30 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjcxMCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweGRlMGYyMDcxNzNCNzk2ZGM3ZmFjMTlFNDFjZjgwNTU3MzU5NzhGODMifQ",
+    "payload": "eyJkb21haW4iOiJtZW50YWxwb2tlci54eXoifQ",
+    "signature": "MHhjMTc2MzVjOTU2MDYyMDlkMWFkODE3ZGU1YzY2Y2RlOTNjNDUzM2ZhZmQ5M2Y3MzYxZWRhN2JlOGI2NDBjZDk2MGRhZmY4NzRkYjYzZDEzOTBhOTlhOTYwM2I2YzllMmNlNmIxN2NhMWY3NzhjOWQ2MjdhM2FhZDA5YWMwNGU1YzFi"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Mental Poker",
+    "iconUrl": "https://mentalpoker.xyz/MentalPokerLogo200.jpg",
+    "homeUrl": "https://mentalpoker.xyz/",
+    "splashImageUrl": "https://mentalpoker.xyz/MentalPokerLogo200.jpg",
+    "splashBackgroundColor": "#ffffff",
+    "webhookUrl": "https://api.neynar.com/f/app/6441e10b-f1c4-432e-a670-1c396d4444ae/event",
+    "subtitle": "Mental Poker - Onchain Poker",
+    "description": "Mental Poker is onchain poker that is a secure, trustless, and no fee poker game. Every card is encrypted and decrypted using commutative encryption.",
+    "screenshotUrls": [
+      "https://mentalpoker.xyz/screenshot_landing.png",
+      "https://mentalpoker.xyz/screenshot_midgame.png",
+      "https://mentalpoker.xyz/screenshot_endgame.png"
+    ],
+    "primaryCategory": "games",
+    "tags": ["poker", "onchain", "verifiable", "texasholdem", "holdem"],
+    "heroImageUrl": "https://mentalpoker.xyz/heroimage.png",
+    "tagline": "Secure, onchain poker",
+    "ogTitle": "Mental Poker",
+    "ogDescription": "Mental Poker is onchain poker that is a secure and no fee poker game using commutative encryption.",
+    "ogImageUrl": "https://mentalpoker.xyz/heroimage.png"
+  }
+}
