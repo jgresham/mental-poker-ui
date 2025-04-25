@@ -16,8 +16,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Texas Hold'em Poker",
-  description: "A mobile-friendly Texas Hold'em Poker web app",
+  title: "Mental Poker",
+  description: "Onchain Poker",
+  openGraph: {
+    title: "Mental Poker",
+    description:
+      "Mental Poker is onchain poker that is a secure and no fee poker game using commutative encryption",
+    images: [
+      {
+        url: "https://mentalpoker.xyz/heroimage.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  other: {
+    "fc:frame": JSON.stringify({
+      version: "1",
+      imageUrl: "https://mentalpoker.xyz/heroimage.png",
+      button: {
+        title: "Play Poker",
+        action: {
+          type: "launch_frame",
+          name: "Mental Poker",
+          url: "https://mentalpoker.xyz",
+          splashImageUrl: "https://mentalpoker.xyz/MentalPokerLogo200.jpg",
+          splashBackgroundColor: "#0d542b",
+        },
+      },
+    }),
+  },
 };
 
 export default function RootLayout({
