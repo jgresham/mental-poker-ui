@@ -20,6 +20,11 @@ import { useRoundKeys } from "../../../hooks/localRoomState";
 import { type Room as RoomType, type Card, GameStage } from "../../../lib/types";
 import { toast } from "sonner";
 
+// export function generateStaticParams() {
+//   // should render for all /room/[roomIds]
+//   return [];
+// }
+
 export default function Room() {
   const params = useParams();
   const { address } = useAccount();
