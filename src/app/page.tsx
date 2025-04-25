@@ -76,7 +76,7 @@ export default function Home() {
     <main className="flex h-screen flex-col items-center justify-between overflow-hidden">
       <div className="w-full h-screen bg-green-900 flex flex-col items-center justify-center relative overflow-hidden">
         {/* Card pattern background */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-5 p-2">
           <div className="grid grid-cols-8 gap-2">
             {Array.from({ length: 64 }).map((_, i) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -86,7 +86,7 @@ export default function Home() {
         </div>
 
         {/* Main content */}
-        <div className="z-10 w-full flex flex-col items-center text-center overflow-y-auto  pt-5 px-4">
+        <div className="z-10 w-full flex flex-col items-center text-center overflow-y-auto pt-10 px-4">
           <div className="max-w-3xl text-center space-y-8 ">
             {/* <div> */}
             <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg">
@@ -117,7 +117,12 @@ export default function Home() {
                   Start Playing
                 </Button> */}
 
-                <Button onClick={() => router.push("/room/0")}>Start Playing</Button>
+                <Button
+                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
+                  onClick={() => router.push("/room/0")}
+                >
+                  Start Playing
+                </Button>
               </div>
             </div>
 
@@ -128,10 +133,10 @@ export default function Home() {
               </div>
 
               <div className="bg-black/30 p-4 rounded-lg">
-                <h3 className="font-bold text-xl mb-2">No Middleman</h3>
+                <h3 className="font-bold text-xl mb-2">No House</h3>
                 <p>
                   Play directly with other players without a central server controlling
-                  the game. No fees.
+                  the game nor a trusted dealer, and no house fees.
                 </p>
               </div>
 
@@ -160,6 +165,22 @@ export default function Home() {
                   height={16}
                 />
                 Github
+              </Link>
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
+                href="https://sepolia.basescan.org/address/0xfd95b63455287facf0eed16a4dd922813a98ecf1#code"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/globe.svg"
+                  alt="Globe icon"
+                  width={16}
+                  height={16}
+                />
+                Smart Contract
               </Link>
             </div>
           </div>
