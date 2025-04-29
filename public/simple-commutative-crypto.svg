@@ -1,0 +1,56 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f9f9f9" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#333333">Commutative Cryptography</text>
+  <text x="400" y="80" font-family="Arial" font-size="18" text-anchor="middle" fill="#666666">Order doesn't matter!</text>
+  
+  <!-- Main Concept Illustration -->
+  <!-- Top Row -->
+  <rect x="100" y="130" width="80" height="60" rx="5" ry="5" fill="#ffe6cc" stroke="#ff9933" stroke-width="2"/>
+  <text x="140" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Message</text>
+  
+  <text x="210" y="165" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="250" y="130" width="80" height="60" rx="5" ry="5" fill="#d4e5ff" stroke="#3366ff" stroke-width="2"/>
+  <text x="290" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock A</text>
+  
+  <text x="360" y="165" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="400" y="130" width="80" height="60" rx="5" ry="5" fill="#ffd4d4" stroke="#ff6666" stroke-width="2"/>
+  <text x="440" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock B</text>
+  
+  <text x="510" y="165" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="550" y="130" width="150" height="60" rx="5" ry="5" fill="#e6ffe6" stroke="#66cc66" stroke-width="2"/>
+  <text x="625" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Double-Locked</text>
+  
+  <!-- Bottom Row -->
+  <rect x="100" y="310" width="80" height="60" rx="5" ry="5" fill="#ffe6cc" stroke="#ff9933" stroke-width="2"/>
+  <text x="140" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Message</text>
+  
+  <text x="210" y="345" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="250" y="310" width="80" height="60" rx="5" ry="5" fill="#ffd4d4" stroke="#ff6666" stroke-width="2"/>
+  <text x="290" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock B</text>
+  
+  <text x="360" y="345" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="400" y="310" width="80" height="60" rx="5" ry="5" fill="#d4e5ff" stroke="#3366ff" stroke-width="2"/>
+  <text x="440" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock A</text>
+  
+  <text x="510" y="345" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="550" y="310" width="150" height="60" rx="5" ry="5" fill="#e6ffe6" stroke="#66cc66" stroke-width="2"/>
+  <text x="625" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Double-Locked</text>
+  
+  <!-- Middle Connection -->
+  <line x1="625" y1="190" x2="625" y2="310" stroke="#333333" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="700" y="250" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333333">SAME RESULT</text>
+  
+  <!-- Key Points -->
+  <rect x="100" y="420" width="600" height="50" rx="10" ry="10" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+  <text x="150" y="450" font-family="Arial" font-size="16" text-anchor="start" fill="#333333">• It doesn't matter which key locks first</text>
+  <text x="450" y="450" font-family="Arial" font-size="16" text-anchor="start" fill="#333333">• Both orders give the same result</text>
+</svg>

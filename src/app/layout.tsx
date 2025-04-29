@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mental Poker",
-  description: "Onchain Poker",
+  title: "Poker",
+  description: "Mental Poker - Onchain Poker",
   openGraph: {
     title: "Mental Poker",
     description:
