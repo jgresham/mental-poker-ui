@@ -1,0 +1,96 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f9f9f9" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#333333">Commutative Cryptography</text>
+  <text x="400" y="80" font-family="Arial" font-size="18" text-anchor="middle" fill="#666666">Order doesn't matter!</text>
+  
+  <!-- Main Concept Illustration -->
+  <!-- Top Row -->
+  <!-- Playing Cards instead of Message -->
+  <rect x="70" y="130" width="110" height="60" rx="5" ry="5" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Three of Hearts -->
+  <rect x="80" y="135" width="40" height="50" rx="3" ry="3" fill="#ffffff" stroke="#000000" stroke-width="1"/>
+  <text x="85" y="145" font-family="Arial" font-size="8" fill="#ff0000">3</text>
+  <text x="115" y="175" font-family="Arial" font-size="8" fill="#ff0000" transform="rotate(180,115,175)">3</text>
+  <path d="M 100 155 C 98 150, 95 150, 93 155 C 91 160, 95 165, 100 160 C 105 165, 109 160, 107 155 C 105 150, 102 150, 100 155 Z" fill="#ff0000"/>
+  <path d="M 100 145 C 98 140, 95 140, 93 145 C 91 150, 95 155, 100 150 C 105 155, 109 150, 107 145 C 105 140, 102 140, 100 145 Z" fill="#ff0000"/>
+  <path d="M 100 165 C 98 160, 95 160, 93 165 C 91 170, 95 175, 100 170 C 105 175, 109 170, 107 165 C 105 160, 102 160, 100 165 Z" fill="#ff0000"/>
+  
+  <!-- Seven of Diamonds -->
+  <rect x="130" y="135" width="40" height="50" rx="3" ry="3" fill="#ffffff" stroke="#000000" stroke-width="1"/>
+  <text x="135" y="145" font-family="Arial" font-size="8" fill="#ff0000">7</text>
+  <text x="165" y="175" font-family="Arial" font-size="8" fill="#ff0000" transform="rotate(180,165,175)">7</text>
+  <path d="M 150 140 L 145 145 L 150 150 L 155 145 Z" fill="#ff0000"/>
+  <path d="M 150 160 L 145 165 L 150 170 L 155 165 Z" fill="#ff0000"/>
+  <path d="M 150 150 L 145 155 L 150 160 L 155 155 Z" fill="#ff0000"/>
+  <path d="M 140 150 L 135 155 L 140 160 L 145 155 Z" fill="#ff0000"/>
+  <path d="M 160 150 L 155 155 L 160 160 L 165 155 Z" fill="#ff0000"/>
+  <path d="M 145 145 L 140 150 L 145 155 L 150 150 Z" fill="#ff0000"/>
+  <path d="M 155 145 L 150 150 L 155 155 L 160 150 Z" fill="#ff0000"/>
+  
+  <text x="210" y="165" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="250" y="130" width="80" height="60" rx="5" ry="5" fill="#d4e5ff" stroke="#3366ff" stroke-width="2"/>
+  <text x="290" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock A</text>
+  
+  <text x="360" y="165" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="400" y="130" width="80" height="60" rx="5" ry="5" fill="#ffd4d4" stroke="#ff6666" stroke-width="2"/>
+  <text x="440" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock B</text>
+  
+  <text x="510" y="165" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="550" y="130" width="150" height="60" rx="5" ry="5" fill="#e6ffe6" stroke="#66cc66" stroke-width="2"/>
+  <text x="625" y="165" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Double-Locked</text>
+  
+  <!-- Bottom Row -->
+  <!-- Playing Cards instead of Message -->
+  <rect x="70" y="310" width="110" height="60" rx="5" ry="5" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Three of Hearts -->
+  <rect x="80" y="315" width="40" height="50" rx="3" ry="3" fill="#ffffff" stroke="#000000" stroke-width="1"/>
+  <text x="85" y="325" font-family="Arial" font-size="8" fill="#ff0000">3</text>
+  <text x="115" y="355" font-family="Arial" font-size="8" fill="#ff0000" transform="rotate(180,115,355)">3</text>
+  <path d="M 100 335 C 98 330, 95 330, 93 335 C 91 340, 95 345, 100 340 C 105 345, 109 340, 107 335 C 105 330, 102 330, 100 335 Z" fill="#ff0000"/>
+  <path d="M 100 325 C 98 320, 95 320, 93 325 C 91 330, 95 335, 100 330 C 105 335, 109 330, 107 325 C 105 320, 102 320, 100 325 Z" fill="#ff0000"/>
+  <path d="M 100 345 C 98 340, 95 340, 93 345 C 91 350, 95 355, 100 350 C 105 355, 109 350, 107 345 C 105 340, 102 340, 100 345 Z" fill="#ff0000"/>
+  
+  <!-- Seven of Diamonds -->
+  <rect x="130" y="315" width="40" height="50" rx="3" ry="3" fill="#ffffff" stroke="#000000" stroke-width="1"/>
+  <text x="135" y="325" font-family="Arial" font-size="8" fill="#ff0000">7</text>
+  <text x="165" y="355" font-family="Arial" font-size="8" fill="#ff0000" transform="rotate(180,165,355)">7</text>
+  <path d="M 150 320 L 145 325 L 150 330 L 155 325 Z" fill="#ff0000"/>
+  <path d="M 150 340 L 145 345 L 150 350 L 155 345 Z" fill="#ff0000"/>
+  <path d="M 150 330 L 145 335 L 150 340 L 155 335 Z" fill="#ff0000"/>
+  <path d="M 140 330 L 135 335 L 140 340 L 145 335 Z" fill="#ff0000"/>
+  <path d="M 160 330 L 155 335 L 160 340 L 165 335 Z" fill="#ff0000"/>
+  <path d="M 145 325 L 140 330 L 145 335 L 150 330 Z" fill="#ff0000"/>
+  <path d="M 155 325 L 150 330 L 155 335 L 160 330 Z" fill="#ff0000"/>
+  
+  <text x="210" y="345" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="250" y="310" width="80" height="60" rx="5" ry="5" fill="#ffd4d4" stroke="#ff6666" stroke-width="2"/>
+  <text x="290" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock B</text>
+  
+  <text x="360" y="345" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="400" y="310" width="80" height="60" rx="5" ry="5" fill="#d4e5ff" stroke="#3366ff" stroke-width="2"/>
+  <text x="440" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Lock A</text>
+  
+  <text x="510" y="345" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">→</text>
+  
+  <rect x="550" y="310" width="150" height="60" rx="5" ry="5" fill="#e6ffe6" stroke="#66cc66" stroke-width="2"/>
+  <text x="625" y="345" font-family="Arial" font-size="16" text-anchor="middle" fill="#333333">Double-Locked</text>
+  
+  <!-- Middle Connection -->
+  <line x1="625" y1="190" x2="625" y2="310" stroke="#333333" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="700" y="250" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333333">SAME RESULT</text>
+  
+  <!-- Key Points -->
+  <rect x="100" y="420" width="600" height="50" rx="10" ry="10" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+  <text x="150" y="450" font-family="Arial" font-size="16" text-anchor="start" fill="#333333">• It doesn't matter which key locks first</text>
+  <text x="450" y="450" font-family="Arial" font-size="16" text-anchor="start" fill="#333333">• Both orders give the same result</text>
+</svg>

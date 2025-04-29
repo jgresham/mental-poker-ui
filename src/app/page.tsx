@@ -168,6 +168,22 @@ export default function Home() {
               </Link>
               <Link
                 className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
+                href="https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956#code"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/globe.svg"
+                  alt="Globe icon"
+                  width={16}
+                  height={16}
+                />
+                Mainnet Smart Contract
+              </Link>
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
                 href="https://sepolia.basescan.org/address/0xfd95b63455287facf0eed16a4dd922813a98ecf1#code"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -180,7 +196,7 @@ export default function Home() {
                   width={16}
                   height={16}
                 />
-                Smart Contract
+                Testnet Smart Contract
               </Link>
             </div>
           </div>

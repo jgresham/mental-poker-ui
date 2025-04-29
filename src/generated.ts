@@ -1192,7 +1192,7 @@ export const cryptoUtilsAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -1507,18 +1507,18 @@ export const deckHandlerAbi = [
 ] as const
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
 export const deckHandlerAddress = {
-  8453: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+  8453: '0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9',
   31337: '0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc',
   84532: '0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1',
 } as const
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2048,7 +2048,7 @@ export const stringExtensionsAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -2467,18 +2467,18 @@ export const texasHoldemRoomAbi = [
 ] as const
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
 export const texasHoldemRoomAddress = {
-  8453: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+  8453: '0xf34890f942220f48391BA33Ff053f64Aa8979956',
   31337: '0xFD471836031dc5108809D173A067e8486B9047A3',
   84532: '0xfD95b63455287faCf0eeD16a4DD922813a98EcF1',
 } as const
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -2837,7 +2837,7 @@ export const useWatchCryptoUtilsCuLogEvent =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2849,7 +2849,7 @@ export const useReadDeckHandler = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"communityCards"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2863,7 +2863,7 @@ export const useReadDeckHandlerCommunityCards =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"cryptoUtils"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2877,7 +2877,7 @@ export const useReadDeckHandlerCryptoUtils =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"encryptedDeck"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2891,7 +2891,7 @@ export const useReadDeckHandlerEncryptedDeck =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getBulkRoomData"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2905,7 +2905,7 @@ export const useReadDeckHandlerGetBulkRoomData =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getCommunityCards"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2919,7 +2919,7 @@ export const useReadDeckHandlerGetCommunityCards =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getEncrypedCard"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2933,7 +2933,7 @@ export const useReadDeckHandlerGetEncrypedCard =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getEncryptedDeck"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2947,7 +2947,7 @@ export const useReadDeckHandlerGetEncryptedDeck =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"handEvaluator"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2961,7 +2961,7 @@ export const useReadDeckHandlerHandEvaluator =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"texasHoldemRoom"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2975,7 +2975,7 @@ export const useReadDeckHandlerTexasHoldemRoom =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -2987,7 +2987,7 @@ export const useWriteDeckHandler = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"resetDeck"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3001,7 +3001,7 @@ export const useWriteDeckHandlerResetDeck =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"revealMyCards"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3015,7 +3015,7 @@ export const useWriteDeckHandlerRevealMyCards =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitDecryptionValues"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3029,7 +3029,7 @@ export const useWriteDeckHandlerSubmitDecryptionValues =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitEncryptedShuffle"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3043,7 +3043,7 @@ export const useWriteDeckHandlerSubmitEncryptedShuffle =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3055,7 +3055,7 @@ export const useSimulateDeckHandler = /*#__PURE__*/ createUseSimulateContract({
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"resetDeck"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3069,7 +3069,7 @@ export const useSimulateDeckHandlerResetDeck =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"revealMyCards"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3083,7 +3083,7 @@ export const useSimulateDeckHandlerRevealMyCards =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitDecryptionValues"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3097,7 +3097,7 @@ export const useSimulateDeckHandlerSubmitDecryptionValues =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitEncryptedShuffle"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3111,7 +3111,7 @@ export const useSimulateDeckHandlerSubmitEncryptedShuffle =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3124,7 +3124,7 @@ export const useWatchDeckHandlerEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"DecryptionValuesSubmitted"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3138,7 +3138,7 @@ export const useWatchDeckHandlerDecryptionValuesSubmittedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"EncryptedShuffleSubmitted"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3152,7 +3152,7 @@ export const useWatchDeckHandlerEncryptedShuffleSubmittedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"FlopRevealed"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3166,7 +3166,7 @@ export const useWatchDeckHandlerFlopRevealedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"PlayerCardsRevealed"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3180,7 +3180,7 @@ export const useWatchDeckHandlerPlayerCardsRevealedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"PlayerRevealingCards"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3194,7 +3194,7 @@ export const useWatchDeckHandlerPlayerRevealingCardsEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"RiverRevealed"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3208,7 +3208,7 @@ export const useWatchDeckHandlerRiverRevealedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"TurnRevealed"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
  */
@@ -3583,7 +3583,7 @@ export const useReadStringExtensionsToString =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3595,7 +3595,7 @@ export const useReadTexasHoldemRoom = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"EMPTY_SEAT"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3609,7 +3609,7 @@ export const useReadTexasHoldemRoomEmptySeat =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"MAX_PLAYERS"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3623,7 +3623,7 @@ export const useReadTexasHoldemRoomMaxPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"MIN_PLAYERS"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3637,7 +3637,7 @@ export const useReadTexasHoldemRoomMinPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"STARTING_CHIPS"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3651,7 +3651,7 @@ export const useReadTexasHoldemRoomStartingChips =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"bigBlind"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3665,7 +3665,7 @@ export const useReadTexasHoldemRoomBigBlind =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countActivePlayers"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3679,7 +3679,7 @@ export const useReadTexasHoldemRoomCountActivePlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3693,7 +3693,7 @@ export const useReadTexasHoldemRoomCountOfHandsRevealed =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countPlayersAtRoundStart"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3707,7 +3707,7 @@ export const useReadTexasHoldemRoomCountPlayersAtRoundStart =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"cryptoUtils"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3721,7 +3721,7 @@ export const useReadTexasHoldemRoomCryptoUtils =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"currentPlayerIndex"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3735,7 +3735,7 @@ export const useReadTexasHoldemRoomCurrentPlayerIndex =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"currentStageBet"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3749,7 +3749,7 @@ export const useReadTexasHoldemRoomCurrentStageBet =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"dealerPosition"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3763,7 +3763,7 @@ export const useReadTexasHoldemRoomDealerPosition =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"deckHandler"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3777,7 +3777,7 @@ export const useReadTexasHoldemRoomDeckHandler =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getNextActivePlayer"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3791,7 +3791,7 @@ export const useReadTexasHoldemRoomGetNextActivePlayer =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayer"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3805,7 +3805,7 @@ export const useReadTexasHoldemRoomGetPlayer =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayerIndexFromAddr"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3819,7 +3819,7 @@ export const useReadTexasHoldemRoomGetPlayerIndexFromAddr =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayers"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3833,7 +3833,7 @@ export const useReadTexasHoldemRoomGetPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersCardIndexes"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3847,7 +3847,7 @@ export const useReadTexasHoldemRoomGetPlayersCardIndexes =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"isPrivate"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3861,7 +3861,7 @@ export const useReadTexasHoldemRoomIsPrivate =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"lastRaiseIndex"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3875,7 +3875,7 @@ export const useReadTexasHoldemRoomLastRaiseIndex =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"numPlayers"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3889,7 +3889,7 @@ export const useReadTexasHoldemRoomNumPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"players"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3903,7 +3903,7 @@ export const useReadTexasHoldemRoomPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"pot"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3916,7 +3916,7 @@ export const useReadTexasHoldemRoomPot = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"roundNumber"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3930,7 +3930,7 @@ export const useReadTexasHoldemRoomRoundNumber =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"seatPositionToPlayerIndex"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3944,7 +3944,7 @@ export const useReadTexasHoldemRoomSeatPositionToPlayerIndex =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"smallBlind"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3958,7 +3958,7 @@ export const useReadTexasHoldemRoomSmallBlind =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"stage"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3971,7 +3971,7 @@ export const useReadTexasHoldemRoomStage = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3983,7 +3983,7 @@ export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -3997,7 +3997,7 @@ export const useWriteTexasHoldemRoomJoinGame =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"leaveGame"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4011,7 +4011,7 @@ export const useWriteTexasHoldemRoomLeaveGame =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"progressGame"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4025,7 +4025,7 @@ export const useWriteTexasHoldemRoomProgressGame =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"resetRound"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4039,7 +4039,7 @@ export const useWriteTexasHoldemRoomResetRound =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4053,7 +4053,7 @@ export const useWriteTexasHoldemRoomSetDeckHandler =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setPlayerHandScore"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4067,7 +4067,7 @@ export const useWriteTexasHoldemRoomSetPlayerHandScore =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"submitAction"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4081,7 +4081,7 @@ export const useWriteTexasHoldemRoomSubmitAction =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4094,7 +4094,7 @@ export const useSimulateTexasHoldemRoom =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4108,7 +4108,7 @@ export const useSimulateTexasHoldemRoomJoinGame =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"leaveGame"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4122,7 +4122,7 @@ export const useSimulateTexasHoldemRoomLeaveGame =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"progressGame"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4136,7 +4136,7 @@ export const useSimulateTexasHoldemRoomProgressGame =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"resetRound"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4150,7 +4150,7 @@ export const useSimulateTexasHoldemRoomResetRound =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4164,7 +4164,7 @@ export const useSimulateTexasHoldemRoomSetDeckHandler =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setPlayerHandScore"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4178,7 +4178,7 @@ export const useSimulateTexasHoldemRoomSetPlayerHandScore =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"submitAction"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4192,7 +4192,7 @@ export const useSimulateTexasHoldemRoomSubmitAction =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4205,7 +4205,7 @@ export const useWatchTexasHoldemRoomEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"GameStarted"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4219,7 +4219,7 @@ export const useWatchTexasHoldemRoomGameStartedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"NewStage"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4233,7 +4233,7 @@ export const useWatchTexasHoldemRoomNewStageEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerMoved"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
@@ -4247,7 +4247,7 @@ export const useWatchTexasHoldemRoomPlayerMovedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PotWon"`
  *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
  * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
  */
