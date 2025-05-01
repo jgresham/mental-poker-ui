@@ -6,6 +6,7 @@ import {
   type Player,
   GameStage,
   REVEAL_COMMUNITY_CARDS_STAGE,
+  BETTING_STAGES,
 } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useConnections, useWaitForTransactionReceipt } from "wagmi";
@@ -98,6 +99,7 @@ export function GameControls({ room, player }: GameControlsProps) {
   console.log("txError2", txError2);
   console.log("txError2.cause", txError2?.cause);
   console.log("txError2 user message", txError2?.message.split("\n")[0]);
+  console.log("txError2 error message", txError2?.message);
   console.log("txError2.stack", txError2?.stack);
   console.log("txError2.name", txError2?.name);
 
@@ -126,6 +128,7 @@ export function GameControls({ room, player }: GameControlsProps) {
   console.log("isSubmittingRevealMyCardsSuccess", isSubmittingRevealMyCardsSuccess);
   console.log("isSubmittingRevealMyCardsError", isSubmittingRevealMyCardsError);
   console.log("txErrorSubmittingRevealMyCards", txErrorSubmittingRevealMyCards);
+
   useEffect(() => {
     if (room?.currentStageBet) {
       setBetAmount(room?.currentStageBet * 2);
@@ -347,8 +350,14 @@ export function GameControls({ room, player }: GameControlsProps) {
   // console.log("c1InversePowPrivateKey2", bigintToHexString(modInverse(c1T, p2048)));
 
   // Handle fold action
-  const handleFold = () => {
+  const handleFold = async () => {
     console.log("handleFold");
+    if (!player) return;
+    const txHash = await submitAction({
+      args: [Action.Fold, BigInt(0)],
+    });
+    console.log("txHash", txHash);
+    setTxHash2(txHash);
   };
 
   // Handle check action
@@ -464,6 +473,8 @@ export function GameControls({ room, player }: GameControlsProps) {
       return hexstring;
     });
     console.log("submitEncryptedDeck encryptedDeckArray", encryptedDeckArray);
+    // intentional bug: for testing invalid cards
+    // encryptedDeckArray[0] = encryptedDeckArray[0].replace("2", "3") as `0x${string}`;
     const txHash2 = await submitEncryptedDeck({
       args: [encryptedDeckArray],
     });
@@ -531,6 +542,11 @@ export function GameControls({ room, player }: GameControlsProps) {
       "submitDecryptionValues partiallyDecryptedCardsHexStrings",
       partiallyDecryptedCardsHexStrings,
     );
+    // intentional bug: for testing invalid cards
+    // partiallyDecryptedCardsHexStrings[0] = partiallyDecryptedCardsHexStrings[0].replace(
+    //   "2",
+    //   "3",
+    // ) as `0x${string}`;
     const txHash2 = await submitDecryptionValues({
       args: [revealOtherPlayersCardsIndexes, partiallyDecryptedCardsHexStrings],
     });
@@ -651,6 +667,9 @@ export function GameControls({ room, player }: GameControlsProps) {
   }
 
   if (!player) return null;
+
+  const isBettingStage = BETTING_STAGES.includes(room.stage);
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 p-2 flex flex-col gap-1 z-10">
       <div className="flex justify-between items-center mb-1">
@@ -717,7 +736,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="destructive"
           size="sm"
           className="h-8 text-xs sm:text-sm"
-          disabled={!isPlayerTurn}
+          disabled={!isPlayerTurn || !isBettingStage}
           onClick={handleFold}
         >
           Fold
@@ -726,7 +745,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="secondary"
           size="sm"
           className="h-8 text-xs sm:text-sm"
-          disabled={!isPlayerTurn}
+          disabled={!isPlayerTurn || !isBettingStage}
           onClick={handleCheck}
         >
           Check
@@ -735,7 +754,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="default"
           size="sm"
           className="h-8 text-xs sm:text-sm bg-green-600"
-          disabled={!isPlayerTurn}
+          disabled={!isPlayerTurn || !isBettingStage}
           onClick={handleCall}
         >
           Call ${room?.currentStageBet !== undefined ? room.currentStageBet : 0}
@@ -744,7 +763,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="default"
           size="sm"
           className="h-8 text-xs sm:text-sm bg-green-700"
-          disabled={!isPlayerTurn}
+          disabled={!isPlayerTurn || !isBettingStage}
           onClick={handleRaise}
         >
           Raise ${betAmount}
@@ -752,7 +771,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       </div>
 
       {/* Bet slider */}
-      {isPlayerTurn && player && (
+      {isPlayerTurn && player && isBettingStage && (
         <div className="mt-1">
           <label htmlFor="betAmount" className="text-xs sm:text-sm text-white">
             Bet amount ${betAmount}

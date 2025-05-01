@@ -16,7 +16,12 @@ import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useEffect, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { ADMIN_ADDRESSES, getCommunityCards } from "../../../lib/utils";
-import { useRoundKeys } from "../../../hooks/localRoomState";
+import {
+  useInvalidCards,
+  useRoundKeys,
+  useSetInvalidCards,
+  useSetPlayerCards,
+} from "../../../hooks/localRoomState";
 import { type Room as RoomType, type Card, GameStage } from "../../../lib/types";
 import { toast } from "sonner";
 
@@ -31,6 +36,10 @@ export default function Room() {
   const roomId = params.roomId as string;
   const [txStatus, setTxStatus] = useState<string | null>(null);
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
+  const { data: invalidCards } = useInvalidCards();
+  const { mutate: setInvalidCards } = useSetInvalidCards();
+  const { mutate: setPlayerCards } = useSetPlayerCards();
+  console.log("room page.tsx invalidCards", invalidCards);
 
   const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
     useReadTexasHoldemRoomGetPlayerIndexFromAddr({
@@ -55,16 +64,55 @@ export default function Room() {
   const { writeContractAsync: resetRound, isPending: isResettingRound } =
     useWriteTexasHoldemRoomResetRound();
 
-  const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
+  const [txHashJoinGame, setTxHashJoinGame] = useState<`0x${string}` | undefined>(
+    undefined,
+  );
+  const [txHashResetRound, setTxHashResetRound] = useState<`0x${string}` | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    // reset things when the round number changes
+    console.log(
+      "resetting invalid cards on new round: roomData?.roundNumber",
+      roomData?.roundNumber,
+    );
+    setPlayerCards(["", ""]);
+    setInvalidCards({
+      areInvalid: false,
+      playerOrCommunityCards: undefined,
+      cardIndices: undefined,
+    });
+    refetchGetPlayerIndexFromAddr();
+    refetchPlayers();
+    refetchRoomData();
+  }, [
+    roomData?.roundNumber,
+    setInvalidCards,
+    setPlayerCards,
+    refetchGetPlayerIndexFromAddr,
+    refetchPlayers,
+    refetchRoomData,
+  ]);
 
   const {
-    data: txResult,
-    isLoading: isWaitingForTx,
-    isSuccess: isTxSuccess,
-    isError: isTxError,
-    error: txError,
+    data: txResultJoinGame,
+    isLoading: isWaitingForTxJoinGame,
+    isSuccess: isTxSuccessJoinGame,
+    isError: isTxErrorJoinGame,
+    error: txErrorJoinGame,
   } = useWaitForTransactionReceipt({
-    hash: txHash,
+    hash: txHashJoinGame,
+  });
+
+  const {
+    data: txResultResetRound,
+    isLoading: isWaitingForTxResetRound,
+    isSuccess: isTxSuccessResetRound,
+    isError: isTxErrorResetRound,
+    error: txErrorResetRound,
+  } = useWaitForTransactionReceipt({
+    hash: txHashResetRound,
   });
 
   useWatchTexasHoldemRoomEvent({
@@ -74,6 +122,15 @@ export default function Room() {
       refetchRoomData();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
+
+      for (const log of logs) {
+        if (log.eventName === "InvalidCardsReported") {
+          console.log("InvalidCardsReported event log", log);
+          toast.info(
+            `Invalid cards reported by player ${log.args.player}. Restarting round...`,
+          );
+        }
+      }
     },
   });
 
@@ -86,6 +143,31 @@ export default function Room() {
       refetchPlayers();
     },
   });
+
+  useEffect(() => {
+    console.log("txResultJoinGame", txResultJoinGame);
+    console.log("isTxSuccessJoinGame", isTxSuccessJoinGame);
+    console.log("isTxErrorJoinGame", isTxErrorJoinGame);
+    console.log("txErrorJoinGame", txErrorJoinGame);
+    if (isTxSuccessJoinGame) {
+      toast.success("Joined room");
+    } else if (isTxErrorJoinGame) {
+      toast.error(`Failed to join room: ${txErrorJoinGame?.message}`);
+    }
+  }, [txResultJoinGame, isTxSuccessJoinGame, isTxErrorJoinGame, txErrorJoinGame]);
+
+  useEffect(() => {
+    console.log("txResultResetRound", txResultResetRound);
+    console.log("isTxSuccessResetRound", isTxSuccessResetRound);
+    console.log("isTxErrorResetRound", isTxErrorResetRound);
+    console.log("txErrorResetRound", txErrorResetRound);
+    if (isTxSuccessResetRound) {
+      toast.success("Reset round");
+    } else if (isTxErrorResetRound) {
+      toast.error(`Failed to reset round: ${txErrorResetRound?.message}`);
+    }
+  }, [txResultResetRound, isTxSuccessResetRound, isTxErrorResetRound, txErrorResetRound]);
+
   // Destructure all properties except encryptedDeck to keep it mutable
   const {
     stage,
@@ -111,14 +193,14 @@ export default function Room() {
   //   refetchNumPlayers();
   // }, 5000);
 
-  console.log("/room/[roomId] joinGame txResult", txResult); // txResult.status === "success", txResult.logs = []
-  console.log("/room/[roomId] transaction error", txError);
+  console.log("/room/[roomId] joinGame txResult", txResultJoinGame); // txResult.status === "success", txResult.logs = []
+  console.log("/room/[roomId] transaction error", txErrorJoinGame);
 
   // Extract contract revert reason if available
-  const revertReason = txError?.message
-    ? txError.message.includes("reverted")
-      ? txError.message.split("reverted:")[1]?.trim() || txError.message
-      : txError.message
+  const revertReason = txErrorJoinGame?.message
+    ? txErrorJoinGame.message.includes("reverted")
+      ? txErrorJoinGame.message.split("reverted:")[1]?.trim() || txErrorJoinGame.message
+      : txErrorJoinGame.message
     : null;
 
   //     GameStage stage;
@@ -137,7 +219,7 @@ export default function Room() {
       const hash = await joinGame({
         args: [],
       });
-      setTxHash(hash);
+      setTxHashJoinGame(hash);
       setTxStatus("Transaction submitted, waiting for confirmation...");
     } catch (error) {
       console.error("Error joining game:", error);
@@ -151,7 +233,7 @@ export default function Room() {
       const hash = await resetRound({
         args: [],
       });
-      setTxHash(hash);
+      setTxHashResetRound(hash);
       setTxStatus("Transaction submitted, waiting for confirmation...");
     } catch (error) {
       console.error("Error joining game:", error);
@@ -175,10 +257,27 @@ export default function Room() {
           });
           console.log("communityCards", communityCards);
           setCommunityCards(communityCards);
+
+          // now that we have valid community cards,
+          // reset invalid cards if there were previously invalid community ones
+          if (invalidCards?.playerOrCommunityCards === "community") {
+            setInvalidCards({
+              areInvalid: false,
+              playerOrCommunityCards: undefined,
+              cardIndices: undefined,
+            });
+          }
         } catch (error) {
           console.error("Error getting community cards:", error);
           toast.error("Error decrypting table cards");
+          // todo: show user a button to report invalid cards
+          //  (or automatically call report function as a txn WAIT a couple seconds, refetch, and confirm?)
           setCommunityCards([]);
+          setInvalidCards({
+            areInvalid: true,
+            playerOrCommunityCards: "community",
+            cardIndices: undefined,
+          });
         }
 
         return;
@@ -187,7 +286,7 @@ export default function Room() {
       console.log("roomData is not ready yet", roomData);
     }
     setCommunityCards([]);
-  }, [roomData]);
+  }, [roomData, setInvalidCards]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
@@ -197,10 +296,13 @@ export default function Room() {
       <div className="w-full h-full relative">
         <>
           <div className="flex flex-col gap-2 mb-4">
-            <Button onClick={handleJoinGame} disabled={isJoiningGame || isWaitingForTx}>
+            <Button
+              onClick={handleJoinGame}
+              disabled={isJoiningGame || isWaitingForTxJoinGame}
+            >
               {isJoiningGame
                 ? "Submitting..."
-                : isWaitingForTx
+                : isWaitingForTxJoinGame
                   ? "Confirming..."
                   : "Join Game"}
             </Button>
@@ -208,35 +310,14 @@ export default function Room() {
             {address && ADMIN_ADDRESSES.includes(address) && (
               <Button
                 onClick={handleResetRound}
-                disabled={isResettingRound || isWaitingForTx}
+                disabled={isResettingRound || isWaitingForTxResetRound}
               >
                 {isResettingRound
                   ? "Submitting..."
-                  : isWaitingForTx
+                  : isWaitingForTxResetRound
                     ? "Resetting..."
                     : "Reset Round"}
               </Button>
-            )}
-
-            {txStatus && (
-              <div className="text-sm p-2 bg-gray-100 rounded">Status: {txStatus}</div>
-            )}
-
-            {txHash && (
-              <div className="text-sm p-2 bg-gray-100 rounded">
-                Transaction Hash: {txHash}
-              </div>
-            )}
-
-            {isTxSuccess && (
-              <div className="text-sm p-2 bg-green-100 rounded">
-                Transaction confirmed! You have joined the game.
-              </div>
-            )}
-            {isTxError && (
-              <div className="text-sm p-2 bg-red-100 rounded">
-                Transaction failed: {revertReason || txError?.message}
-              </div>
             )}
           </div>
           {/* Dev view: Display all the properties of the game state */}

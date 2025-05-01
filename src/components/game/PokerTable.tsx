@@ -3,8 +3,14 @@ import { type Room, type Player, MAX_PLAYERS, GameStageToString } from "@/lib/ty
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
 import { useAccount } from "wagmi";
-import { useRoundKeys } from "../../hooks/localRoomState";
+import {
+  useGetSetInvalidCards,
+  useInvalidCards,
+  useRoundKeys,
+} from "../../hooks/localRoomState";
 import { zeroAddress } from "viem";
+import { Button } from "../ui/button";
+import { useWriteTexasHoldemRoomReportInvalidCards } from "../../generated";
 
 interface PokerTableProps {
   room?: Room;
@@ -15,6 +21,10 @@ interface PokerTableProps {
 export function PokerTable({ room, players, roomId }: PokerTableProps) {
   const { address } = useAccount();
   const { data: roundKeys } = useRoundKeys(room?.id, room?.roundNumber);
+  const { data: invalidCards } = useInvalidCards();
+  console.log("PokerTable invalidCards", invalidCards);
+  const { writeContractAsync: reportInvalidCards } =
+    useWriteTexasHoldemRoomReportInvalidCards();
 
   if (!room) {
     return <p>Loading...</p>;
@@ -55,6 +65,13 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
     return positions;
   };
 
+  const handleReportInvalidCards = async () => {
+    console.log("report invalid cards");
+    await reportInvalidCards({
+      args: [],
+    });
+  };
+
   // Find the current player's index
   // const currentPlayerIndex = players.findIndex((player) => player.addr === address);
 
@@ -82,6 +99,17 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
         <div className="absolute top-[30%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-sm">
           Pot: ${pot}
         </div>
+
+        {invalidCards?.areInvalid && (
+          <Button
+            onClick={handleReportInvalidCards}
+            className="absolute z-15 top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+            variant="destructive"
+            //  bg-red-500/30 text-white px-3 py-1 rounded-full text-sm"
+          >
+            Report invalid cards!
+          </Button>
+        )}
 
         {/* Community cards */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-1 sm:gap-2">
@@ -120,6 +148,9 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
           console.log("dealerPosition", dealerPosition);
           if (player.playerIndex === dealerPosition) {
             player.isDealer = true;
+            console.log("player.isDealer", player);
+          } else {
+            player.isDealer = false;
           }
           if (player.playerIndex === currentPlayerIndex) {
             player.isTurn = true;
@@ -136,7 +167,7 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
                 top: `${position.y}%`,
               }}
             >
-              <PlayerUI player={player} isCurrentUser={isCurrentUser} />
+              <PlayerUI player={player} isCurrentUser={isCurrentUser} stage={stage} />
             </div>
           );
         })}

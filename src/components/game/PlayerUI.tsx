@@ -1,5 +1,10 @@
-import React from "react";
-import { type Card as CardType, stringCardsToCards, type Player } from "@/lib/types";
+import React, { useEffect, useState } from "react";
+import {
+  type Card as CardType,
+  stringCardsToCards,
+  type Player,
+  GameStage,
+} from "@/lib/types";
 import { Card } from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -8,14 +13,19 @@ import { useEnsAvatar } from "wagmi";
 import { useEnsName } from "wagmi";
 import { Clock } from "lucide-react";
 import { toast } from "sonner";
-import { usePlayerCards } from "../../hooks/localRoomState";
+import {
+  usePlayerCards,
+  useInvalidCards,
+  useSetInvalidCards,
+} from "../../hooks/localRoomState";
 
 interface PlayerProps {
   player: Player;
   isCurrentUser?: boolean;
+  stage?: GameStage;
 }
 
-export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
+export function PlayerUI({ player, isCurrentUser = false, stage }: PlayerProps) {
   const {
     name,
     addr,
@@ -34,7 +44,42 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
 
   const { data: ensName } = useEnsName({ address: addr as `0x${string}` });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "" });
+  const [cards, setCards] = useState<CardType[]>([]);
   const { data: playerCards } = usePlayerCards();
+  const { data: invalidCards } = useInvalidCards();
+  const { mutate: setInvalidCards } = useSetInvalidCards();
+  console.log("playerUI.tsx invalidCards", invalidCards);
+
+  useEffect(() => {
+    if (
+      playerCards[0] !== undefined &&
+      playerCards[1] !== undefined &&
+      playerCards[0] !== "" &&
+      playerCards[1] !== "" &&
+      isCurrentUser
+    ) {
+      try {
+        setCards(stringCardsToCards(playerCards));
+        if (invalidCards?.playerOrCommunityCards === "player") {
+          setInvalidCards({
+            areInvalid: false,
+            playerOrCommunityCards: undefined,
+            cardIndices: undefined,
+          });
+        }
+      } catch (error) {
+        console.error("Error converting player cards to cards", error);
+        toast.error("Error decrypting player cards");
+        // todo: show user a button to report invalid cards (or automatically call report function as a txn)
+        setInvalidCards({
+          areInvalid: true,
+          playerOrCommunityCards: "player",
+          cardIndices: undefined,
+        });
+      }
+    }
+    // including invalidCards and setInvalidCards in the dependency array causes this to be run twice
+  }, [playerCards, isCurrentUser]);
 
   // Get initials for avatar fallback
   const displayName = ensName ?? name;
@@ -45,16 +90,6 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
         .join("")
         .toUpperCase()
     : addr?.slice(2, 4);
-
-  let cards: CardType[] = [];
-  if (playerCards[0] !== "" && playerCards[1] !== "" && isCurrentUser) {
-    try {
-      cards = stringCardsToCards(playerCards);
-    } catch (error) {
-      console.error("Error converting player cards to cards", error);
-      toast.error("Error decrypting player cards");
-    }
-  }
 
   return (
     <div
@@ -98,7 +133,22 @@ export function PlayerUI({ player, isCurrentUser = false }: PlayerProps) {
                 className="w-full h-full"
               />
             ) : (
-              <div className="w-full h-full rounded border border-black/10" />
+              <>
+                {stage !== undefined &&
+                stage >= GameStage.Shuffle &&
+                !player.hasFolded ? (
+                  <Card
+                    card={{
+                      faceUp: false,
+                      suit: "hearts",
+                      rank: "A",
+                    }}
+                    className="w-full h-full"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border border-black/10" />
+                )}
+              </>
             )}
           </div>
         ))}

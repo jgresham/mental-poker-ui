@@ -176,6 +176,13 @@ export const REVEAL_COMMUNITY_CARDS_STAGE = [
   GameStage.RevealRiver,
 ];
 
+export const BETTING_STAGES = [
+  GameStage.Preflop,
+  GameStage.Flop,
+  GameStage.Turn,
+  GameStage.River,
+];
+
 export const GameStageToString = {
   [GameStage.Idle]: "waiting to start",
   [GameStage.Shuffle]: "encrypting shuffle",
