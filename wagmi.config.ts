@@ -17,7 +17,7 @@ export default defineConfig({
         // chain id to address
         TexasHoldemRoom: {
           // Foundry Anvil local
-          31337: "0xFD471836031dc5108809D173A067e8486B9047A3",
+          31337: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
           // Base Sepolia
           84532: "0xfD95b63455287faCf0eeD16a4DD922813a98EcF1",
           // Base Mainnet
@@ -25,7 +25,7 @@ export default defineConfig({
         },
         DeckHandler: {
           // Foundry Anvil local
-          31337: "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc",
+          31337: "0x9A676e781A523b5d0C0e43731313A708CB607508",
           // Base Sepolia
           84532: "0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1",
           // Base Mainnet

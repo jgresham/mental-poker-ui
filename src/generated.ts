@@ -1495,6 +1495,19 @@ export const deckHandlerAbi = [
     anonymous: false,
     inputs: [
       {
+        name: 'message',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'THP_Log',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
         name: 'player',
         internalType: 'address',
         type: 'address',
@@ -1513,7 +1526,7 @@ export const deckHandlerAbi = [
  */
 export const deckHandlerAddress = {
   8453: '0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9',
-  31337: '0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc',
+  31337: '0x9A676e781A523b5d0C0e43731313A708CB607508',
   84532: '0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1',
 } as const
 
@@ -2109,7 +2122,7 @@ export const texasHoldemRoomAbi = [
     inputs: [],
     name: 'countOfHandsRevealed',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2240,7 +2253,7 @@ export const texasHoldemRoomAbi = [
     outputs: [
       { name: 'playerCardIndexes', internalType: 'uint8[2]', type: 'uint8[2]' },
     ],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2311,6 +2324,13 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'progressGame',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'reportInvalidCards',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -2406,6 +2426,19 @@ export const texasHoldemRoomAbi = [
     anonymous: false,
     inputs: [
       {
+        name: 'player',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'InvalidCardsReported',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
         name: 'stage',
         internalType: 'enum TexasHoldemRoom.GameStage',
         type: 'uint8',
@@ -2413,6 +2446,56 @@ export const texasHoldemRoomAbi = [
       },
     ],
     name: 'NewStage',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'player',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'playerIndex',
+        internalType: 'uint8',
+        type: 'uint8',
+        indexed: true,
+      },
+      {
+        name: 'seatPosition',
+        internalType: 'uint8',
+        type: 'uint8',
+        indexed: true,
+      },
+    ],
+    name: 'PlayerJoined',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'player',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'playerIndex',
+        internalType: 'uint8',
+        type: 'uint8',
+        indexed: true,
+      },
+      {
+        name: 'seatPosition',
+        internalType: 'uint8',
+        type: 'uint8',
+        indexed: true,
+      },
+    ],
+    name: 'PlayerLeft',
   },
   {
     type: 'event',
@@ -2464,6 +2547,19 @@ export const texasHoldemRoomAbi = [
     ],
     name: 'PotWon',
   },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'message',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'THP_Log',
+  },
 ] as const
 
 /**
@@ -2473,7 +2569,7 @@ export const texasHoldemRoomAbi = [
  */
 export const texasHoldemRoomAddress = {
   8453: '0xf34890f942220f48391BA33Ff053f64Aa8979956',
-  31337: '0xFD471836031dc5108809D173A067e8486B9047A3',
+  31337: '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82',
   84532: '0xfD95b63455287faCf0eeD16a4DD922813a98EcF1',
 } as const
 
@@ -3206,6 +3302,20 @@ export const useWatchDeckHandlerRiverRevealedEvent =
   })
 
 /**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"THP_Log"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1)
+ */
+export const useWatchDeckHandlerThpLogEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: deckHandlerAbi,
+    address: deckHandlerAddress,
+    eventName: 'THP_Log',
+  })
+
+/**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"TurnRevealed"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
@@ -3677,20 +3787,6 @@ export const useReadTexasHoldemRoomCountActivePlayers =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
- *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * -
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
- */
-export const useReadTexasHoldemRoomCountOfHandsRevealed =
-  /*#__PURE__*/ createUseReadContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'countOfHandsRevealed',
-  })
-
-/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countPlayersAtRoundStart"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -3831,20 +3927,6 @@ export const useReadTexasHoldemRoomGetPlayers =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersCardIndexes"`
- *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * -
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
- */
-export const useReadTexasHoldemRoomGetPlayersCardIndexes =
-  /*#__PURE__*/ createUseReadContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'getPlayersCardIndexes',
-  })
-
-/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"isPrivate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -3981,6 +4063,34 @@ export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWriteTexasHoldemRoomCountOfHandsRevealed =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'countOfHandsRevealed',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersCardIndexes"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWriteTexasHoldemRoomGetPlayersCardIndexes =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'getPlayersCardIndexes',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4020,6 +4130,20 @@ export const useWriteTexasHoldemRoomProgressGame =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'progressGame',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportInvalidCards"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWriteTexasHoldemRoomReportInvalidCards =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'reportInvalidCards',
   })
 
 /**
@@ -4092,6 +4216,34 @@ export const useSimulateTexasHoldemRoom =
   })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useSimulateTexasHoldemRoomCountOfHandsRevealed =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'countOfHandsRevealed',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersCardIndexes"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useSimulateTexasHoldemRoomGetPlayersCardIndexes =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'getPlayersCardIndexes',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4131,6 +4283,20 @@ export const useSimulateTexasHoldemRoomProgressGame =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'progressGame',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportInvalidCards"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useSimulateTexasHoldemRoomReportInvalidCards =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'reportInvalidCards',
   })
 
 /**
@@ -4217,6 +4383,20 @@ export const useWatchTexasHoldemRoomGameStartedEvent =
   })
 
 /**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"InvalidCardsReported"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWatchTexasHoldemRoomInvalidCardsReportedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    eventName: 'InvalidCardsReported',
+  })
+
+/**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"NewStage"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4228,6 +4408,34 @@ export const useWatchTexasHoldemRoomNewStageEvent =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     eventName: 'NewStage',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerJoined"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWatchTexasHoldemRoomPlayerJoinedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    eventName: 'PlayerJoined',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerLeft"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWatchTexasHoldemRoomPlayerLeftEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    eventName: 'PlayerLeft',
   })
 
 /**
@@ -4256,4 +4464,18 @@ export const useWatchTexasHoldemRoomPotWonEvent =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     eventName: 'PotWon',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"THP_Log"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWatchTexasHoldemRoomThpLogEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    eventName: 'THP_Log',
   })

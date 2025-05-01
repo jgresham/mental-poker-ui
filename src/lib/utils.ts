@@ -8,6 +8,8 @@ import { zeroAddress } from "viem";
 export const ADMIN_ADDRESSES = [
   "0x2a99EC82d658F7a77DdEbFd83D0f8F591769cB64",
   "0x101a25d0FDC4E9ACa9fA65584A28781046f1BeEe",
+  "0x7D20fd2BD3D13B03571A36568cfCc2A4EB3c749e",
+  "0x3797A1F60C46D2D6F02c3568366712D8A8A69a73",
 ];
 
 export function cn(...inputs: ClassValue[]) {

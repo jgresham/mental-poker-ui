@@ -4,7 +4,7 @@ import { generateKeysAndR } from "../lib/elgamal-commutative-node-1chunk";
 // Define a unique key for the query
 const PLAYER_CARDS_KEY = ["playerCards"];
 const ROUND_KEYS_KEY = "roundKeys";
-
+const INVALID_CARDS_KEY = ["invalidCards"];
 /**
  * A custom hook that retrieves player cards using TanStack Query.
  * These cards are only known to the local current player.
@@ -92,6 +92,55 @@ export function useRoundKeys(roomId?: string, roundNumber?: number) {
         roomId,
       );
       return Promise.resolve({ privateKey, publicKey, r });
+    },
+  });
+}
+
+/**
+ * A custom hook that retrieves player cards using TanStack Query.
+ * These cards are only known to the local current player.
+ * They differ from player.cards which are publically known if the player
+ * is required to reveal their cards.
+ * @returns The current player cards
+ */
+export function useInvalidCards() {
+  // Initialize the query with default value
+  return useQuery<{
+    areInvalid: boolean;
+    playerOrCommunityCards?: "player" | "community";
+    cardIndices?: number[];
+  }>({
+    queryKey: INVALID_CARDS_KEY,
+    initialData: {
+      areInvalid: false,
+      playerOrCommunityCards: undefined,
+      cardIndices: undefined,
+    },
+    queryFn: () =>
+      Promise.resolve({
+        areInvalid: false,
+        playerOrCommunityCards: "player",
+        cardIndices: undefined,
+      }),
+  });
+}
+
+/**
+ * A custom hook that provides a function to set player cards
+ * @returns A function to update player cards
+ */
+export function useSetInvalidCards() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (newInvalidCards: {
+      areInvalid: boolean;
+      playerOrCommunityCards?: "player" | "community";
+      cardIndices?: number[];
+    }) => {
+      return Promise.resolve(newInvalidCards);
+    },
+    onSuccess: (newInvalidCards) => {
+      queryClient.setQueryData(INVALID_CARDS_KEY, newInvalidCards);
     },
   });
 }
