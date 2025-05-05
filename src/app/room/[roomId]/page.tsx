@@ -10,6 +10,7 @@ import {
   useWatchTexasHoldemRoomEvent,
   useWatchDeckHandlerEvent,
   useWriteTexasHoldemRoomResetRound,
+  useReadTexasHoldemRoomSeatPositionToPlayerIndex,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
@@ -70,6 +71,10 @@ export default function Room() {
   const [txHashResetRound, setTxHashResetRound] = useState<`0x${string}` | undefined>(
     undefined,
   );
+  const { data: seatPositionToPlayerIndex } =
+    useReadTexasHoldemRoomSeatPositionToPlayerIndex({
+      args: [],
+    });
 
   useEffect(() => {
     // reset things when the round number changes
@@ -128,6 +133,12 @@ export default function Room() {
           console.log("InvalidCardsReported event log", log);
           toast.info(
             `Invalid cards reported by player ${log.args.player}. Restarting round...`,
+          );
+        }
+        if (log.eventName === "PotWon") {
+          console.log("PotWon event log", log);
+          toast.info(
+            `Pot ${log.args.amount} chips won by player ${log.args.winners.join(", ")}!`,
           );
         }
       }

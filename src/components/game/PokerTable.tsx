@@ -100,6 +100,7 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
           Pot: ${pot}
         </div>
 
+        {/* {(invalidCards?.areInvalid || true) && ( */}
         {invalidCards?.areInvalid && (
           <Button
             onClick={handleReportInvalidCards}

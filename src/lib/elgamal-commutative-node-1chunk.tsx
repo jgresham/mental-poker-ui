@@ -4,6 +4,7 @@
 import * as bigintModArith from "bigint-mod-arith";
 import { randomBigIntInRange } from "./prime";
 
+// A 2048-bit safe prime from RFC 3526 (Group 14), widely used in Diffie-Hellman
 // primes and generators chosen from https://www.ietf.org/rfc/rfc3526.txt
 // 2048 bit prime
 // const p2048str = `0xFFFFFFFF FFFFFFFF C90FDAA2 2168C234 C4C6628B 80DC1CD1\
@@ -22,6 +23,25 @@ export const p2048str =
 export const p2048 = BigInt(p2048str);
 export const g2048 = BigInt(2);
 
+export const p1024str =
+  "0xB10B8F96A080E01DDE92DE5EAE5D54EC52C99FBCFB06A3C69A6A9DCA52D23B616073E28675A23D189838EF1E2EE652C013ECB4AEA90611231EE6A7083A8D6EBAA7FDF64B8A94B1BE24983A5CF7A0C4BD5C72C5B6630C7495C3B9CAC2FC6325517F6B6B643F1C59099BEBFBB6939A2D4C4B7D16C06F4C52C9DE2BCBF6955817183995497CEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF";
+export const p1024 = BigInt(p1024str);
+export const g1024 = BigInt(2);
+
+export const p512str =
+  "0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD";
+export const p512 = BigInt(p512str);
+export const g512 = BigInt(2);
+
+export const p256str =
+  "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1";
+export const p256 = BigInt(p256str);
+export const g256 = BigInt(2);
+
+export const p128str = "0xFFFFFFFFFFFFFFFFC90FDAA22168C234";
+export const p128 = BigInt(p128str);
+export const g128 = BigInt(2);
+
 // Function to get timestamp for logging
 export function getTimestamp(): string {
   return `[${new Date().toISOString()}]`;
@@ -29,15 +49,15 @@ export function getTimestamp(): string {
 
 // Generate a private and public key pair
 export function generateKeys(): { publicKey: bigint; privateKey: bigint } {
-  const privateKey = randomBigIntInRange(BigInt(3), p2048);
-  const publicKey = bigintModArith.modPow(g2048, privateKey, p2048);
+  const privateKey = randomBigIntInRange(BigInt(3), p256);
+  const publicKey = bigintModArith.modPow(g2048, privateKey, p256);
   return { publicKey, privateKey };
 }
 
 export function generateKeysAndR(): { publicKey: bigint; privateKey: bigint; r: bigint } {
-  const privateKey = randomBigIntInRange(BigInt(3), p2048);
-  const publicKey = bigintModArith.modPow(g2048, privateKey, p2048);
-  const r = randomBigIntInRange(BigInt(3), p2048);
+  const privateKey = randomBigIntInRange(BigInt(3), p256);
+  const publicKey = bigintModArith.modPow(g2048, privateKey, p256);
+  const r = randomBigIntInRange(BigInt(3), p256);
   return { publicKey, privateKey, r };
 }
 
@@ -55,7 +75,7 @@ export function getSafeChunkSize(p: bigint): number {
 }
 
 // Convert string to a single BigInt
-export function stringToBigint(str: string): bigint {
+export function stringToBigint(str: string, p: bigint): bigint {
   console.log(
     `${getTimestamp()} Converting string "${str}" to a single BigInt hex encoding`,
   );
@@ -65,9 +85,9 @@ export function stringToBigint(str: string): bigint {
   const buffer = encoder.encode(str);
 
   // Check if the string is too large
-  if (buffer.length > getSafeChunkSize(p2048)) {
+  if (buffer.length > getSafeChunkSize(p)) {
     console.error(
-      `String is too large to convert to a single BigInt. Maximum size is ${getSafeChunkSize(p2048)} bytes, but got ${buffer.length} bytes.`,
+      `String is too large to convert to a single BigInt. Maximum size is ${getSafeChunkSize(p)} bytes, but got ${buffer.length} bytes.`,
     );
   }
 
@@ -150,7 +170,7 @@ export function removeEncryptionLayer(
   c1: bigint,
   c2: bigint,
   privateKey: bigint,
-  p = p2048,
+  p = p256,
 ): bigint {
   console.log(
     `${getTimestamp()} Removing encryption layer with private key: ${privateKey} p=${p}`,
@@ -168,7 +188,7 @@ export function encryptMessage({
   message,
   publicKey,
   g = g2048,
-  p = p2048,
+  p = p256,
   r,
 }: {
   message: string;
@@ -177,7 +197,7 @@ export function encryptMessage({
   p?: bigint;
   r?: bigint;
 }): { c1: bigint; c2: bigint } {
-  const bigintMessage = stringToBigint(message);
+  const bigintMessage = stringToBigint(message, p);
   return encryptMessageBigint({ messageBigint: bigintMessage, publicKey, g, p, r });
 }
 
@@ -189,7 +209,7 @@ export function encryptMessageBigint({
   messageBigint,
   publicKey,
   g = g2048,
-  p = p2048,
+  p = p256,
   r,
 }: {
   messageBigint: bigint;

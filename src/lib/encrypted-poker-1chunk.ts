@@ -7,7 +7,9 @@ import * as bigintModArith from "bigint-mod-arith";
 
 import {
   encryptMessage,
+  g256,
   generateC1,
+  p256,
   stringToBigint,
 } from "./elgamal-commutative-node-1chunk";
 import { shuffleArray } from "./utils";
@@ -54,7 +56,7 @@ export function decryptCard({
   privateKey: bigint;
 }): bigint {
   // constant 2048 bit prime
-  const p = p2048;
+  const p = p256;
   // For every chunk in the encrypted card, decrypt it
   // console.log(`decryptCard encryptedCard.c1: ${encryptedCard.c1.toString(16)}`);
   // console.log(`decryptCard encryptedCard.c2: ${encryptedCard.c2.toString(16)}`);
@@ -80,7 +82,7 @@ export function encryptMessageBigint({
   messageBigint,
   publicKey,
   g = g2048,
-  p = p2048,
+  p = p256,
   r,
 }: {
   messageBigint: bigint;
@@ -108,10 +110,12 @@ export function encryptMessageBigint({
 export function formatCardDeckForShuffleAndEncrypt({
   deck,
   r,
-}: { deck: string[]; r: bigint }) {
-  const c1 = generateC1(g2048, r, p2048);
+  p,
+}: { deck: string[]; r: bigint; p: bigint }) {
+  // const c1 = generateC1(g2048, r, p2048);
+  const c1 = generateC1(g256, r, p256);
   const formattedDeck = deck.map((card) => {
-    const c2 = stringToBigint(card);
+    const c2 = stringToBigint(card, p);
     return { c1, c2 };
   });
   return formattedDeck;
@@ -130,11 +134,13 @@ export function shuffleAndEncryptDeck({
   publicKey,
   r,
   noShuffle,
+  p,
 }: {
   encryptedDeck: { c1: bigint; c2: bigint }[];
   publicKey: bigint;
   r?: bigint;
   noShuffle?: boolean;
+  p?: bigint;
 }): { c1: bigint; c2: bigint }[] {
   const startTime = performance.now();
 
@@ -152,6 +158,7 @@ export function shuffleAndEncryptDeck({
         messageBigint: encryptedMessageBigint.c2,
         publicKey,
         r,
+        p,
       }),
   );
 
