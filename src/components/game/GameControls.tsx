@@ -28,7 +28,7 @@ import {
   g2048,
   generateC1,
   modInverse,
-  p2048,
+  p256,
 } from "../../lib/elgamal-commutative-node-1chunk";
 import { toast } from "sonner";
 import {
@@ -70,7 +70,7 @@ export function GameControls({ room, player }: GameControlsProps) {
   //   refetch: refetchEncryptedDeck,
   //   dataUpdatedAt: encryptedDeckUpdatedAt,
   // } = useReadDeckHandlerGetEncryptedDeck({});
-  // console.log("encryptedDeck", encryptedDeck);
+  console.log("encryptedDeck", room.encryptedDeck);
   const {
     writeContractAsync: submitEncryptedDeck,
     isPending: isSubmittingEncryptedDeck,
@@ -320,10 +320,10 @@ export function GameControls({ room, player }: GameControlsProps) {
     );
     console.log("handleSubmitRevealMyCards revealMyCardsIndexes", revealMyCardsIndexes);
 
-    const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
+    const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     const c1InversePowPrivateKey = modInverse(
-      bigintModArith.modPow(c1, roundKeys.privateKey, p2048),
-      p2048,
+      bigintModArith.modPow(c1, roundKeys.privateKey, p256),
+      p256,
     );
     const args = [
       bigintToHexString(c1),
@@ -444,7 +444,8 @@ export function GameControls({ room, player }: GameControlsProps) {
     if (player?.isDealer) {
       // new encrypted deck from unencrypted deck
       console.log("Deck before encrypted shuffle: ", DECK);
-      deck = formatCardDeckForShuffleAndEncrypt({ deck: DECK, r: roundKeys.r });
+      // todo: variable prime
+      deck = formatCardDeckForShuffleAndEncrypt({ deck: DECK, r: roundKeys.r, p: p256 });
       console.log("Deck before encrypted shuffle, formatted deck: ", deck);
     } else {
       console.log("handleShuffle: encrypting and shuffling existing encrypted deck");
@@ -462,11 +463,13 @@ export function GameControls({ room, player }: GameControlsProps) {
       encryptedDeck: deck,
       publicKey: roundKeys.publicKey,
       r: roundKeys.r,
+      p: p256,
     });
     console.log("Deck after encrypted shuffle: ", encryptedDeckBlock);
 
     const encryptedDeckArray = encryptedDeckBlock.map((card) => {
-      const hexstring = `0x${card.c2.toString(16).padStart(512, "0")}` as `0x${string}`;
+      // todo: variable prime
+      const hexstring = `0x${card.c2.toString(16).padStart(64, "0")}` as `0x${string}`;
       if (hexstring.length % 2 !== 0) {
         console.log("hexstring not even", hexstring);
       }
@@ -516,7 +519,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       revealOtherPlayersCardsIndexes,
     );
 
-    const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
+    const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealOtherPlayersCardsIndexes.map((index) => {
       const card = room.encryptedDeck[index];
@@ -582,7 +585,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       players,
     );
     console.log("revealMyCardsIndexes", revealMyCardsIndexes);
-    const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
+    const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealMyCardsIndexes.map((index) => {
       const card = room.encryptedDeck[index];
@@ -633,7 +636,7 @@ export function GameControls({ room, player }: GameControlsProps) {
       revealCommunityCardsIndexes,
     );
 
-    const c1 = generateC1(g2048, roundKeys.r, p2048); // todo: player should keep it from the original encrypted shuffle
+    const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealCommunityCardsIndexes.map((index) => {
       const card = room.encryptedDeck[index];

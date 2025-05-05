@@ -5,7 +5,6 @@ import {
   generateKeys,
   stringToBigint,
   p2048,
-  generateC1,
   g2048,
   generatePermutations,
   getTimestamp,
