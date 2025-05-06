@@ -58,6 +58,7 @@ export function useGetBulkRoomData() {
       lastRaiseIndex: Number(rawData.lastRaiseIndex),
       numPlayers: Number(rawData.numPlayers),
       roundNumber: Number(rawData.roundNumber),
+      lastActionTimestamp: Number(rawData.lastActionTimestamp),
     };
   }, [rawData]);
 

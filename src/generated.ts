@@ -1264,6 +1264,11 @@ export const deckHandlerAbi = [
             type: 'string[5]',
           },
           { name: 'encryptedDeck', internalType: 'bytes[]', type: 'bytes[]' },
+          {
+            name: 'lastActionTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
         ],
       },
     ],
@@ -1513,7 +1518,7 @@ export const deckHandlerAbi = [
  */
 export const deckHandlerAddress = {
   8453: '0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9',
-  31337: '0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9',
+  31337: '0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf',
   84532: '0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1',
 } as const
 
@@ -1965,6 +1970,509 @@ export const pokerHandEvaluatorv2Abi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ReportIdlePlayerFirstShuffleTest
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const reportIdlePlayerFirstShuffleTestAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'IS_TEST',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'args',
+    outputs: [{ name: '', internalType: 'bytes', type: 'bytes' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'cryptoUtils',
+    outputs: [
+      { name: '', internalType: 'contract CryptoUtils', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deckHandler',
+    outputs: [
+      { name: '', internalType: 'contract DeckHandler', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeArtifacts',
+    outputs: [
+      {
+        name: 'excludedArtifacts_',
+        internalType: 'string[]',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeContracts',
+    outputs: [
+      {
+        name: 'excludedContracts_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeSelectors',
+    outputs: [
+      {
+        name: 'excludedSelectors_',
+        internalType: 'struct StdInvariant.FuzzSelector[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'selectors', internalType: 'bytes4[]', type: 'bytes4[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeSenders',
+    outputs: [
+      {
+        name: 'excludedSenders_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'failed',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'handEvaluator',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract PokerHandEvaluatorv2',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'player1',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'player2',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'player3',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'room',
+    outputs: [
+      { name: '', internalType: 'contract TexasHoldemRoom', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'setUp',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetArtifactSelectors',
+    outputs: [
+      {
+        name: 'targetedArtifactSelectors_',
+        internalType: 'struct StdInvariant.FuzzArtifactSelector[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'artifact', internalType: 'string', type: 'string' },
+          { name: 'selectors', internalType: 'bytes4[]', type: 'bytes4[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetArtifacts',
+    outputs: [
+      {
+        name: 'targetedArtifacts_',
+        internalType: 'string[]',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetContracts',
+    outputs: [
+      {
+        name: 'targetedContracts_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetInterfaces',
+    outputs: [
+      {
+        name: 'targetedInterfaces_',
+        internalType: 'struct StdInvariant.FuzzInterface[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'artifacts', internalType: 'string[]', type: 'string[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetSelectors',
+    outputs: [
+      {
+        name: 'targetedSelectors_',
+        internalType: 'struct StdInvariant.FuzzSelector[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'selectors', internalType: 'bytes4[]', type: 'bytes4[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetSenders',
+    outputs: [
+      {
+        name: 'targetedSenders_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'test_reportIdlePlayer',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'addressReporting',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'playerReported',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'timeElapsed',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'IdlePlayerKicked',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'string', type: 'string', indexed: false },
+    ],
+    name: 'log',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'address', type: 'address', indexed: false },
+    ],
+    name: 'log_address',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'val',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'val',
+        internalType: 'int256[]',
+        type: 'int256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'val',
+        internalType: 'address[]',
+        type: 'address[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'log_bytes',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'bytes32', type: 'bytes32', indexed: false },
+    ],
+    name: 'log_bytes32',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'int256', type: 'int256', indexed: false },
+    ],
+    name: 'log_int',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'address', type: 'address', indexed: false },
+    ],
+    name: 'log_named_address',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'val',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'val',
+        internalType: 'int256[]',
+        type: 'int256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'val',
+        internalType: 'address[]',
+        type: 'address[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'log_named_bytes',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'bytes32', type: 'bytes32', indexed: false },
+    ],
+    name: 'log_named_bytes32',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'int256', type: 'int256', indexed: false },
+      {
+        name: 'decimals',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_decimal_int',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'uint256', type: 'uint256', indexed: false },
+      {
+        name: 'decimals',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_decimal_uint',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'int256', type: 'int256', indexed: false },
+    ],
+    name: 'log_named_int',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'string', type: 'string', indexed: false },
+    ],
+    name: 'log_named_string',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'log_named_uint',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'string', type: 'string', indexed: false },
+    ],
+    name: 'log_string',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'log_uint',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'logs',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StringExtensions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2109,7 +2617,7 @@ export const texasHoldemRoomAbi = [
     inputs: [],
     name: 'countOfHandsRevealed',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -2259,6 +2767,13 @@ export const texasHoldemRoomAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'lastActionTimestamp',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'lastRaiseIndex',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
     stateMutability: 'view',
@@ -2311,6 +2826,13 @@ export const texasHoldemRoomAbi = [
     type: 'function',
     inputs: [],
     name: 'progressGame',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'playerIndex', internalType: 'uint8', type: 'uint8' }],
+    name: 'reportIdlePlayer',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -2407,6 +2929,31 @@ export const texasHoldemRoomAbi = [
       },
     ],
     name: 'GameStarted',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'addressReporting',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'playerReported',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'timeElapsed',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'IdlePlayerKicked',
   },
   {
     type: 'event',
@@ -2543,7 +3090,7 @@ export const texasHoldemRoomAbi = [
  */
 export const texasHoldemRoomAddress = {
   8453: '0xf34890f942220f48391BA33Ff053f64Aa8979956',
-  31337: '0x9E545E3C0baAB3E08CdfD552C960A1050f373042',
+  31337: '0x0E801D84Fa97b50751Dbf25036d067dCf18858bF',
   84532: '0xfD95b63455287faCf0eeD16a4DD922813a98EcF1',
 } as const
 
@@ -2556,6 +3103,477 @@ export const texasHoldemRoomConfig = {
   address: texasHoldemRoomAddress,
   abi: texasHoldemRoomAbi,
 } as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TexasHoldemRoomRealKeysNoShuffleTest
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const texasHoldemRoomRealKeysNoShuffleTestAbi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'IS_TEST',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'args',
+    outputs: [{ name: '', internalType: 'bytes', type: 'bytes' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'cryptoUtils',
+    outputs: [
+      { name: '', internalType: 'contract CryptoUtils', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deckHandler',
+    outputs: [
+      { name: '', internalType: 'contract DeckHandler', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeArtifacts',
+    outputs: [
+      {
+        name: 'excludedArtifacts_',
+        internalType: 'string[]',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeContracts',
+    outputs: [
+      {
+        name: 'excludedContracts_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeSelectors',
+    outputs: [
+      {
+        name: 'excludedSelectors_',
+        internalType: 'struct StdInvariant.FuzzSelector[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'selectors', internalType: 'bytes4[]', type: 'bytes4[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'excludeSenders',
+    outputs: [
+      {
+        name: 'excludedSenders_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'failed',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'handEvaluator',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract PokerHandEvaluatorv2',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'player1',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'player2',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'player3',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'room',
+    outputs: [
+      { name: '', internalType: 'contract TexasHoldemRoom', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'setUp',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetArtifactSelectors',
+    outputs: [
+      {
+        name: 'targetedArtifactSelectors_',
+        internalType: 'struct StdInvariant.FuzzArtifactSelector[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'artifact', internalType: 'string', type: 'string' },
+          { name: 'selectors', internalType: 'bytes4[]', type: 'bytes4[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetArtifacts',
+    outputs: [
+      {
+        name: 'targetedArtifacts_',
+        internalType: 'string[]',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetContracts',
+    outputs: [
+      {
+        name: 'targetedContracts_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetInterfaces',
+    outputs: [
+      {
+        name: 'targetedInterfaces_',
+        internalType: 'struct StdInvariant.FuzzInterface[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'artifacts', internalType: 'string[]', type: 'string[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetSelectors',
+    outputs: [
+      {
+        name: 'targetedSelectors_',
+        internalType: 'struct StdInvariant.FuzzSelector[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'addr', internalType: 'address', type: 'address' },
+          { name: 'selectors', internalType: 'bytes4[]', type: 'bytes4[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'targetSenders',
+    outputs: [
+      {
+        name: 'targetedSenders_',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'string', type: 'string', indexed: false },
+    ],
+    name: 'log',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'address', type: 'address', indexed: false },
+    ],
+    name: 'log_address',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'val',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'val',
+        internalType: 'int256[]',
+        type: 'int256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'val',
+        internalType: 'address[]',
+        type: 'address[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'log_bytes',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'bytes32', type: 'bytes32', indexed: false },
+    ],
+    name: 'log_bytes32',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'int256', type: 'int256', indexed: false },
+    ],
+    name: 'log_int',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'address', type: 'address', indexed: false },
+    ],
+    name: 'log_named_address',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'val',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'val',
+        internalType: 'int256[]',
+        type: 'int256[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      {
+        name: 'val',
+        internalType: 'address[]',
+        type: 'address[]',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_array',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'log_named_bytes',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'bytes32', type: 'bytes32', indexed: false },
+    ],
+    name: 'log_named_bytes32',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'int256', type: 'int256', indexed: false },
+      {
+        name: 'decimals',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_decimal_int',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'uint256', type: 'uint256', indexed: false },
+      {
+        name: 'decimals',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'log_named_decimal_uint',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'int256', type: 'int256', indexed: false },
+    ],
+    name: 'log_named_int',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'string', type: 'string', indexed: false },
+    ],
+    name: 'log_named_string',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'key', internalType: 'string', type: 'string', indexed: false },
+      { name: 'val', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'log_named_uint',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'string', type: 'string', indexed: false },
+    ],
+    name: 'log_string',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
+    name: 'log_uint',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: '', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'logs',
+  },
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -3608,6 +4626,425 @@ export const useWatchPokerHandEvaluatorv2PheLogEvent =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__
+ */
+export const useReadReportIdlePlayerFirstShuffleTest =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"IS_TEST"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestIsTest =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'IS_TEST',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"args"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestArgs =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'args',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"cryptoUtils"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestCryptoUtils =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'cryptoUtils',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"deckHandler"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestDeckHandler =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'deckHandler',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"excludeArtifacts"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestExcludeArtifacts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'excludeArtifacts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"excludeContracts"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestExcludeContracts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'excludeContracts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"excludeSelectors"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestExcludeSelectors =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'excludeSelectors',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"excludeSenders"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestExcludeSenders =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'excludeSenders',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"failed"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestFailed =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'failed',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"handEvaluator"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestHandEvaluator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'handEvaluator',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"player1"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestPlayer1 =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'player1',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"player2"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestPlayer2 =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'player2',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"player3"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestPlayer3 =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'player3',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"room"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestRoom =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'room',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"targetArtifactSelectors"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestTargetArtifactSelectors =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'targetArtifactSelectors',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"targetArtifacts"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestTargetArtifacts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'targetArtifacts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"targetContracts"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestTargetContracts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'targetContracts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"targetInterfaces"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestTargetInterfaces =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'targetInterfaces',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"targetSelectors"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestTargetSelectors =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'targetSelectors',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"targetSenders"`
+ */
+export const useReadReportIdlePlayerFirstShuffleTestTargetSenders =
+  /*#__PURE__*/ createUseReadContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'targetSenders',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__
+ */
+export const useWriteReportIdlePlayerFirstShuffleTest =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"setUp"`
+ */
+export const useWriteReportIdlePlayerFirstShuffleTestSetUp =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'setUp',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"test_reportIdlePlayer"`
+ */
+export const useWriteReportIdlePlayerFirstShuffleTestTestReportIdlePlayer =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'test_reportIdlePlayer',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__
+ */
+export const useSimulateReportIdlePlayerFirstShuffleTest =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"setUp"`
+ */
+export const useSimulateReportIdlePlayerFirstShuffleTestSetUp =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'setUp',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `functionName` set to `"test_reportIdlePlayer"`
+ */
+export const useSimulateReportIdlePlayerFirstShuffleTestTestReportIdlePlayer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    functionName: 'test_reportIdlePlayer',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"IdlePlayerKicked"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestIdlePlayerKickedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'IdlePlayerKicked',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_address"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogAddressEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_address',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_array"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogArrayEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_array',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_bytes"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogBytesEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_bytes',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_bytes32"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogBytes32Event =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_bytes32',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_int"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogIntEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_int',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_address"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedAddressEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_address',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_array"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedArrayEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_array',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_bytes"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedBytesEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_bytes',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_bytes32"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedBytes32Event =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_bytes32',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_decimal_int"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedDecimalIntEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_decimal_int',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_decimal_uint"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedDecimalUintEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_decimal_uint',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_int"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedIntEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_int',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_string"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedStringEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_string',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_named_uint"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogNamedUintEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_named_uint',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_string"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogStringEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_string',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"log_uint"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogUintEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'log_uint',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link reportIdlePlayerFirstShuffleTestAbi}__ and `eventName` set to `"logs"`
+ */
+export const useWatchReportIdlePlayerFirstShuffleTestLogsEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: reportIdlePlayerFirstShuffleTestAbi,
+    eventName: 'logs',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stringExtensionsAbi}__
  */
 export const useReadStringExtensions = /*#__PURE__*/ createUseReadContract({
@@ -3744,6 +5181,20 @@ export const useReadTexasHoldemRoomCountActivePlayers =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'countActivePlayers',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useReadTexasHoldemRoomCountOfHandsRevealed =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'countOfHandsRevealed',
   })
 
 /**
@@ -3915,6 +5366,20 @@ export const useReadTexasHoldemRoomIsPrivate =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"lastActionTimestamp"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useReadTexasHoldemRoomLastActionTimestamp =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'lastActionTimestamp',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"lastRaiseIndex"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4037,20 +5502,6 @@ export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
- *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * -
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
- */
-export const useWriteTexasHoldemRoomCountOfHandsRevealed =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'countOfHandsRevealed',
-  })
-
-/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4090,6 +5541,20 @@ export const useWriteTexasHoldemRoomProgressGame =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'progressGame',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportIdlePlayer"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWriteTexasHoldemRoomReportIdlePlayer =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'reportIdlePlayer',
   })
 
 /**
@@ -4176,20 +5641,6 @@ export const useSimulateTexasHoldemRoom =
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
- *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * -
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
- */
-export const useSimulateTexasHoldemRoomCountOfHandsRevealed =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: texasHoldemRoomAbi,
-    address: texasHoldemRoomAddress,
-    functionName: 'countOfHandsRevealed',
-  })
-
-/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4229,6 +5680,20 @@ export const useSimulateTexasHoldemRoomProgressGame =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     functionName: 'progressGame',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportIdlePlayer"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useSimulateTexasHoldemRoomReportIdlePlayer =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    functionName: 'reportIdlePlayer',
   })
 
 /**
@@ -4329,6 +5794,20 @@ export const useWatchTexasHoldemRoomGameStartedEvent =
   })
 
 /**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"IdlePlayerKicked"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xfD95b63455287faCf0eeD16a4DD922813a98EcF1)
+ */
+export const useWatchTexasHoldemRoomIdlePlayerKickedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomAbi,
+    address: texasHoldemRoomAddress,
+    eventName: 'IdlePlayerKicked',
+  })
+
+/**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"InvalidCardsReported"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
@@ -4410,4 +5889,396 @@ export const useWatchTexasHoldemRoomPotWonEvent =
     abi: texasHoldemRoomAbi,
     address: texasHoldemRoomAddress,
     eventName: 'PotWon',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTest =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"IS_TEST"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestIsTest =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'IS_TEST',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"args"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestArgs =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'args',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"cryptoUtils"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestCryptoUtils =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'cryptoUtils',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"deckHandler"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestDeckHandler =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'deckHandler',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"excludeArtifacts"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestExcludeArtifacts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'excludeArtifacts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"excludeContracts"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestExcludeContracts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'excludeContracts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"excludeSelectors"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestExcludeSelectors =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'excludeSelectors',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"excludeSenders"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestExcludeSenders =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'excludeSenders',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"failed"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestFailed =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'failed',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"handEvaluator"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestHandEvaluator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'handEvaluator',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"player1"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestPlayer1 =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'player1',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"player2"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestPlayer2 =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'player2',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"player3"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestPlayer3 =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'player3',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"room"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestRoom =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'room',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"targetArtifactSelectors"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestTargetArtifactSelectors =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'targetArtifactSelectors',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"targetArtifacts"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestTargetArtifacts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'targetArtifacts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"targetContracts"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestTargetContracts =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'targetContracts',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"targetInterfaces"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestTargetInterfaces =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'targetInterfaces',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"targetSelectors"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestTargetSelectors =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'targetSelectors',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"targetSenders"`
+ */
+export const useReadTexasHoldemRoomRealKeysNoShuffleTestTargetSenders =
+  /*#__PURE__*/ createUseReadContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'targetSenders',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__
+ */
+export const useWriteTexasHoldemRoomRealKeysNoShuffleTest =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"setUp"`
+ */
+export const useWriteTexasHoldemRoomRealKeysNoShuffleTestSetUp =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'setUp',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__
+ */
+export const useSimulateTexasHoldemRoomRealKeysNoShuffleTest =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `functionName` set to `"setUp"`
+ */
+export const useSimulateTexasHoldemRoomRealKeysNoShuffleTestSetUp =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    functionName: 'setUp',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_address"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogAddressEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_address',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_array"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogArrayEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_array',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_bytes"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogBytesEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_bytes',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_bytes32"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogBytes32Event =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_bytes32',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_int"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogIntEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_int',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_address"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedAddressEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_address',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_array"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedArrayEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_array',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_bytes"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedBytesEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_bytes',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_bytes32"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedBytes32Event =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_bytes32',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_decimal_int"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedDecimalIntEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_decimal_int',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_decimal_uint"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedDecimalUintEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_decimal_uint',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_int"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedIntEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_int',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_string"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedStringEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_string',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_named_uint"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogNamedUintEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_named_uint',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_string"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogStringEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_string',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"log_uint"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogUintEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'log_uint',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomRealKeysNoShuffleTestAbi}__ and `eventName` set to `"logs"`
+ */
+export const useWatchTexasHoldemRoomRealKeysNoShuffleTestLogsEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: texasHoldemRoomRealKeysNoShuffleTestAbi,
+    eventName: 'logs',
   })

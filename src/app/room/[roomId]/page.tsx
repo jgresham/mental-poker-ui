@@ -348,15 +348,15 @@ export default function Room() {
               Round Keys. priv. r. pub.
               <br />
               {JSON.stringify(roundKeys.privateKey, (key, value) =>
-                typeof value === "bigint" ? value.toString() : value,
+                typeof value === "bigint" ? value.toString(16).padStart(64, "0") : value,
               )}
               <br />
               {JSON.stringify(roundKeys.r, (key, value) =>
-                typeof value === "bigint" ? value.toString() : value,
+                typeof value === "bigint" ? value.toString(16).padStart(64, "0") : value,
               )}
               <br />
               {JSON.stringify(roundKeys.publicKey, (key, value) =>
-                typeof value === "bigint" ? value.toString() : value,
+                typeof value === "bigint" ? value.toString(16).padStart(64, "0") : value,
               )}
             </span>
           </div>
