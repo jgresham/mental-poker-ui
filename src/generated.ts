@@ -1416,12 +1416,6 @@ export const deckHandlerAbi = [
     type: 'event',
     anonymous: false,
     inputs: [
-      {
-        name: 'player',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
       { name: 'card1', internalType: 'string', type: 'string', indexed: false },
       { name: 'card2', internalType: 'string', type: 'string', indexed: false },
       { name: 'card3', internalType: 'string', type: 'string', indexed: false },
@@ -1485,12 +1479,6 @@ export const deckHandlerAbi = [
     type: 'event',
     anonymous: false,
     inputs: [
-      {
-        name: 'player',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
       { name: 'card1', internalType: 'string', type: 'string', indexed: false },
     ],
     name: 'RiverRevealed',
@@ -1499,12 +1487,6 @@ export const deckHandlerAbi = [
     type: 'event',
     anonymous: false,
     inputs: [
-      {
-        name: 'player',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
       { name: 'card1', internalType: 'string', type: 'string', indexed: false },
     ],
     name: 'TurnRevealed',
@@ -1518,7 +1500,7 @@ export const deckHandlerAbi = [
  */
 export const deckHandlerAddress = {
   8453: '0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9',
-  31337: '0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf',
+  31337: '0x3Aa5ebB10DC797CAC828524e59A333d0A371443c',
   84532: '0x1571227335029664aD1a65Ab6BE083F4Bf85d4f1',
 } as const
 
@@ -2831,7 +2813,7 @@ export const texasHoldemRoomAbi = [
   },
   {
     type: 'function',
-    inputs: [{ name: 'playerIndex', internalType: 'uint8', type: 'uint8' }],
+    inputs: [],
     name: 'reportIdlePlayer',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -3090,7 +3072,7 @@ export const texasHoldemRoomAbi = [
  */
 export const texasHoldemRoomAddress = {
   8453: '0xf34890f942220f48391BA33Ff053f64Aa8979956',
-  31337: '0x0E801D84Fa97b50751Dbf25036d067dCf18858bF',
+  31337: '0x68B1D87F95878fE05B998F19b66F4baba5De1aed',
   84532: '0xfD95b63455287faCf0eeD16a4DD922813a98EcF1',
 } as const
 

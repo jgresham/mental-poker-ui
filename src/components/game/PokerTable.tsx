@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { type Room, type Player, MAX_PLAYERS, GameStageToString } from "@/lib/types";
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
@@ -10,7 +10,11 @@ import {
 } from "../../hooks/localRoomState";
 import { zeroAddress } from "viem";
 import { Button } from "../ui/button";
-import { useWriteTexasHoldemRoomReportInvalidCards } from "../../generated";
+import {
+  useWriteTexasHoldemRoomReportIdlePlayer,
+  useWriteTexasHoldemRoomReportInvalidCards,
+} from "../../generated";
+import { ActionClock, DEFAULT_TIME_LIMIT_SEC } from "./ActionClock";
 
 interface PokerTableProps {
   room?: Room;
@@ -25,12 +29,58 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
   console.log("PokerTable invalidCards", invalidCards);
   const { writeContractAsync: reportInvalidCards } =
     useWriteTexasHoldemRoomReportInvalidCards();
+  const { writeContractAsync: reportIdlePlayer } =
+    useWriteTexasHoldemRoomReportIdlePlayer();
+
+  const [isCurrentPlayerIsIdle, setIsCurrentPlayerIsIdle] = useState(false);
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (room) {
+      const { lastActionTimestamp } = room;
+
+      // if the timestamp is new,
+      // and a valid timestamp, set the state and start the timer
+      if (lastActionTimestamp !== undefined && lastActionTimestamp > 0) {
+        console.log("Action clock: setting 30s timer");
+        const timeLeft = Math.floor(
+          lastActionTimestamp + DEFAULT_TIME_LIMIT_SEC - Date.now() / 1000,
+        );
+        if (timeLeft <= 0) {
+          console.log("Action clock: timeLeft <= 0! Buzz!");
+          setIsCurrentPlayerIsIdle(true);
+        } else {
+          setIsCurrentPlayerIsIdle(false);
+        }
+        timeoutId = setTimeout(
+          () => {
+            console.log("Action clock: setTimeout timedout! Buzz!");
+            setIsCurrentPlayerIsIdle(true);
+          },
+          (DEFAULT_TIME_LIMIT_SEC + 1) * 1000,
+        );
+      } else {
+        setIsCurrentPlayerIsIdle(false);
+      }
+    }
+    return () => {
+      console.log("Action clock: clearing timeout");
+      clearTimeout(timeoutId);
+    };
+  }, [room]);
 
   if (!room) {
     return <p>Loading...</p>;
   }
-  const { communityCards, pot, stage, dealerPosition, currentPlayerIndex, roundNumber } =
-    room;
+  const {
+    communityCards,
+    pot,
+    stage,
+    dealerPosition,
+    currentPlayerIndex,
+    roundNumber,
+    lastActionTimestamp,
+  } = room;
+
   console.log("/components/game/PokerTable room, players", room, players);
   // Calculate positions for players around the table
   // const getPlayerPositions = (playerCount: number, currentPlayerIndex: number) => {
@@ -72,6 +122,13 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
     });
   };
 
+  const handleReportIdlePlayer = async () => {
+    console.log("report idle player");
+    await reportIdlePlayer({
+      args: [],
+    });
+  };
+
   // Find the current player's index
   // const currentPlayerIndex = players.findIndex((player) => player.addr === address);
 
@@ -86,6 +143,10 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
         <br />
         Round: {roundNumber}
         <br />
+        last action: {lastActionTimestamp}
+        <br />
+        <ActionClock lastActionTimestamp={lastActionTimestamp} />
+        <br />
         Keys:
         <br />
         r: {roundKeys?.r?.toString().substring(0, 5)}
@@ -99,16 +160,24 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
         <div className="absolute top-[30%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-sm">
           Pot: ${pot}
         </div>
-
         {/* {(invalidCards?.areInvalid || true) && ( */}
         {invalidCards?.areInvalid && (
           <Button
             onClick={handleReportInvalidCards}
-            className="absolute z-15 top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="absolute z-15 top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2"
             variant="destructive"
-            //  bg-red-500/30 text-white px-3 py-1 rounded-full text-sm"
           >
             Report invalid cards!
+          </Button>
+        )}
+        {/* {(isCurrentPlayerIsIdle || true) && ( */}
+        {isCurrentPlayerIsIdle && (
+          <Button
+            onClick={handleReportIdlePlayer}
+            variant="destructive"
+            className="absolute z-15 top-[75%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+          >
+            Report idle player!
           </Button>
         )}
 

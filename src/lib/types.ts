@@ -128,6 +128,7 @@ export interface Room {
   lastRaiseIndex: number;
   communityCards: Card[];
   encryptedDeck: `0x${string}`[];
+  lastActionTimestamp: number;
 }
 
 // Solidity contract GameStage
