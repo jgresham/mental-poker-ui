@@ -25,6 +25,7 @@ import {
 } from "../../../hooks/localRoomState";
 import { type Room as RoomType, type Card, GameStage } from "../../../lib/types";
 import { toast } from "sonner";
+import { Coins } from "lucide-react";
 
 // export function generateStaticParams() {
 //   // should render for all /room/[roomIds]
@@ -139,6 +140,12 @@ export default function Room() {
           console.log("PotWon event log", log);
           toast.info(
             `Pot ${log.args.amount} chips won by player ${log.args.winners.join(", ")}!`,
+          );
+        }
+        if (log.eventName === "IdlePlayerKicked") {
+          console.log("IdlePlayerKicked event log", log);
+          toast.info(
+            `Player ${log.args.playerReported} kicked for being idle. Restarting round...`,
           );
         }
       }
@@ -301,65 +308,41 @@ export default function Room() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
-      <div className="absolute top-5 right-5 z-20">
-        <ConnectButton />
-      </div>
-      <div className="w-full h-full relative">
-        <>
-          <div className="flex flex-col gap-2 mb-4">
-            <Button
-              onClick={handleJoinGame}
-              disabled={isJoiningGame || isWaitingForTxJoinGame}
-            >
+      <div className="absolute top-5 right-5 z-20 flex flex-row gap-2">
+        {address && ADMIN_ADDRESSES.includes(address) && (
+          <Button
+            onClick={handleResetRound}
+            variant="destructive"
+            disabled={isResettingRound || isWaitingForTxResetRound}
+          >
+            {isResettingRound
+              ? "Submitting..."
+              : isWaitingForTxResetRound
+                ? "Resetting..."
+                : "Reset Round"}
+          </Button>
+        )}
+        {!players?.find((player) => player.addr === address) && (
+          <Button
+            onClick={handleJoinGame}
+            variant="default"
+            size="lg"
+            disabled={isJoiningGame || isWaitingForTxJoinGame}
+          >
+            <Coins className="w-8 h-8" />
+            <span className="text-lg">
               {isJoiningGame
                 ? "Submitting..."
                 : isWaitingForTxJoinGame
                   ? "Confirming..."
                   : "Join Game"}
-            </Button>
-
-            {address && ADMIN_ADDRESSES.includes(address) && (
-              <Button
-                onClick={handleResetRound}
-                disabled={isResettingRound || isWaitingForTxResetRound}
-              >
-                {isResettingRound
-                  ? "Submitting..."
-                  : isWaitingForTxResetRound
-                    ? "Resetting..."
-                    : "Reset Round"}
-              </Button>
-            )}
-          </div>
-          {/* Dev view: Display all the properties of the game state */}
-          <div className="flex flex-row gap-2 text-[8px]">
-            <span>Small Blind: {smallBlind}</span>
-            <span>Big Blind: {bigBlind}</span>
-            <span>Pot: {pot}</span>
-            <span>Current Stage Bet: {currentStageBet}</span>
-            <span>Dealer Position: {dealerPosition}</span>
-            <span>Current Player Index: {currentPlayerIndex}</span>
-            <span>Last Raise Index: {lastRaiseIndex}</span>
-            <span>Community Cards: {JSON.stringify(communityCards)}</span>
-            {/* <span>Encrypted Deck: {encryptedDeck}</span> */}
-            <span>Logged in Player Index: {getPlayerIndexFromAddr}</span>
-            {/* <span>Players: {JSON.stringify(players)}</span> */}
-            <span>
-              Round Keys. priv. r. pub.
-              <br />
-              {JSON.stringify(roundKeys.privateKey, (key, value) =>
-                typeof value === "bigint" ? value.toString(16).padStart(64, "0") : value,
-              )}
-              <br />
-              {JSON.stringify(roundKeys.r, (key, value) =>
-                typeof value === "bigint" ? value.toString(16).padStart(64, "0") : value,
-              )}
-              <br />
-              {JSON.stringify(roundKeys.publicKey, (key, value) =>
-                typeof value === "bigint" ? value.toString(16).padStart(64, "0") : value,
-              )}
             </span>
-          </div>
+          </Button>
+        )}
+        <ConnectButton />
+      </div>
+      <div className="w-full h-full relative">
+        <>
           <PokerTable
             room={
               {

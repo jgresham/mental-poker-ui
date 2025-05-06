@@ -16,7 +16,12 @@ import {
   modInverse,
 } from "../src/lib/encrypted-poker-1chunk";
 import * as bigintModArith from "bigint-mod-arith";
-import { getCommunityCardIndexes, getOtherPlayersCardsIndexes } from "../src/lib/utils";
+import {
+  getAllRevealedCommunityCardsIndexes,
+  getCommunityCardIndexes,
+  getMyCardsIndexes,
+  getOtherPlayersCardsIndexes,
+} from "../src/lib/utils";
 import { GameStage } from "../src/lib/types";
 
 // vitest set timeout to 1 minute
@@ -276,8 +281,10 @@ test("test generate data, 3-player test, optional-shuffle", () => {
       );
     });
   }
+
+  // ======= Decrypt community cards =======
   // just have each player decrypt all the community cards
-  const allCommunityCardIndexes = getCommunityCardIndexes(
+  const allCommunityCardIndexes = getAllRevealedCommunityCardsIndexes(
     GameStage.Showdown,
     NUM_PLAYERS,
   );
@@ -316,161 +323,60 @@ test("test generate data, 3-player test, optional-shuffle", () => {
         `decryptionValues[${index}] = BigNumbers.init(hex"${card.toString(16).padStart(64, "0")}", false);`,
       );
     });
+    if (i === NUM_PLAYERS - 1) {
+      const cardStrings: string[] = [];
+      for (const card of decryptedCards) {
+        cardStrings.push(bigintToString(card));
+      }
+      console.log(`=========== communityCards = [${cardStrings.join(", ")}];`);
+    }
   }
+  for (let i = 0; i < NUM_PLAYERS; i++) {
+    const currentPlayerIndex = i;
+    const myCardsIndexes = getMyCardsIndexes(
+      currentPlayerIndex,
+      dealerPosition,
+      contractPlayers,
+    );
+    console.log(`myCardsIndexes: ${myCardsIndexes}`);
 
-  console.log("Both players decrypt the flop, turn, and river. p1 first");
-  const flop1i = 5;
-  const flop2i = 6;
-  const flop3i = 7;
-  const turni = 9;
-  const riveri = 11;
-  const flop1 = players[1].encryptedDeck[flop1i].c2;
-  const flop2 = players[1].encryptedDeck[flop2i].c2;
-  const flop3 = players[1].encryptedDeck[flop3i].c2;
-  const turn = players[1].encryptedDeck[turni].c2;
-  const river = players[1].encryptedDeck[riveri].c2;
-
-  const decryptedFlop1 = decryptCard({
-    encryptedCard: {
-      c1: players[0].encryptedDeck[flop1i].c1,
-      c2: flop1,
-    },
-    privateKey: players[0].privateKey,
-  });
-  const decryptedFlop2 = decryptCard({
-    encryptedCard: {
-      c1: players[0].encryptedDeck[flop2i].c1,
-      c2: flop2,
-    },
-    privateKey: players[0].privateKey,
-  });
-  const decryptedFlop3 = decryptCard({
-    encryptedCard: {
-      c1: players[0].encryptedDeck[flop3i].c1,
-      c2: flop3,
-    },
-    privateKey: players[0].privateKey,
-  });
-  const decryptedTurn = decryptCard({
-    encryptedCard: {
-      c1: players[0].encryptedDeck[turni].c1,
-      c2: turn,
-    },
-    privateKey: players[0].privateKey,
-  });
-  const decryptedRiver = decryptCard({
-    encryptedCard: {
-      c1: players[0].encryptedDeck[riveri].c1,
-      c2: river,
-    },
-    privateKey: players[0].privateKey,
-  });
-
-  console.log(`player1: Decrypted card flop1: ${decryptedFlop1}`);
-  console.log(`player1: Decrypted card flop2: ${decryptedFlop2}`);
-  console.log(`player1: Decrypted card flop3: ${decryptedFlop3}`);
-  console.log(`player1: Decrypted card turn: ${decryptedTurn}`);
-  console.log(`player1: Decrypted card river: ${decryptedRiver}`);
-  // p2 now
-  const decryptedFlop1final = decryptCard({
-    encryptedCard: {
-      c1: players[1].encryptedDeck[flop1i].c1,
-      c2: decryptedFlop1,
-    },
-    privateKey: players[1].privateKey,
-  });
-  const decryptedFlop2final = decryptCard({
-    encryptedCard: {
-      c1: players[1].encryptedDeck[flop2i].c1,
-      c2: decryptedFlop2,
-    },
-    privateKey: players[1].privateKey,
-  });
-  const decryptedFlop3final = decryptCard({
-    encryptedCard: {
-      c1: players[1].encryptedDeck[flop3i].c1,
-      c2: decryptedFlop3,
-    },
-    privateKey: players[1].privateKey,
-  });
-  const decryptedTurnfinal = decryptCard({
-    encryptedCard: {
-      c1: players[1].encryptedDeck[turni].c1,
-      c2: decryptedTurn,
-    },
-    privateKey: players[1].privateKey,
-  });
-  const decryptedRiverfinal = decryptCard({
-    encryptedCard: {
-      c1: players[1].encryptedDeck[riveri].c1,
-      c2: decryptedRiver,
-    },
-    privateKey: players[1].privateKey,
-  });
-  // p2's cards
-  console.log(`player1: Decrypted card 1:`);
-  console.log(`hex"${decryptedCard1.toString(16).padStart(64, "0")}}"`);
-  console.log(`player1: Decrypted card 3:`);
-  console.log(`hex"${decryptedCard3.toString(16).padStart(64, "0")}}"`);
-  console.log(`player2: Decrypted card 1:`);
-  console.log(`hex"${decryptedCard1final.toString(16).padStart(64, "0")}}"`);
-  console.log(
-    `bigintToString(decryptedCard1final): ${bigintToString(decryptedCard1final)}`,
-  );
-  console.log(`player2: Decrypted card 3:`);
-  console.log(`hex"${decryptedCard3final.toString(16).padStart(64, "0")}}"`);
-  console.log(
-    `bigintToString(decryptedCard3final): ${bigintToString(decryptedCard3final)}`,
-  );
-  // p1's cards
-  console.log(`player2: Decrypted card 0:`);
-  console.log(`hex"${decryptedCard0.toString(16).padStart(64, "0")}}"`);
-  console.log(`player2: Decrypted card 2:`);
-  console.log(`hex"${decryptedCard2.toString(16).padStart(64, "0")}}"`);
-  console.log(`player1: Decrypted card 0:`);
-  console.log(`hex"${decryptedCard0final.toString(16).padStart(64, "0")}}"`);
-  console.log(
-    `bigintToString(decryptedCard0final): ${bigintToString(decryptedCard0final)}`,
-  );
-  console.log(`player1: Decrypted card 2:`);
-  console.log(`hex"${decryptedCard2final.toString(16).padStart(64, "0")}}"`);
-  console.log(
-    `bigintToString(decryptedCard2final): ${bigintToString(decryptedCard2final)}`,
-  );
-
-  console.log(`player1: Decrypted card flop1:`);
-  console.log(`hex"${decryptedFlop1.toString(16).padStart(64, "0")}}"`);
-  console.log(`player1: Decrypted card flop2:`);
-  console.log(`hex"${decryptedFlop2.toString(16).padStart(64, "0")}}"`);
-  console.log(`player1: Decrypted card flop3:`);
-  console.log(`hex"${decryptedFlop3.toString(16).padStart(64, "0")}}"`);
-  console.log(`player1: Decrypted card turn:`);
-  console.log(`hex"${decryptedTurn.toString(16).padStart(64, "0")}}"`);
-  console.log(`player1: Decrypted card river:`);
-  console.log(`hex"${decryptedRiver.toString(16).padStart(64, "0")}}"`);
-
-  // PLAYER 2'S table cards in hex
-  console.log(`player2: decrypted card string card flop123turnriver:`);
-  console.log(`hex"${decryptedFlop1final.toString(16).padStart(64, "0")}}"`);
-  console.log(`hex"${decryptedFlop2final.toString(16).padStart(64, "0")}}"`);
-  console.log(`hex"${decryptedFlop3final.toString(16).padStart(64, "0")}}"`);
-  console.log(`hex"${decryptedTurnfinal.toString(16).padStart(64, "0")}}"`);
-  console.log(`hex"${decryptedRiverfinal.toString(16).padStart(64, "0")}}"`);
-
-  console.log(
-    `player2: decrypted card string card flop1: ${bigintToString(decryptedFlop1final)}`,
-  );
-  console.log(
-    `player2: decrypted card string card flop2: ${bigintToString(decryptedFlop2final)}`,
-  );
-  console.log(
-    `player2: decrypted card string card flop3: ${bigintToString(decryptedFlop3final)}`,
-  );
-  console.log(
-    `player2: decrypted card string card turn: ${bigintToString(decryptedTurnfinal)}`,
-  );
-  console.log(
-    `player2: decrypted card string card river: ${bigintToString(decryptedRiverfinal)}`,
-  );
+    const decryptedCards = myCardsIndexes.map((index) => {
+      const card = latestEncryptedDeck[index];
+      const decryptedCard = decryptCard({
+        encryptedCard: {
+          c1: players[i].encryptedDeck[i].c1, // always same
+          c2: card.c2,
+        },
+        privateKey: players[i].privateKey as bigint,
+      });
+      console.log("decryptedCard", decryptedCard);
+      // update the latest encrypted deck
+      latestEncryptedDeck[index].c2 = decryptedCard;
+      return decryptedCard;
+    });
+    console.log("decryptedCards", decryptedCards);
+    const partiallyDecryptedCardsHexStrings = decryptedCards.map((card) => {
+      const hexstring = `0x${card.toString(16).padStart(64, "0")}` as `0x${string}`;
+      if (hexstring.length % 2 !== 0) {
+        console.log("hexstring not even", hexstring);
+      }
+      return hexstring;
+    });
+    console.log(
+      `NEW Player ${i} decrypted cards: \n${partiallyDecryptedCardsHexStrings.join("\n")}\n at indicies ${myCardsIndexes}`,
+    );
+    myCardsIndexes.forEach((cardIndex, index) => {
+      console.log(`cardIndexes[${index}] = ${cardIndex};`);
+    });
+    decryptedCards.forEach((card, index) => {
+      console.log(
+        `decryptionValues[${index}] = BigNumbers.init(hex"${card.toString(16).padStart(64, "0")}", false);`,
+      );
+    });
+    console.log(
+      `====== player ${currentPlayerIndex} cards [${bigintToString(decryptedCards[0])}, ${bigintToString(decryptedCards[1])}] `,
+    );
+  }
+  // ======= End decrypt community cards =======
   console.log("\n\n\n\n\n\n END DECRYPT CARDS \n\n\n\n\n");
 });
