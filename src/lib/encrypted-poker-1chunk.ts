@@ -69,7 +69,7 @@ export function decryptCard({
   // console.log(`decryptCard modInverseResult: ${modInverseResult.toString(16)}`);
   const result = (encryptedCard.c2 * modInverseResult) % p;
   console.log(
-    `decryptCard result (hex) (dec): ${result.toString(16)} ${result.toString(10)}`,
+    `decryptCard result (hex) (dec): ${result.toString(16).padStart(64, "0")} ${result.toString(10)}`,
   );
   return result;
 }
