@@ -339,7 +339,12 @@ export default function Room() {
             </span>
           </Button>
         )}
-        <ConnectButton />
+        <ConnectButton
+          accountStatus={{
+            smallScreen: "avatar",
+            largeScreen: "full",
+          }}
+        />
       </div>
       <div className="w-full h-full relative">
         <>

@@ -88,8 +88,8 @@ export function PokerTable({ room, players, roomId }: PokerTableProps) {
     // For mobile optimization, we'll arrange players in a circular pattern
     const positions = [];
     // Reduce the radius to bring players closer to the center
-    const radius = 35; // % of container (reduced from 45%)
-    const centerX = 50;
+    const radius = 40; // % of container (reduced from 45%)
+    const centerX = 53; // lower to shift players to the left
     const centerY = 50;
 
     // Find the current player's index

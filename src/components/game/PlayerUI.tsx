@@ -9,8 +9,7 @@ import { Card } from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { useEnsAvatar } from "wagmi";
-import { useEnsName } from "wagmi";
+import { useEnsAvatar, useEnsName } from "wagmi";
 import { Clock } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -18,19 +17,25 @@ import {
   useInvalidCards,
   useSetInvalidCards,
 } from "../../hooks/localRoomState";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface PlayerProps {
   player: Player;
   isCurrentUser?: boolean;
   stage?: GameStage;
+  layout?: "small";
 }
 
-export function PlayerUI({ player, isCurrentUser = false, stage }: PlayerProps) {
+export function PlayerUI({
+  player,
+  isCurrentUser = false,
+  stage,
+  layout = "small",
+}: PlayerProps) {
   const {
     name,
     addr,
     chips,
-    // cards,
     hasFolded,
     isDealer,
     isSmallBlind,
@@ -38,17 +43,16 @@ export function PlayerUI({ player, isCurrentUser = false, stage }: PlayerProps) 
     isTurn,
     isAllIn,
     currentStageBet,
-    // totalRoundBet,
     avatarUrl,
   } = player;
 
   const { data: ensName } = useEnsName({ address: addr as `0x${string}` });
-  const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "" });
+  const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? undefined });
   const [cards, setCards] = useState<CardType[]>([]);
   const { data: playerCards } = usePlayerCards();
-  const { data: invalidCards } = useInvalidCards();
+  const { data: invalidCardsData } = useInvalidCards();
   const { mutate: setInvalidCards } = useSetInvalidCards();
-  console.log("playerUI.tsx invalidCards", invalidCards);
+  console.log("playerUI.tsx invalidCards", invalidCardsData);
 
   useEffect(() => {
     if (
@@ -60,7 +64,7 @@ export function PlayerUI({ player, isCurrentUser = false, stage }: PlayerProps) 
     ) {
       try {
         setCards(stringCardsToCards(playerCards));
-        if (invalidCards?.playerOrCommunityCards === "player") {
+        if (invalidCardsData?.playerOrCommunityCards === "player") {
           setInvalidCards({
             areInvalid: false,
             playerOrCommunityCards: undefined,
@@ -91,101 +95,163 @@ export function PlayerUI({ player, isCurrentUser = false, stage }: PlayerProps) 
         .toUpperCase()
     : addr?.slice(2, 4);
 
-  return (
-    <div
-      className={cn(
-        "flex flex-col items-center p-1 rounded-lg transition-all max-w-[110px] mx-auto",
-        isTurn
-          ? "bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-500"
-          : "bg-gray-100 dark:bg-gray-800/30",
-        // isActive && "opacity-50",
-        isCurrentUser && "bg-green-100 dark:bg-green-900/30",
-      )}
-    >
-      {isTurn && (
-        <div className="fixed bottom-[-10px] right-[-10px]">
-          <span className="flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full ring-1 ring-blue-500">
-            <Clock size={16} />
-          </span>
-        </div>
-      )}
-      <div className="flex items-center gap-1 mb-1 w-full">
-        <Avatar className="h-8 w-8 border-2 border-white">
-          <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
-          <AvatarFallback className="text-xs">{initials}</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col overflow-hidden">
-          {isCurrentUser && <span className="text-xs font-medium truncate">ME</span>}
-          <span className="text-xs font-medium truncate">{name}</span>
-          <span className="text-xs text-gray-500 dark:text-gray-400">${chips}</span>
-        </div>
-      </div>
-
-      <div className="flex gap-1 mb-1 justify-center">
-        {[0, 1].map((index) => (
-          <div key={index} className="w-9 h-12">
-            {cards[index] ? (
-              <Card
-                card={{
-                  ...cards[index],
-                  faceUp: isCurrentUser ? true : cards[index].faceUp,
-                }}
-                className="w-full h-full"
-              />
-            ) : (
-              <>
-                {stage !== undefined &&
-                stage >= GameStage.Shuffle &&
-                !player.hasFolded ? (
-                  <Card
-                    card={{
-                      faceUp: false,
-                      suit: "hearts",
-                      rank: "A",
-                    }}
-                    className="w-full h-full"
-                  />
-                ) : (
-                  <div className="w-full h-full rounded border border-black/10" />
-                )}
-              </>
-            )}
+  const PlayerInfoSection = () => (
+    <div className="flex items-center gap-1 mb-1 w-full">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Avatar className="h-8 w-8 border-2 border-white dark:border-gray-700 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all">
+            <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
+            <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+          </Avatar>
+        </PopoverTrigger>
+        <PopoverContent className="w-60 p-2" align="center" side="top">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
+                <AvatarFallback>{initials}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="font-medium">{displayName}</span>
+                <span className="text-xs text-gray-500 truncate">{addr}</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-1 text-sm">
+              <div>Chips:</div>
+              <div className="font-medium">${chips}</div>
+              <div>Status:</div>
+              <div className="font-medium">
+                {hasFolded ? "Folded" : isAllIn ? "All-In" : "Active"}
+              </div>
+              {(isDealer || isSmallBlind || isBigBlind) && (
+                <>
+                  <div>Position:</div>
+                  <div className="font-medium">
+                    {isDealer ? "Dealer" : isSmallBlind ? "Small Blind" : "Big Blind"}
+                  </div>
+                </>
+              )}
+              {currentStageBet > 0 && (
+                <>
+                  <div>Current Bet:</div>
+                  <div className="font-medium">${currentStageBet}</div>
+                </>
+              )}
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap gap-1 justify-center">
-        {isDealer && (
-          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
-            D
-          </Badge>
-        )}
-        {isSmallBlind && (
-          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
-            SB
-          </Badge>
-        )}
-        {isBigBlind && (
-          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
-            BB
-          </Badge>
-        )}
-        {isAllIn && (
-          <Badge variant="destructive" className="text-xs py-0 px-1 h-5">
-            All-In
-          </Badge>
-        )}
-        {currentStageBet > 0 && (
-          <Badge variant="secondary" className="text-xs py-0 px-1 h-5">
-            Bet: ${currentStageBet}
-          </Badge>
-        )}
-        {hasFolded && (
-          <Badge variant="outline" className="text-xs py-0 px-1 h-5">
-            F
-          </Badge>
-        )}
+        </PopoverContent>
+      </Popover>
+      <div className="flex flex-col overflow-hidden">
+        {isCurrentUser && <span className="text-xs font-medium truncate">ME</span>}
+        {/* <span className="text-xs font-medium truncate">{displayName}</span> */}
+        <span className="text-xs">${chips}</span>
       </div>
     </div>
   );
+
+  const BadgesSection = () => (
+    <div className="flex flex-wrap gap-0.5 sm:gap-1 justify-center">
+      {isDealer && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          D
+        </Badge>
+      )}
+      {isSmallBlind && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          SB
+        </Badge>
+      )}
+      {isBigBlind && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          BB
+        </Badge>
+      )}
+      {isAllIn && (
+        <Badge variant="destructive" className="text-xs py-0 px-1 h-5">
+          All-In
+        </Badge>
+      )}
+      {currentStageBet > 0 && (
+        <Badge variant="secondary" className="text-xs py-0 px-1 h-5">
+          Bet: ${currentStageBet}
+        </Badge>
+      )}
+      {hasFolded && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          F
+        </Badge>
+      )}
+    </div>
+  );
+
+  const renderCardContent = (cardIndex: number) =>
+    cards[cardIndex] ? (
+      <Card
+        card={{
+          ...cards[cardIndex],
+          faceUp: isCurrentUser ? true : cards[cardIndex].faceUp,
+        }}
+        className="w-full h-full"
+      />
+    ) : (
+      <>
+        {
+          !player.hasFolded &&
+            !player.joinedAndWaitingForNextRound &&
+            (stage !== undefined && stage >= GameStage.Shuffle ? (
+              <Card
+                card={{ faceUp: false, suit: "hearts", rank: "A" }} // Placeholder for face-down card
+                className="w-full h-full"
+              />
+            ) : (
+              <div className="w-full h-full rounded border border-black/10 dark:border-white/10" />
+            ))
+          // show nothing if player has folded
+        }
+      </>
+    );
+
+  if (layout === "small") {
+    return (
+      <div
+        className={cn(
+          "flex flex-col items-center relative p-0.5",
+          isCurrentUser && " rounded-lg bg-green-50/30 dark:bg-green-900/20",
+        )}
+      >
+        {isTurn && (
+          <div className="absolute bottom-[-2px] left-[-2px] z-20">
+            <span className="flex items-center justify-center w-5 h-5 bg-yellow-100 dark:bg-yellow-800 rounded-full ring-1 ring-yellow-500 shadow-md animate-pulse">
+              <Clock size={10} />
+            </span>
+          </div>
+        )}
+        {/* {isCurrentUser && (
+          <div className="absolute inset-0 rounded-lg pointer-events-none animate-pulse ring-2 ring-green-400/50"></div>
+        )} */}
+        <PlayerInfoSection />
+        <div className="relative h-12 w-[3rem] mb-1">
+          {" "}
+          {/* Container: card width (2.25rem) + offset (0.75rem) = 3rem */}
+          {[0, 1].map((index) => (
+            <div
+              key={index}
+              className={cn(
+                `absolute top-0 w-9 h-12 ${
+                  !player.hasFolded && !player.joinedAndWaitingForNextRound
+                    ? "shadow-sm"
+                    : ""
+                }`, // w-9 is 2.25rem
+                index === 0 && "left-[-0.5rem] z-10 transform -rotate-[8deg]",
+                index === 1 && "left-[1rem] transform rotate-[15deg]", // 0.75rem (12px) offset
+              )}
+            >
+              {renderCardContent(index)}
+            </div>
+          ))}
+        </div>
+        <BadgesSection />
+      </div>
+    );
+  }
 }
