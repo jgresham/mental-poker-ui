@@ -8,6 +8,18 @@ interface CardProps {
 }
 
 export function Card({ card, className }: CardProps) {
+  const suitSymbol =
+    card.suit === "hearts"
+      ? "♥"
+      : card.suit === "diamonds"
+        ? "♦"
+        : card.suit === "clubs"
+          ? "♣"
+          : "♠";
+
+  const suitColor =
+    card.suit === "hearts" || card.suit === "diamonds" ? "text-red-600" : "text-black";
+
   return (
     <div
       className={cn(
@@ -21,33 +33,13 @@ export function Card({ card, className }: CardProps) {
         {/* We'll use placeholder images until we create actual card images */}
         {card.faceUp ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <div
-              className={cn(
-                "font-bold",
-                card.suit === "hearts" || card.suit === "diamonds"
-                  ? "text-red-600"
-                  : "text-black",
-                "text-sm sm:text-base",
-              )}
-            >
-              {card.rank}
+            <div className="flex items-center">
+              <div className={cn("font-bold", suitColor, "text-sm sm:text-base")}>
+                {card.rank}
+              </div>
+              <div className={cn(suitColor, "text-xs ml-0.5")}>{suitSymbol}</div>
             </div>
-            <div
-              className={cn(
-                card.suit === "hearts" || card.suit === "diamonds"
-                  ? "text-red-600"
-                  : "text-black",
-                "text-lg sm:text-xl",
-              )}
-            >
-              {card.suit === "hearts"
-                ? "♥"
-                : card.suit === "diamonds"
-                  ? "♦"
-                  : card.suit === "clubs"
-                    ? "♣"
-                    : "♠"}
-            </div>
+            <div className={cn(suitColor, "text-lg sm:text-xl")}>{suitSymbol}</div>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full">
