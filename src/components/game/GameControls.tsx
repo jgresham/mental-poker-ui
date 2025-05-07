@@ -43,6 +43,7 @@ import {
 } from "../../lib/utils";
 import * as bigintModArith from "bigint-mod-arith";
 import { useGetPlayers } from "../../wagmi/wrapper";
+import { LogOut } from "lucide-react";
 
 interface GameControlsProps {
   room: Room;
@@ -680,6 +681,19 @@ export function GameControls({ room, player }: GameControlsProps) {
           <span className="text-xs sm:text-sm">Bet: ${room?.currentStageBet}</span>
           <span className="text-xs sm:text-sm ml-2 sm:ml-4">Chips: ${player.chips}</span>
         </div>
+
+        <div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-xs px-2 text-white"
+            onClick={handleLeaveGame}
+          >
+            {/* todo: confirmation dialog */}
+            <LogOut size={12} strokeWidth={1.5} />
+            Leave Game
+          </Button>
+        </div>
       </div>
       {(isSubmittingEncryptedDeckError || isSubmittingDecryptionValuesError) && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2">
@@ -734,7 +748,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           Reveal community cards
         </Button>
       </div> */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-2">
+      <div className="grid grid-cols-4 sm:grid-cols-4 gap-1 sm:gap-2">
         <Button
           variant="destructive"
           size="sm"
@@ -793,17 +807,6 @@ export function GameControls({ room, player }: GameControlsProps) {
           />
         </div>
       )}
-
-      <div>
-        <Button
-          variant="destructive"
-          size="sm"
-          className="h-7 text-xs px-2"
-          onClick={handleLeaveGame}
-        >
-          Leave Game
-        </Button>
-      </div>
 
       {/* Dealer controls - only visible when it's time to advance the game */}
       {/* {allPlayersActed && gameState.stage !== "ended" && (
