@@ -306,6 +306,9 @@ export default function Room() {
     setCommunityCards([]);
   }, [roomData, setInvalidCards]);
 
+  const loggedInPlayer = players?.find((player) => player.addr === address);
+  const isLoggedInAndIsTurn = loggedInPlayer?.playerIndex === currentPlayerIndex;
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
       <div className="absolute top-5 right-5 z-20 flex flex-row gap-2">
@@ -322,7 +325,7 @@ export default function Room() {
                 : "Reset Round"}
           </Button>
         )}
-        {!players?.find((player) => player.addr === address) && (
+        {!loggedInPlayer && (
           <Button
             onClick={handleJoinGame}
             variant="default"
@@ -332,9 +335,9 @@ export default function Room() {
             <Coins className="w-8 h-8" />
             <span className="text-lg">
               {isJoiningGame
-                ? "Submitting..."
+                ? "Joining..."
                 : isWaitingForTxJoinGame
-                  ? "Confirming..."
+                  ? "Joining..."
                   : "Join Game"}
             </span>
           </Button>
@@ -360,25 +363,28 @@ export default function Room() {
             players={players || []}
             roomId={roomId || ""}
           />
-          <GameControls
-            room={{
-              id: roomId,
-              roundNumber: Number(roundNumber),
-              stage,
-              isPrivate: isPrivate ?? false,
-              smallBlind: Number(smallBlind),
-              bigBlind: Number(bigBlind),
-              pot: Number(pot),
-              numPlayers: Number(numPlayers),
-              currentStageBet: Number(currentStageBet),
-              dealerPosition: Number(dealerPosition),
-              currentPlayerIndex: Number(currentPlayerIndex),
-              lastRaiseIndex: Number(lastRaiseIndex),
-              encryptedDeck: encryptedDeck,
-              communityCards,
-            }}
-            player={players?.find((player) => player.addr === address)}
-          />
+
+          {isLoggedInAndIsTurn && (
+            <GameControls
+              room={{
+                id: roomId,
+                roundNumber: Number(roundNumber),
+                stage,
+                isPrivate: isPrivate ?? false,
+                smallBlind: Number(smallBlind),
+                bigBlind: Number(bigBlind),
+                pot: Number(pot),
+                numPlayers: Number(numPlayers),
+                currentStageBet: Number(currentStageBet),
+                dealerPosition: Number(dealerPosition),
+                currentPlayerIndex: Number(currentPlayerIndex),
+                lastRaiseIndex: Number(lastRaiseIndex),
+                encryptedDeck: encryptedDeck,
+                communityCards,
+              }}
+              player={players?.find((player) => player.addr === address)}
+            />
+          )}
         </>
       </div>
     </main>
