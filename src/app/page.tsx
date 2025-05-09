@@ -30,6 +30,7 @@ export default function Home() {
     const load = async () => {
       const context = await sdk.context;
       if (context) {
+        console.log("Farcaster miniapp context found", context);
         try {
           console.log("Calling sdk.actions.ready()");
           sdk.actions.ready();

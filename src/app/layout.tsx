@@ -4,6 +4,7 @@ import "../../node_modules/@rainbow-me/rainbowkit/dist/index.css";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,8 +57,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          </Providers>
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );

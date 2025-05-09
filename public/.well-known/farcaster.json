@@ -15,9 +15,8 @@
     "subtitle": "Mental Poker - Onchain Poker",
     "description": "Mental Poker is onchain poker that is a secure, trustless, and no fee poker game. Every card is encrypted and decrypted using commutative encryption.",
     "screenshotUrls": [
-      "https://mentalpoker.xyz/screenshot_landing.png",
-      "https://mentalpoker.xyz/screenshot_midgame.png",
-      "https://mentalpoker.xyz/screenshot_endgame.png"
+      "https://mentalpoker.xyz/screenshot-2players.png",
+      "https://mentalpoker.xyz/screenshot-landing.png"
     ],
     "primaryCategory": "games",
     "tags": ["poker", "onchain", "verifiable", "texasholdem", "holdem"],
