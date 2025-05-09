@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { ErudaEnabler } from "../../../components/ErudaEnabler";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PokerTable } from "@/components/game/PokerTable";
 import { GameControls } from "@/components/game/GameControls";
@@ -9,23 +10,28 @@ import {
   useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useWatchTexasHoldemRoomEvent,
   useWatchDeckHandlerEvent,
-  useWriteTexasHoldemRoomResetRound,
-  useReadTexasHoldemRoomSeatPositionToPlayerIndex,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
+import { zeroAddress } from "viem";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
-import { ADMIN_ADDRESSES, getCommunityCards } from "../../../lib/utils";
+import { getCommunityCards, getMyCardsIndexes } from "../../../lib/utils";
 import {
   useInvalidCards,
+  usePlayerCards,
   useRoundKeys,
   useSetInvalidCards,
   useSetPlayerCards,
 } from "../../../hooks/localRoomState";
-import { type Room as RoomType, type Card, GameStage } from "../../../lib/types";
+import { type Room as RoomType, type Card, GameStage, MAX_PLAYERS } from "../../../lib/types";
+import { p256 } from "../../../lib/elgamal-commutative-node-1chunk";
+import { generateC1 } from "../../../lib/elgamal-commutative-node-1chunk";
+import { g2048 } from "../../../lib/elgamal-commutative-node-1chunk";
+import { decryptCard } from "../../../lib/encrypted-poker-1chunk";
 import { toast } from "sonner";
 import { Coins } from "lucide-react";
+import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
 
 // export function generateStaticParams() {
 //   // should render for all /room/[roomIds]
@@ -36,10 +42,10 @@ export default function Room() {
   const params = useParams();
   const { address } = useAccount();
   const roomId = params.roomId as string;
-  const [txStatus, setTxStatus] = useState<string | null>(null);
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
   const { data: invalidCards } = useInvalidCards();
   const { mutate: setInvalidCards } = useSetInvalidCards();
+  const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
   console.log("room page.tsx invalidCards", invalidCards);
 
@@ -49,6 +55,8 @@ export default function Room() {
     });
   const { data: players, refetch: refetchPlayers } = useGetPlayers();
   const { data: roomData, refetch: refetchRoomData } = useGetBulkRoomData();
+  const { data: roundKeys } = useRoundKeys(roomId, Number(roomData?.roundNumber));
+
   console.log(
     "/room/[roomId] useReadTexasHoldemRoom non-bulk properties",
     players,
@@ -58,24 +66,13 @@ export default function Room() {
     "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties",
     roomData,
   );
-  const { data: roundKeys } = useRoundKeys(roomId, roomData?.roundNumber);
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
     useWriteTexasHoldemRoomJoinGame();
 
-  const { writeContractAsync: resetRound, isPending: isResettingRound } =
-    useWriteTexasHoldemRoomResetRound();
-
   const [txHashJoinGame, setTxHashJoinGame] = useState<`0x${string}` | undefined>(
     undefined,
   );
-  const [txHashResetRound, setTxHashResetRound] = useState<`0x${string}` | undefined>(
-    undefined,
-  );
-  const { data: seatPositionToPlayerIndex } =
-    useReadTexasHoldemRoomSeatPositionToPlayerIndex({
-      args: [],
-    });
 
   useEffect(() => {
     // reset things when the round number changes
@@ -111,18 +108,18 @@ export default function Room() {
     hash: txHashJoinGame,
   });
 
-  const {
-    data: txResultResetRound,
-    isLoading: isWaitingForTxResetRound,
-    isSuccess: isTxSuccessResetRound,
-    isError: isTxErrorResetRound,
-    error: txErrorResetRound,
-  } = useWaitForTransactionReceipt({
-    hash: txHashResetRound,
-  });
-
   useWatchTexasHoldemRoomEvent({
-    onLogs: (logs) => {
+    // onLogs: (logs: {
+    //   eventName: string;
+    //   args: {
+    //     player?: `0x${string}` | undefined;
+    //     amount?: bigint;
+    //     winners?: `0x${string}`[];
+    //     playerReported?: `0x${string}` | undefined;
+    //   }[];
+    // }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onLogs: async(logs: any) => {
       console.log("Texas Holdem Room event logs", logs);
       // refretch all contract data
       refetchRoomData();
@@ -133,7 +130,7 @@ export default function Room() {
         if (log.eventName === "InvalidCardsReported") {
           console.log("InvalidCardsReported event log", log);
           toast.info(
-            `Invalid cards reported by player ${log.args.player}. Restarting round...`,
+            `Invalid cards reported by player ${log.args.player as { player?: `0x${string}` | undefined }}. Restarting round...`,
           );
         }
         if (log.eventName === "PotWon") {
@@ -149,13 +146,25 @@ export default function Room() {
           );
         }
       }
+      // sleep 3 seconds
+      console.log("sleeping 3 seconds");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      refetchRoomData();
+      refetchGetPlayerIndexFromAddr();
+      refetchPlayers();
     },
   });
 
   useWatchDeckHandlerEvent({
-    onLogs: (logs) => {
+    onLogs: async (logs) => {
       console.log("Deck Handler event logs", logs);
       // refretch all contract data
+      refetchRoomData();
+      refetchGetPlayerIndexFromAddr();
+      refetchPlayers();
+      // sleep 3 seconds
+      console.log("sleeping 3 seconds");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       refetchRoomData();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
@@ -175,16 +184,35 @@ export default function Room() {
   }, [txResultJoinGame, isTxSuccessJoinGame, isTxErrorJoinGame, txErrorJoinGame]);
 
   useEffect(() => {
-    console.log("txResultResetRound", txResultResetRound);
-    console.log("isTxSuccessResetRound", isTxSuccessResetRound);
-    console.log("isTxErrorResetRound", isTxErrorResetRound);
-    console.log("txErrorResetRound", txErrorResetRound);
-    if (isTxSuccessResetRound) {
-      toast.success("Reset round");
-    } else if (isTxErrorResetRound) {
-      toast.error(`Failed to reset round: ${txErrorResetRound?.message}`);
+    const player = players?.find((player) => player.addr === address);
+    if (
+      playerCards[0] === "" &&
+      playerCards[1] === "" &&
+      roomData &&
+      roomData.stage > GameStage.RevealDeal
+    ) {
+      if (
+        roomData.encryptedDeck !== undefined &&
+        player?.seatPosition !== undefined &&
+        roundKeys.privateKey !== null &&
+        roundKeys.publicKey !== null &&
+        roundKeys.r !== null &&
+        players !== undefined
+      ) {
+        console.log("revealing my cards, stage is past reveal deal");
+        handleDecryptMyCardsLocally();
+      }
     }
-  }, [txResultResetRound, isTxSuccessResetRound, isTxErrorResetRound, txErrorResetRound]);
+    //  else {
+    //   setPlayerCards(["", ""]);
+    // }
+  }, [
+    playerCards,
+    roomData,
+    roundKeys,
+    players,
+    address,
+  ]);
 
   // Destructure all properties except encryptedDeck to keep it mutable
   const {
@@ -199,12 +227,75 @@ export default function Room() {
     lastRaiseIndex,
     numPlayers,
     roundNumber,
+    lastActionTimestamp,
   } = roomData ?? {
     stage: GameStage.Idle,
   };
-
   // Access encryptedDeck directly from roomData to keep it mutable
-  const encryptedDeck = roomData?.encryptedDeck.concat() || [];
+  const encryptedDeck = useMemo(() => roomData?.encryptedDeck.concat() || [], [roomData]);
+
+
+  // const handleDecryptMyCardsLocally = useCallback(async () => {
+    const handleDecryptMyCardsLocally = async () => {
+    console.log("handleDecryptMyCardsLocally");
+
+    if (encryptedDeck === undefined) {
+      console.log("no encrypted deck");
+      return;
+    }
+    const player = players?.find((player) => player.addr === address);
+
+    if (player?.seatPosition === undefined) {
+      console.error("handleDecryptMyCardsLocally: player seat position is undefined");
+      return;
+    }
+    if (
+      roundKeys.privateKey === null ||
+      roundKeys.publicKey === null ||
+      roundKeys.r === null
+    ) {
+      console.error("handleDecryptMyCardsLocally: null round key found");
+      return;
+    }
+    if (players === undefined || players === null) {
+      console.error("handleDecryptMyCardsLocally: players is undefined");
+      return;
+    }
+    if(dealerPosition === undefined) {
+      console.error("handleDecryptMyCardsLocally: dealer position is undefined");
+      return;
+    }
+    const revealMyCardsIndexes = getMyCardsIndexes(
+      player.seatPosition,
+      dealerPosition,
+      players,
+    );
+    console.log("revealMyCardsIndexes", revealMyCardsIndexes);
+    const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
+    console.log("generated c1", c1.toString(16));
+    const decryptedCards = revealMyCardsIndexes.map((index) => {
+      const card = encryptedDeck[index];
+      const decryptedCard = decryptCard({
+        encryptedCard: {
+          c1,
+          c2: BigInt(card),
+        },
+        privateKey: roundKeys.privateKey as bigint,
+      });
+      console.log("decryptedCard", bigintToString(decryptedCard));
+      return bigintToString(decryptedCard);
+    });
+    console.log("decryptedCards", decryptedCards);
+    setPlayerCards(decryptedCards as [string, string]);
+  };
+  // }, [
+  //   encryptedDeck,
+  //   players,
+  //   address,
+  //   roundKeys,
+  //   // setPlayerCards,
+  //   dealerPosition,
+  // ]);
 
   // setTimeout(() => {
   //   console.log("refetching numPlayers", numPlayersUpdatedAt, numPlayers);
@@ -215,11 +306,11 @@ export default function Room() {
   console.log("/room/[roomId] transaction error", txErrorJoinGame);
 
   // Extract contract revert reason if available
-  const revertReason = txErrorJoinGame?.message
-    ? txErrorJoinGame.message.includes("reverted")
-      ? txErrorJoinGame.message.split("reverted:")[1]?.trim() || txErrorJoinGame.message
-      : txErrorJoinGame.message
-    : null;
+  // const revertReason = txErrorJoinGame?.message
+  //   ? txErrorJoinGame.message.includes("reverted")
+  //     ? txErrorJoinGame.message.split("reverted:")[1]?.trim() || txErrorJoinGame.message
+  //     : txErrorJoinGame.message
+  //   : null;
 
   //     GameStage stage;
   //     uint256 pot;
@@ -233,29 +324,12 @@ export default function Room() {
   //     BigNumber[] encryptedDeck;
   const handleJoinGame = async () => {
     try {
-      setTxStatus("Submitting transaction...");
       const hash = await joinGame({
         args: [],
       });
       setTxHashJoinGame(hash);
-      setTxStatus("Transaction submitted, waiting for confirmation...");
     } catch (error) {
       console.error("Error joining game:", error);
-      setTxStatus(`Error: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  };
-
-  const handleResetRound = async () => {
-    try {
-      setTxStatus("Submitting reset round transaction...");
-      const hash = await resetRound({
-        args: [],
-      });
-      setTxHashResetRound(hash);
-      setTxStatus("Transaction submitted, waiting for confirmation...");
-    } catch (error) {
-      console.error("Error joining game:", error);
-      setTxStatus(`Error: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
@@ -263,7 +337,7 @@ export default function Room() {
     if (
       roomData &&
       roomData.stage !== undefined &&
-      roomData.encryptedDeck !== undefined &&
+      encryptedDeck !== undefined &&
       roomData.numPlayers !== undefined
     ) {
       if (roomData.stage >= GameStage.Flop) {
@@ -271,7 +345,7 @@ export default function Room() {
           const communityCards = getCommunityCards({
             stage: roomData.stage,
             numOfPlayers: roomData.numPlayers,
-            encryptedDeck: roomData.encryptedDeck,
+            encryptedDeck: encryptedDeck,
           });
           console.log("communityCards", communityCards);
           setCommunityCards(communityCards);
@@ -304,29 +378,21 @@ export default function Room() {
       console.log("roomData is not ready yet", roomData);
     }
     setCommunityCards([]);
-  }, [roomData, setInvalidCards]);
+  }, [roomData, setInvalidCards, encryptedDeck]);
 
   const loggedInPlayer = players?.find((player) => player.addr === address);
+  const isPlayerLoggedInAndInTheRoom = address !== undefined && loggedInPlayer !== undefined;
+  // console.log("isPlayerLoggedInAndInTheRoom", isPlayerLoggedInAndInTheRoom);
+  // console.log("loggedInPlayer", loggedInPlayer);
+  const countOfPlayers = players?.reduce((acc, player) => acc + (player.addr !== zeroAddress ? 1 : 0), 0);
+  // console.log("countOfPlayers", countOfPlayers);
   const isLoggedInAndIsTurn = loggedInPlayer?.playerIndex === currentPlayerIndex;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
-      <div className="absolute top-5 right-5 z-20 flex flex-row gap-2">
-        {address && ADMIN_ADDRESSES.includes(address) && (
-          <Button
-            onClick={handleResetRound}
-            variant="destructive"
-            disabled={isResettingRound || isWaitingForTxResetRound}
-          >
-            {isResettingRound
-              ? "Submitting..."
-              : isWaitingForTxResetRound
-                ? "Resetting..."
-                : "Reset Round"}
-          </Button>
-        )}
-        {!loggedInPlayer && (
-          <Button
+      <div className="absolute top-1 left-1 z-20 flex flex-row gap-2">
+        {!isPlayerLoggedInAndInTheRoom && countOfPlayers !== undefined && countOfPlayers < MAX_PLAYERS && (
+        <Button
             onClick={handleJoinGame}
             variant="default"
             size="lg"
@@ -341,13 +407,16 @@ export default function Room() {
                   : "Join Game"}
             </span>
           </Button>
-        )}
+       )}
+    </div>
+      <div className="absolute top-1 right-1 z-20 flex flex-row gap-2">
         <ConnectButton
           accountStatus={{
             smallScreen: "avatar",
             largeScreen: "full",
           }}
         />
+
       </div>
       <div className="w-full h-full relative">
         <>
@@ -362,9 +431,10 @@ export default function Room() {
             }
             players={players || []}
             roomId={roomId || ""}
+            player={players?.find((player) => player.addr === address)}
           />
 
-          {isLoggedInAndIsTurn && (
+          <div className={`${isLoggedInAndIsTurn ? "block" : "hidden"}`}>
             <GameControls
               room={{
                 id: roomId,
@@ -379,14 +449,16 @@ export default function Room() {
                 dealerPosition: Number(dealerPosition),
                 currentPlayerIndex: Number(currentPlayerIndex),
                 lastRaiseIndex: Number(lastRaiseIndex),
+                lastActionTimestamp: Number(lastActionTimestamp),
                 encryptedDeck: encryptedDeck,
                 communityCards,
               }}
               player={players?.find((player) => player.addr === address)}
             />
-          )}
+          </div>
         </>
       </div>
+      <ErudaEnabler/>
     </main>
   );
 }

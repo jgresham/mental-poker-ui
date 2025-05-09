@@ -55,6 +55,7 @@ export function PlayerUI({
   console.log("playerUI.tsx invalidCards", invalidCardsData);
 
   useEffect(() => {
+    console.log("player ui setCards useEffect");
     if (
       playerCards[0] !== undefined &&
       playerCards[1] !== undefined &&
@@ -63,6 +64,7 @@ export function PlayerUI({
       isCurrentUser
     ) {
       try {
+        console.log("player ui setCards useEffect try");
         setCards(stringCardsToCards(playerCards));
         if (invalidCardsData?.playerOrCommunityCards === "player") {
           setInvalidCards({
@@ -95,12 +97,17 @@ export function PlayerUI({
         .toUpperCase()
     : addr?.slice(2, 4);
 
+    let avatarSrc = avatarUrl;
+    if(avatarUrl === undefined) {
+      avatarSrc = ensAvatar ?? undefined;
+    }
+
   const PlayerInfoSection = () => (
     <div className="flex items-center gap-1 mb-1 w-full">
       <Popover>
         <PopoverTrigger asChild>
           <Avatar className="h-8 w-8 border-2 border-white dark:border-gray-700 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all">
-            <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
+            <AvatarImage src={avatarSrc} alt={name} />
             <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
@@ -108,7 +115,7 @@ export function PlayerUI({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Avatar className="h-10 w-10">
-                <AvatarImage src={avatarUrl ?? ensAvatar ?? undefined} alt={name} />
+                <AvatarImage src={avatarSrc} alt={name} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
@@ -144,7 +151,7 @@ export function PlayerUI({
       <div className="flex flex-col overflow-hidden">
         {isCurrentUser && <span className="text-xs font-medium truncate">ME</span>}
         {/* <span className="text-xs font-medium truncate">{displayName}</span> */}
-        <span className="text-xs">${chips}</span>
+        <span className="text-xs font-bold">${chips}</span>
       </div>
     </div>
   );
@@ -230,6 +237,7 @@ export function PlayerUI({
           <div className="absolute inset-0 rounded-lg pointer-events-none animate-pulse ring-2 ring-green-400/50"></div>
         )} */}
         <PlayerInfoSection />
+        {player.joinedAndWaitingForNextRound && <div className="text-xs">idle</div>}
         <div className="relative h-12 w-[3rem] mb-1">
           {" "}
           {/* Container: card width (2.25rem) + offset (0.75rem) = 3rem */}

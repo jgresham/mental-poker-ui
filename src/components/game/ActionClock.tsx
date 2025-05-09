@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 export const DEFAULT_TIME_LIMIT_SEC = 30;

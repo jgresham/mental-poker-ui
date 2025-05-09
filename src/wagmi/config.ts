@@ -7,7 +7,7 @@ import {
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { http, createConfig } from "@wagmi/core";
-import { base, baseSepolia, type Chain, foundry } from "@wagmi/core/chains";
+import { arbitrum, base, baseSepolia, type Chain, foundry, optimism } from "@wagmi/core/chains";
 
 const walletConnectors = connectorsForWallets(
   [
@@ -23,13 +23,15 @@ const walletConnectors = connectorsForWallets(
 );
 
 const chains: Chain[] = [base];
-chains.push(baseSepolia);
+// chains.push(baseSepolia);
+chains.push(optimism);
+chains.push(arbitrum);
 if (
   process.env.NEXT_PUBLIC_WORKER_DOMAIN?.includes("staging") ||
   process.env.NEXT_PUBLIC_WORKER_DOMAIN?.includes("localhost") ||
   process.env.NODE_ENV === "development"
 ) {
-  chains.push(baseSepolia);
+  // chains.push(baseSepolia);
   chains.push(foundry);
 }
 
@@ -43,6 +45,12 @@ export const frameWagmiConfig = createConfig({
       "https://base-sepolia.g.alchemy.com/v2/xFjQGD9_D32OdWAY-iyViQ7xHYHIUF-i",
     ),
     [foundry.id]: http(),
+    [optimism.id]: http(
+      "https://opt-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC",
+    ),
+    [arbitrum.id]: http(
+      "https://arb-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC",
+    ),
   },
   connectors: [
     farcasterFrame(),
