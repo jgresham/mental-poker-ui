@@ -6,7 +6,7 @@ import {
   rainbowWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { http, createConfig } from "@wagmi/core";
+import { http, createConfig, webSocket} from "@wagmi/core";
 import { arbitrum, base, baseSepolia, type Chain, foundry, optimism } from "@wagmi/core/chains";
 
 const walletConnectors = connectorsForWallets(
@@ -44,10 +44,15 @@ export const frameWagmiConfig = createConfig({
     [baseSepolia.id]: http(
       "https://base-sepolia.g.alchemy.com/v2/xFjQGD9_D32OdWAY-iyViQ7xHYHIUF-i",
     ),
-    [foundry.id]: http(),
-    [optimism.id]: http(
+    [foundry.id]: http("http://localhost:8545"),
+    [optimism.id]: 
+      http(
       "https://opt-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC",
-    ),
+    )
+  //   ,
+  //   webSocket("wss://opt-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC")
+  // ]
+  ,
     [arbitrum.id]: http(
       "https://arb-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC",
     ),

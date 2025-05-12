@@ -30,7 +30,7 @@ import { generateC1 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { g2048 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { decryptCard } from "../../../lib/encrypted-poker-1chunk";
 import { toast } from "sonner";
-import { Coins } from "lucide-react";
+import { Coins, LogOut, OctagonAlert} from "lucide-react";
 import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
 
 // export function generateStaticParams() {
@@ -54,7 +54,7 @@ export default function Room() {
       args: [address as `0x${string}`],
     });
   const { data: players, refetch: refetchPlayers } = useGetPlayers();
-  const { data: roomData, refetch: refetchRoomData } = useGetBulkRoomData();
+  const { data: roomData, error: roomDataError, refetch: refetchRoomData } = useGetBulkRoomData();
   const { data: roundKeys } = useRoundKeys(roomId, Number(roomData?.roundNumber));
 
   console.log(
@@ -63,8 +63,9 @@ export default function Room() {
     getPlayerIndexFromAddr,
   );
   console.log(
-    "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties",
+    "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties, roomDataError",
     roomData,
+    JSON.stringify(roomDataError)
   );
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
@@ -109,6 +110,10 @@ export default function Room() {
   });
 
   useWatchTexasHoldemRoomEvent({
+    onError: (error) => {
+      console.error("Texas Holdem Room event error", error);
+      toast.error(`useWatchTexasHoldemRoomEvent error: ${error.message}`);
+    },
     // onLogs: (logs: {
     //   eventName: string;
     //   args: {
@@ -144,6 +149,14 @@ export default function Room() {
           toast.info(
             `Player ${log.args.playerReported} kicked for being idle. Restarting round...`,
           );
+        }
+        if (log.eventName === "PlayerJoined") {
+          console.log("PlayerJoined event log", log);
+          if(log.args.player !== address) {
+            toast.info(
+              `Player ${log.args.player} joined the game.`,
+            );
+          }
         }
       }
       // sleep 3 seconds
@@ -380,6 +393,24 @@ export default function Room() {
     setCommunityCards([]);
   }, [roomData, setInvalidCards, encryptedDeck]);
 
+  // Handle leaving game
+  const handleLeaveGame = () => {
+    // ask the user to confirm they want to leave
+    // if they leave during a round, warn them:
+    // that their hand will be folded and they will forfeit any of their chips in the pot
+    // if they confirm, leave the game
+    // if they cancel, do nothing
+    if (
+      confirm(
+        "Are you sure you want to leave the game? Any chips in the pot will be forfeited.",
+      )
+    ) {
+      // Handle leaving logic here
+      // router.push("/");
+      console.log("leaving game confirmed");
+    }
+  };
+
   const loggedInPlayer = players?.find((player) => player.addr === address);
   const isPlayerLoggedInAndInTheRoom = address !== undefined && loggedInPlayer !== undefined;
   // console.log("isPlayerLoggedInAndInTheRoom", isPlayerLoggedInAndInTheRoom);
@@ -408,6 +439,19 @@ export default function Room() {
             </span>
           </Button>
        )}
+       {isPlayerLoggedInAndInTheRoom && (
+             <div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-xs px-2 text-white"
+            onClick={handleLeaveGame}
+          >
+            {/* todo: confirmation dialog */}
+            <LogOut size={16} strokeWidth={2} />
+          </Button>
+        </div>
+       )}
     </div>
       <div className="absolute top-1 right-1 z-20 flex flex-row gap-2">
         <ConnectButton
@@ -416,6 +460,10 @@ export default function Room() {
             largeScreen: "full",
           }}
         />
+
+      </div>
+      <div className="absolute top-[15%] z-20 flex flex-row gap-2">
+        {roomDataError && <span className="text-red-500 bg-white/60 rounded-md p-2 flex flex-row gap-2"><OctagonAlert />{roomDataError.shortMessage}</span>}
 
       </div>
       <div className="w-full h-full relative">
