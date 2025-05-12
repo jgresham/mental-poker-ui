@@ -1,6 +1,6 @@
 // import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import { generateKeysAndR } from "../lib/elgamal-commutative-node-1chunk";
-// import { REVEAL_COMMUNITY_CARDS_STAGE } from "../lib/types";
+// import { REVEAL_COMMUNITY_CARDS_STAGES } from "../lib/types";
 // import { GameStage } from "../lib/types";
 
 // // Define a unique key for the query
@@ -45,7 +45,7 @@
 //         return submitDecryptionValues({ args: [[], []] });
 //       }
 //       // if reveal cards, call submitDecryptionValues
-//       if (REVEAL_COMMUNITY_CARDS_STAGE.includes(stage)) {
+//       if (REVEAL_COMMUNITY_CARDS_STAGES.includes(stage)) {
 //         return submitDecryptionValues({ args: [[], []] });
 //       }
 //     },

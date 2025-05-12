@@ -171,7 +171,7 @@ export enum GameStage {
   Ended = 12,
 }
 
-export const REVEAL_COMMUNITY_CARDS_STAGE = [
+export const REVEAL_COMMUNITY_CARDS_STAGES = [
   GameStage.RevealFlop,
   GameStage.RevealTurn,
   GameStage.RevealRiver,
