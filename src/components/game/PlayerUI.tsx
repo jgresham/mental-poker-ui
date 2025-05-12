@@ -192,26 +192,26 @@ export function PlayerUI({
   );
 
   const renderCardContent = (cardIndex: number) =>
-    cards[cardIndex] ? (
+    (cards[cardIndex] && stage !== undefined && stage >= GameStage.Preflop) ? (
       <Card
         card={{
           ...cards[cardIndex],
           faceUp: isCurrentUser ? true : cards[cardIndex].faceUp,
         }}
-        className="w-full h-full"
+        className="w-full h-full shadow-sm"
       />
     ) : (
       <>
         {
           !player.hasFolded &&
             !player.joinedAndWaitingForNextRound &&
-            (stage !== undefined && stage >= GameStage.Shuffle ? (
+            (stage !== undefined && stage >= GameStage.RevealDeal ? (
               <Card
                 card={{ faceUp: false, suit: "hearts", rank: "A" }} // Placeholder for face-down card
-                className="w-full h-full"
+                className="w-full h-full shadow-sm"
               />
             ) : (
-              <div className="w-full h-full rounded border border-black/10 dark:border-white/10" />
+              <div className="w-full h-full rounded" />
             ))
           // show nothing if player has folded
         }
@@ -237,7 +237,7 @@ export function PlayerUI({
           <div className="absolute inset-0 rounded-lg pointer-events-none animate-pulse ring-2 ring-green-400/50"></div>
         )} */}
         <PlayerInfoSection />
-        {player.joinedAndWaitingForNextRound && <div className="text-xs">idle</div>}
+        {/* {player.joinedAndWaitingForNextRound && <div className="text-xs">idle</div>} */}
         <div className="relative h-12 w-[3rem] mb-1">
           {" "}
           {/* Container: card width (2.25rem) + offset (0.75rem) = 3rem */}
@@ -245,11 +245,7 @@ export function PlayerUI({
             <div
               key={index}
               className={cn(
-                `absolute top-0 w-9 h-12 ${
-                  !player.hasFolded && !player.joinedAndWaitingForNextRound
-                    ? "shadow-sm"
-                    : ""
-                }`, // w-9 is 2.25rem
+                `absolute top-0 w-9 h-12`, // w-9 is 2.25rem
                 index === 0 && "left-[-0.5rem] z-10 transform -rotate-[8deg]",
                 index === 1 && "left-[1rem] transform rotate-[15deg]", // 0.75rem (12px) offset
               )}

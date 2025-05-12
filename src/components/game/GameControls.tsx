@@ -129,6 +129,7 @@ export function GameControls({ room, player }: GameControlsProps) {
   const handleCall = async () => {
     console.log("handleCall");
     if (!player) return;
+    console.log("handleCall player", player, room.currentPlayerIndex, room.currentPlayerIndex === player.playerIndex);
     const txHash = await submitAction({
       args: [Action.Call, BigInt(0)],
     });

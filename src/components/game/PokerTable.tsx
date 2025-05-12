@@ -21,7 +21,7 @@ import { DevModeToggle } from "../DevModeToggle";
 import { useDevMode } from "../../hooks/devMode";
 import { ADMIN_ADDRESSES, getCommunityCardIndexes, getMyCardsIndexes, getOtherPlayersCardsIndexes } from "../../lib/utils";
 import { toast } from "sonner";
-import { LogOut, TimerReset } from "lucide-react";
+import { TimerReset } from "lucide-react";
 import { bigintToHexString, g2048, generateC1, modInverse, p256 } from "../../lib/elgamal-commutative-node-1chunk";
 import { decryptCard, DECK, formatCardDeckForShuffleAndEncrypt, shuffleAndEncryptDeck } from "../../lib/encrypted-poker-1chunk";
 import * as bigintModArith from "bigint-mod-arith";
@@ -63,10 +63,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     isError: isSubmittingRevealMyCardsError,
     error: txErrorSubmittingRevealMyCards,
   } = useWriteDeckHandlerRevealMyCards();
-  console.log("isSubmittingRevealMyCards", isSubmittingRevealMyCards);
-  console.log("isSubmittingRevealMyCardsSuccess", isSubmittingRevealMyCardsSuccess);
-  console.log("isSubmittingRevealMyCardsError", isSubmittingRevealMyCardsError);
-  console.log("txErrorSubmittingRevealMyCards", txErrorSubmittingRevealMyCards);
+  console.log("isSubmittingRevealMyCards", isSubmittingRevealMyCards, isSubmittingRevealMyCardsSuccess, isSubmittingRevealMyCardsError, txErrorSubmittingRevealMyCards);
   
   const {
     writeContractAsync: submitDecryptionValues,
@@ -75,10 +72,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     isError: isSubmittingDecryptionValuesError,
     error: txErrorSubmittingDecryptionValues,
   } = useWriteDeckHandlerSubmitDecryptionValues();
-  console.log("isSubmittingDecryptionValues", isSubmittingDecryptionValues);
-  console.log("isSubmittingDecryptionValuesSuccess", isSubmittingDecryptionValuesSuccess);
-  console.log("isSubmittingDecryptionValuesError", isSubmittingDecryptionValuesError);
-  console.log("txErrorSubmittingDecryptionValues", txErrorSubmittingDecryptionValues);
+  console.log("isSubmittingDecryptionValues", isSubmittingDecryptionValues, isSubmittingDecryptionValuesSuccess, isSubmittingDecryptionValuesError, txErrorSubmittingDecryptionValues);
   
   const [isCurrentPlayerIsIdle, setIsCurrentPlayerIsIdle] = useState(false);
   const [hasPromptedStageObligation, setHasPromptedStageObligation] =
@@ -89,23 +83,23 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   const [txHash2, setTxHash2] = useState<string | undefined>(undefined);
   const {
     data: txResult,
-    isLoading: isWaitingForTx,
-    isSuccess: isTxSuccess,
-    isError: isTxError,
+    // isLoading: isWaitingForTx,
+    // isSuccess: isTxSuccess,
+    // isError: isTxError,
     error: txError2,
   } = useWaitForTransactionReceipt({
     hash: txHash2 as `0x${string}`,
   });
   console.log("txReceipt", txResult);
-  console.log("txReceipt2", isWaitingForTx);
-  console.log("isTxSuccess", isTxSuccess);
-  console.log("isTxError", isTxError);
-  console.log("txError2", txError2);
-  console.log("txError2.cause", txError2?.cause);
-  console.log("txError2 user message", txError2?.message.split("\n")[0]);
+  // console.log("txReceipt2", isWaitingForTx);
+  // console.log("isTxSuccess", isTxSuccess);
+  // console.log("isTxError", isTxError);
+  // console.log("txError2", txError2);
+  // console.log("txError2.cause", txError2?.cause);
+  // console.log("txError2 user message", txError2?.message.split("\n")[0]);
   console.log("txError2 error message", txError2?.message);
   console.log("txError2.stack", txError2?.stack);
-  console.log("txError2.name", txError2?.name);
+  // console.log("txError2.name", txError2?.name);
 
   const {
     data: txResultResetRound,
@@ -620,24 +614,6 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     }
   };
 
-    // Handle leaving game
-    const handleLeaveGame = () => {
-      // ask the user to confirm they want to leave
-      // if they leave during a round, warn them:
-      // that their hand will be folded and they will forfeit any of their chips in the pot
-      // if they confirm, leave the game
-      // if they cancel, do nothing
-      if (
-        confirm(
-          "Are you sure you want to leave the game? Any chips in the pot will be forfeited.",
-        )
-      ) {
-        // Handle leaving logic here
-        // router.push("/");
-        console.log("leaving game confirmed");
-      }
-    };
-
   // Find the current player's index
   // const currentPlayerIndex = players.findIndex((player) => player.addr === address);
 
@@ -667,19 +643,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
           priv: {roundKeys?.privateKey?.toString().substring(0, 5)}
         </div>
       )}
-      <div className="absolute z-10 bottom-15 right-0">
-
-      <div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 text-xs px-2 text-white"
-            onClick={handleLeaveGame}
-          >
-            {/* todo: confirmation dialog */}
-            <LogOut size={16} strokeWidth={2} />
-          </Button>
-        </div>
+      <div className="absolute z-10 bottom-25 right-0">
       {address && ADMIN_ADDRESSES.includes(address) && (
           <Button
             onClick={handleResetRound}
