@@ -8,13 +8,12 @@ import { GameControls } from "@/components/game/GameControls";
 import {
   useWriteTexasHoldemRoomJoinGame,
   useWriteTexasHoldemRoomLeaveGame,
-  useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useWatchTexasHoldemRoomEvent,
   useWatchDeckHandlerEvent,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { zeroAddress } from "viem";
-import { useAccount, useConnect, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useEffect, useMemo, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { getCommunityCards, getMyCardsIndexes } from "../../../lib/utils";
@@ -42,6 +41,8 @@ import { toast } from "sonner";
 import { Coins, LogOut, OctagonAlert } from "lucide-react";
 import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
 import { useSetEventLogEncryptedDeck } from "../../../hooks/eventLogEncryptedDeck";
+import useInactive from "../../../hooks/useInactive";
+import { useInterval } from "../../../hooks/useInterval";
 
 // export function generateStaticParams() {
 //   // should render for all /room/[roomIds]
@@ -51,7 +52,8 @@ import { useSetEventLogEncryptedDeck } from "../../../hooks/eventLogEncryptedDec
 export default function Room() {
   const params = useParams();
   const { address } = useAccount();
-  const { connectors, connect } = useConnect();
+  const isInactive = useInactive(10 * 60 * 1000); // after 10 minutes, stop polling the rpc for contract data
+
   const roomId = params.roomId as string;
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
   const { data: invalidCards } = useInvalidCards();
@@ -63,10 +65,6 @@ export default function Room() {
   const { mutate: setEventLogEncryptedDeck } = useSetEventLogEncryptedDeck();
   console.log("room page.tsx invalidCards", invalidCards);
 
-  const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
-    useReadTexasHoldemRoomGetPlayerIndexFromAddr({
-      args: [address as `0x${string}`],
-    });
   const { data: players, refetch: refetchPlayers } = useGetPlayers();
   const {
     data: roomData,
@@ -75,11 +73,7 @@ export default function Room() {
   } = useGetBulkRoomData();
   const { data: roundKeys } = useRoundKeys(roomId, Number(roomData?.roundNumber));
 
-  console.log(
-    "/room/[roomId] useReadTexasHoldemRoom non-bulk properties",
-    players,
-    getPlayerIndexFromAddr,
-  );
+  console.log("/room/[roomId] useReadTexasHoldemRoom non-bulk properties", players);
   console.log(
     "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties, roomDataError",
     roomData,
@@ -112,17 +106,28 @@ export default function Room() {
       lastUpdatedByPlayerAddress: zeroAddress,
       cardIndiciesUpdated: undefined,
     });
-    refetchGetPlayerIndexFromAddr();
     refetchPlayers();
     refetchRoomData();
   }, [
     roomData?.roundNumber,
     setInvalidCards,
     setPlayerCards,
-    refetchGetPlayerIndexFromAddr,
     refetchPlayers,
     refetchRoomData,
   ]);
+
+  useInterval(async () => {
+    if (!isInactive) {
+      // console.log("10s polling for updates...");
+      refetchRoomData();
+      refetchPlayers();
+    } else {
+      console.log("10 minutes of inactivity detected, stopping polling contract data...");
+      toast.info(
+        "You have been inactive for 10 minutes. Stopping some updates until you return.",
+      );
+    }
+  }, 10000);
 
   const {
     data: txResultJoinGame,
@@ -153,7 +158,6 @@ export default function Room() {
       console.log("Texas Holdem Room event logs", logs);
       // refretch all contract data
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
 
       for (const log of logs) {
@@ -189,7 +193,6 @@ export default function Room() {
       }
       await new Promise((resolve) => setTimeout(resolve, 5000));
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
     },
   });
@@ -199,7 +202,6 @@ export default function Room() {
       console.log("Deck Handler event logs", logs);
       // refretch all contract data
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
       for (const log of logs) {
         if (log.eventName === "EncryptedShuffleSubmitted") {
@@ -235,7 +237,6 @@ export default function Room() {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
     },
   });
