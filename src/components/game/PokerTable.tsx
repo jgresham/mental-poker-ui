@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { type Room, type Player, MAX_PLAYERS, GameStageToString, GameStage, REVEAL_COMMUNITY_CARDS_STAGE } from "@/lib/types";
+import {
+  type Room,
+  type Player,
+  MAX_PLAYERS,
+  GameStageToString,
+  GameStage,
+  REVEAL_COMMUNITY_CARDS_STAGES,
+  ALL_REVEAL_CARDS_STAGES,
+} from "@/lib/types";
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
 import { useAccount, useConnections, useWaitForTransactionReceipt } from "wagmi";
@@ -19,11 +27,27 @@ import {
 import { ActionClock, DEFAULT_TIME_LIMIT_SEC } from "./ActionClock";
 import { DevModeToggle } from "../DevModeToggle";
 import { useDevMode } from "../../hooks/devMode";
-import { ADMIN_ADDRESSES, getCommunityCardIndexes, getMyCardsIndexes, getOtherPlayersCardsIndexes } from "../../lib/utils";
+import {
+  ADMIN_ADDRESSES,
+  getCommunityCardIndexes,
+  getMyCardsIndexes,
+  getOtherPlayersCardsIndexes,
+} from "../../lib/utils";
 import { toast } from "sonner";
 import { TimerReset } from "lucide-react";
-import { bigintToHexString, g2048, generateC1, modInverse, p256 } from "../../lib/elgamal-commutative-node-1chunk";
-import { decryptCard, DECK, formatCardDeckForShuffleAndEncrypt, shuffleAndEncryptDeck } from "../../lib/encrypted-poker-1chunk";
+import {
+  bigintToHexString,
+  g2048,
+  generateC1,
+  modInverse,
+  p256,
+} from "../../lib/elgamal-commutative-node-1chunk";
+import {
+  decryptCard,
+  DECK,
+  formatCardDeckForShuffleAndEncrypt,
+  shuffleAndEncryptDeck,
+} from "../../lib/encrypted-poker-1chunk";
 import * as bigintModArith from "bigint-mod-arith";
 
 interface PokerTableProps {
@@ -45,7 +69,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     useWriteTexasHoldemRoomReportInvalidCards();
   const { writeContractAsync: reportIdlePlayer } =
     useWriteTexasHoldemRoomReportIdlePlayer();
-  const { writeContractAsync: resetRound, isPending: isResettingRound } = useWriteTexasHoldemRoomResetRound();
+  const { writeContractAsync: resetRound, isPending: isResettingRound } =
+    useWriteTexasHoldemRoomResetRound();
   const [txHashResetRound, setTxHashResetRound] = useState<`0x${string}` | undefined>(
     undefined,
   );
@@ -63,8 +88,14 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     isError: isSubmittingRevealMyCardsError,
     error: txErrorSubmittingRevealMyCards,
   } = useWriteDeckHandlerRevealMyCards();
-  console.log("isSubmittingRevealMyCards", isSubmittingRevealMyCards, isSubmittingRevealMyCardsSuccess, isSubmittingRevealMyCardsError, txErrorSubmittingRevealMyCards);
-  
+  console.log(
+    "isSubmittingRevealMyCards",
+    isSubmittingRevealMyCards,
+    isSubmittingRevealMyCardsSuccess,
+    isSubmittingRevealMyCardsError,
+    txErrorSubmittingRevealMyCards,
+  );
+
   const {
     writeContractAsync: submitDecryptionValues,
     isPending: isSubmittingDecryptionValues,
@@ -72,8 +103,14 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     isError: isSubmittingDecryptionValuesError,
     error: txErrorSubmittingDecryptionValues,
   } = useWriteDeckHandlerSubmitDecryptionValues();
-  console.log("isSubmittingDecryptionValues", isSubmittingDecryptionValues, isSubmittingDecryptionValuesSuccess, isSubmittingDecryptionValuesError, txErrorSubmittingDecryptionValues);
-  
+  console.log(
+    "isSubmittingDecryptionValues",
+    isSubmittingDecryptionValues,
+    isSubmittingDecryptionValuesSuccess,
+    isSubmittingDecryptionValuesError,
+    txErrorSubmittingDecryptionValues,
+  );
+
   const [isCurrentPlayerIsIdle, setIsCurrentPlayerIsIdle] = useState(false);
   const [hasPromptedStageObligation, setHasPromptedStageObligation] =
     useState<GameStage | null>(null);
@@ -111,7 +148,6 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     hash: txHashResetRound,
   });
 
-
   useEffect(() => {
     if (room?.stage !== hasPromptedStageObligation) {
       console.log("stage changed, resetting prompt for stage obligation to null");
@@ -142,7 +178,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       toast.error(`Failed to reset round: ${txErrorResetRound?.message}`);
     }
   }, [txResultResetRound, isTxSuccessResetRound, isTxErrorResetRound, txErrorResetRound]);
-  
+
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (room) {
@@ -178,9 +214,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     };
   }, [room]);
 
-
   useEffect(() => {
-    console.log("waiting for vars to be ready to call handleObligation", isPlayerTurn)
+    console.log("waiting for vars to be ready to call handleObligation", isPlayerTurn);
     if (connections.length === 0 && connector === undefined) {
       console.log("no wagmi connections yet. connector", connector);
       return;
@@ -211,8 +246,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     }
     if (
       room.stage !== GameStage.Shuffle &&
-      room.stage !== GameStage.RevealDeal &&
-      !REVEAL_COMMUNITY_CARDS_STAGE.includes(room.stage) &&
+      !ALL_REVEAL_CARDS_STAGES.includes(room.stage) &&
       room.stage !== GameStage.Showdown
     ) {
       console.log("not a valid stage for obligation");
@@ -228,10 +262,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     player?.seatPosition,
     roundKeys,
     connections,
-    connector
+    connector,
   ]);
-
-
 
   if (!room) {
     return <p>Loading...</p>;
@@ -264,7 +296,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     }
     // if reveal cards, call submitDecryptionValues
     if (
-      REVEAL_COMMUNITY_CARDS_STAGE.includes(room.stage) &&
+      REVEAL_COMMUNITY_CARDS_STAGES.includes(room.stage) &&
       !isSubmittingDecryptionValues
     ) {
       console.log("BACKGROUND OBLIGATION: REVEAL COMMUNITY CARDS");
@@ -290,7 +322,6 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       );
     }
   };
-
 
   const handleShuffle = async () => {
     console.log("handleShuffle", room.encryptedDeck);
@@ -602,7 +633,6 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     });
   };
 
-
   const handleResetRound = async () => {
     try {
       const hash = await resetRound({
@@ -610,7 +640,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       });
       setTxHashResetRound(hash);
     } catch (error) {
-      console.error("Error joining game:", error);
+      console.error("Error resetting round:", error);
     }
   };
 
@@ -632,29 +662,31 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
           <br />
           last action: {lastActionTimestamp}
           <br />
-        <ActionClock lastActionTimestamp={lastActionTimestamp} />
-        <br />
-        Keys:
-        <br />
-        r: {roundKeys?.r?.toString().substring(0, 5)}
-        <br />
-        pub: {roundKeys?.publicKey?.toString().substring(0, 5)}
-        <br />
+          <ActionClock lastActionTimestamp={lastActionTimestamp} />
+          <br />
+          Keys:
+          <br />
+          r: {roundKeys?.r?.toString().substring(0, 5)}
+          <br />
+          pub: {roundKeys?.publicKey?.toString().substring(0, 5)}
+          <br />
           priv: {roundKeys?.privateKey?.toString().substring(0, 5)}
         </div>
       )}
       <div className="absolute z-10 bottom-25 right-0">
-      {address && ADMIN_ADDRESSES.includes(address) && (
+        {address && ADMIN_ADDRESSES.includes(address) && (
           <Button
             onClick={handleResetRound}
             variant="ghost"
             disabled={isResettingRound || isWaitingForTxResetRound}
           >
-            {isResettingRound
-              ? "Submitting..."
-              : isWaitingForTxResetRound
-                ? "Resetting..."
-                : <TimerReset />}
+            {isResettingRound ? (
+              "Submitting..."
+            ) : isWaitingForTxResetRound ? (
+              "Resetting..."
+            ) : (
+              <TimerReset />
+            )}
           </Button>
         )}
         <DevModeToggle />
@@ -664,7 +696,13 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
         <div className="absolute top-[30%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-sm">
           Pot: ${pot}
         </div>
-        {(isSubmittingEncryptedDeckError || isSubmittingDecryptionValuesError || isSubmittingRevealMyCardsError) && (
+        {((stage === GameStage.Showdown && isSubmittingRevealMyCardsSuccess !== true) ||
+          (stage === GameStage.Shuffle &&
+            isSubmittingEncryptedDeckSuccess !== true &&
+            isPlayerTurn) ||
+          (ALL_REVEAL_CARDS_STAGES.includes(stage) &&
+            isSubmittingDecryptionValuesSuccess !== true &&
+            isPlayerTurn)) && (
           <Button
             variant="secondary"
             size="sm"
@@ -672,9 +710,15 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
             onClick={handleObligation}
           >
             Submit
-            {isSubmittingEncryptedDeckError ? " Encrypted Deck" : isSubmittingDecryptionValuesError ? " Decryption Values" : " Reveal My Cards"}
+            {stage === GameStage.Shuffle
+              ? " Encrypted Deck"
+              : stage === GameStage.Showdown
+                ? " Reveal My Cards"
+                : ALL_REVEAL_CARDS_STAGES.includes(stage)
+                  ? " Decryption Values"
+                  : ""}
           </Button>
-      )}
+        )}
         {/* {(invalidCards?.areInvalid || true) && ( */}
         {invalidCards?.areInvalid && (
           <Button

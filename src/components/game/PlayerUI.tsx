@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useEnsAvatar, useEnsName } from "wagmi";
-import { Clock } from "lucide-react";
+import { Clock, LogOut, LogIn } from "lucide-react";
 import { toast } from "sonner";
 import {
   usePlayerCards,
@@ -44,6 +44,8 @@ export function PlayerUI({
     isAllIn,
     currentStageBet,
     avatarUrl,
+    leavingAfterRoundEnds,
+    joinedAndWaitingForNextRound,
   } = player;
 
   const { data: ensName } = useEnsName({ address: addr as `0x${string}` });
@@ -97,10 +99,10 @@ export function PlayerUI({
         .toUpperCase()
     : addr?.slice(2, 4);
 
-    let avatarSrc = avatarUrl;
-    if(avatarUrl === undefined) {
-      avatarSrc = ensAvatar ?? undefined;
-    }
+  let avatarSrc = avatarUrl;
+  if (avatarUrl === undefined) {
+    avatarSrc = ensAvatar ?? undefined;
+  }
 
   const PlayerInfoSection = () => (
     <div className="flex items-center gap-1 mb-1 w-full">
@@ -138,6 +140,12 @@ export function PlayerUI({
                   </div>
                 </>
               )}
+              {leavingAfterRoundEnds && (
+                <>
+                  <div>Leaving:</div>
+                  <div>true</div>
+                </>
+              )}
               {currentStageBet > 0 && (
                 <>
                   <div>Current Bet:</div>
@@ -149,7 +157,6 @@ export function PlayerUI({
         </PopoverContent>
       </Popover>
       <div className="flex flex-col overflow-hidden">
-        {isCurrentUser && <span className="text-xs font-medium truncate">ME</span>}
         {/* <span className="text-xs font-medium truncate">{displayName}</span> */}
         <span className="text-xs font-bold">${chips}</span>
       </div>
@@ -188,11 +195,21 @@ export function PlayerUI({
           F
         </Badge>
       )}
+      {leavingAfterRoundEnds && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          <LogOut size={8} strokeWidth={1} />
+        </Badge>
+      )}
+      {joinedAndWaitingForNextRound && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          <LogIn size={8} strokeWidth={1} />
+        </Badge>
+      )}
     </div>
   );
 
   const renderCardContent = (cardIndex: number) =>
-    (cards[cardIndex] && stage !== undefined && stage >= GameStage.Preflop) ? (
+    cards[cardIndex] && stage !== undefined && stage >= GameStage.Preflop ? (
       <Card
         card={{
           ...cards[cardIndex],

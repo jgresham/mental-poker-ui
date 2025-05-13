@@ -19,7 +19,7 @@ export default defineConfig({
           // Foundry Anvil local
           31337: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
           // Base Sepolia
-          84532: "0xb1d348bbf62A46EDE1bafC6647947c89632120d8",
+          84532: "0xf6e446dEA97c5AD07a1bE08C5338250C6831AD35",
           // Base Mainnet
           8453: "0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9",
           // Optimism Mainnet
@@ -31,7 +31,7 @@ export default defineConfig({
           // Foundry Anvil local
           31337: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
           // Base Sepolia
-          84532: "0x8088B7394EDb2A0a15539EF5e63FD3cf03549AB6",
+          84532: "0xbD53c2fD36B4fc97E4869A3e13656da93348C712",
           // Base Mainnet
           8453: "0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6",
           // Optimism Mainnet

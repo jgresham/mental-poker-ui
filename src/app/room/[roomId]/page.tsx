@@ -7,13 +7,14 @@ import { PokerTable } from "@/components/game/PokerTable";
 import { GameControls } from "@/components/game/GameControls";
 import {
   useWriteTexasHoldemRoomJoinGame,
+  useWriteTexasHoldemRoomLeaveGame,
   useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useWatchTexasHoldemRoomEvent,
   useWatchDeckHandlerEvent,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { zeroAddress } from "viem";
-import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useConnect, useWaitForTransactionReceipt } from "wagmi";
 import { useEffect, useMemo, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { getCommunityCards, getMyCardsIndexes } from "../../../lib/utils";
@@ -24,13 +25,19 @@ import {
   useSetInvalidCards,
   useSetPlayerCards,
 } from "../../../hooks/localRoomState";
-import { type Room as RoomType, type Card, GameStage, MAX_PLAYERS } from "../../../lib/types";
+import {
+  type Room as RoomType,
+  type Card,
+  GameStage,
+  MAX_PLAYERS,
+  BETTING_STAGES,
+} from "../../../lib/types";
 import { p256 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { generateC1 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { g2048 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { decryptCard } from "../../../lib/encrypted-poker-1chunk";
 import { toast } from "sonner";
-import { Coins, LogOut, OctagonAlert} from "lucide-react";
+import { Coins, LogOut, OctagonAlert } from "lucide-react";
 import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
 
 // export function generateStaticParams() {
@@ -41,6 +48,7 @@ import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
 export default function Room() {
   const params = useParams();
   const { address } = useAccount();
+  const { connectors, connect } = useConnect();
   const roomId = params.roomId as string;
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
   const { data: invalidCards } = useInvalidCards();
@@ -54,7 +62,11 @@ export default function Room() {
       args: [address as `0x${string}`],
     });
   const { data: players, refetch: refetchPlayers } = useGetPlayers();
-  const { data: roomData, error: roomDataError, refetch: refetchRoomData } = useGetBulkRoomData();
+  const {
+    data: roomData,
+    error: roomDataError,
+    refetch: refetchRoomData,
+  } = useGetBulkRoomData();
   const { data: roundKeys } = useRoundKeys(roomId, Number(roomData?.roundNumber));
 
   console.log(
@@ -65,11 +77,13 @@ export default function Room() {
   console.log(
     "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties, roomDataError",
     roomData,
-    JSON.stringify(roomDataError)
+    JSON.stringify(roomDataError),
   );
 
   const { writeContractAsync: joinGame, isPending: isJoiningGame } =
     useWriteTexasHoldemRoomJoinGame();
+
+  const { writeContractAsync: leaveGame } = useWriteTexasHoldemRoomLeaveGame();
 
   const [txHashJoinGame, setTxHashJoinGame] = useState<`0x${string}` | undefined>(
     undefined,
@@ -124,7 +138,7 @@ export default function Room() {
     //   }[];
     // }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onLogs: async(logs: any) => {
+    onLogs: async (logs: any) => {
       console.log("Texas Holdem Room event logs", logs);
       // refretch all contract data
       refetchRoomData();
@@ -152,11 +166,13 @@ export default function Room() {
         }
         if (log.eventName === "PlayerJoined") {
           console.log("PlayerJoined event log", log);
-          if(log.args.player !== address) {
-            toast.info(
-              `Player ${log.args.player} joined the game.`,
-            );
+          if (log.args.player !== address) {
+            toast.info(`Player ${log.args.player} joined the room.`);
           }
+        }
+        if (log.eventName === "PlayerLeft") {
+          console.log("PlayerLeft event log", log);
+          toast.info(`Player ${log.args.player} left the room.`);
         }
       }
       // sleep 3 seconds
@@ -219,13 +235,7 @@ export default function Room() {
     //  else {
     //   setPlayerCards(["", ""]);
     // }
-  }, [
-    playerCards,
-    roomData,
-    roundKeys,
-    players,
-    address,
-  ]);
+  }, [playerCards, roomData, roundKeys, players, address]);
 
   // Destructure all properties except encryptedDeck to keep it mutable
   const {
@@ -247,9 +257,8 @@ export default function Room() {
   // Access encryptedDeck directly from roomData to keep it mutable
   const encryptedDeck = useMemo(() => roomData?.encryptedDeck.concat() || [], [roomData]);
 
-
   // const handleDecryptMyCardsLocally = useCallback(async () => {
-    const handleDecryptMyCardsLocally = async () => {
+  const handleDecryptMyCardsLocally = async () => {
     console.log("handleDecryptMyCardsLocally");
 
     if (encryptedDeck === undefined) {
@@ -274,7 +283,7 @@ export default function Room() {
       console.error("handleDecryptMyCardsLocally: players is undefined");
       return;
     }
-    if(dealerPosition === undefined) {
+    if (dealerPosition === undefined) {
       console.error("handleDecryptMyCardsLocally: dealer position is undefined");
       return;
     }
@@ -343,6 +352,7 @@ export default function Room() {
       setTxHashJoinGame(hash);
     } catch (error) {
       console.error("Error joining game:", error);
+      toast.error(`Error joining game: ${error.shortMessage}`);
     }
   };
 
@@ -393,8 +403,8 @@ export default function Room() {
     setCommunityCards([]);
   }, [roomData, setInvalidCards, encryptedDeck]);
 
-  // Handle leaving game
-  const handleLeaveGame = () => {
+  // Handle leaving game (player leaves at the end of the round)
+  const handleLeaveGame = async () => {
     // ask the user to confirm they want to leave
     // if they leave during a round, warn them:
     // that their hand will be folded and they will forfeit any of their chips in the pot
@@ -405,6 +415,11 @@ export default function Room() {
         "Are you sure you want to leave the game? Any chips in the pot will be forfeited.",
       )
     ) {
+      console.log("calling leaveGame");
+      const txHash = await leaveGame({
+        args: [],
+      });
+      console.log("txHash", txHash);
       // Handle leaving logic here
       // router.push("/");
       console.log("leaving game confirmed");
@@ -412,47 +427,64 @@ export default function Room() {
   };
 
   const loggedInPlayer = players?.find((player) => player.addr === address);
-  const isPlayerLoggedInAndInTheRoom = address !== undefined && loggedInPlayer !== undefined;
+  const isPlayerLoggedInAndInTheRoom =
+    address !== undefined && loggedInPlayer !== undefined;
   // console.log("isPlayerLoggedInAndInTheRoom", isPlayerLoggedInAndInTheRoom);
   // console.log("loggedInPlayer", loggedInPlayer);
-  const countOfPlayers = players?.reduce((acc, player) => acc + (player.addr !== zeroAddress ? 1 : 0), 0);
+  const countOfPlayers = players?.reduce(
+    (acc, player) => acc + (player.addr !== zeroAddress ? 1 : 0),
+    0,
+  );
   // console.log("countOfPlayers", countOfPlayers);
   const isLoggedInAndIsTurn = loggedInPlayer?.playerIndex === currentPlayerIndex;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between overflow-hidden">
       <div className="absolute top-1 left-1 z-20 flex flex-row gap-2">
-        {!isPlayerLoggedInAndInTheRoom && countOfPlayers !== undefined && countOfPlayers < MAX_PLAYERS && (
-        <Button
-            onClick={handleJoinGame}
-            variant="default"
-            size="lg"
-            disabled={isJoiningGame || isWaitingForTxJoinGame}
-          >
-            <Coins className="w-8 h-8" />
-            <span className="text-lg">
-              {isJoiningGame
-                ? "Joining..."
-                : isWaitingForTxJoinGame
+        {!isPlayerLoggedInAndInTheRoom &&
+          countOfPlayers !== undefined &&
+          countOfPlayers < MAX_PLAYERS && (
+            <Button
+              onClick={handleJoinGame}
+              variant="default"
+              size="lg"
+              disabled={isJoiningGame || isWaitingForTxJoinGame}
+            >
+              <Coins className="w-8 h-8" />
+              <span className="text-lg">
+                {isJoiningGame
                   ? "Joining..."
-                  : "Join Game"}
-            </span>
-          </Button>
-       )}
-       {isPlayerLoggedInAndInTheRoom && (
-             <div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 text-xs px-2 text-white"
-            onClick={handleLeaveGame}
-          >
-            {/* todo: confirmation dialog */}
-            <LogOut size={16} strokeWidth={2} />
-          </Button>
-        </div>
-       )}
-    </div>
+                  : isWaitingForTxJoinGame
+                    ? "Joining..."
+                    : "Join Game"}
+              </span>
+            </Button>
+          )}
+        {/* {connectors
+          .filter((connector) => connector.name === "Coinbase Wallet")
+          .map((connector) => (
+            <button
+              key={connector.uid}
+              onClick={() => connect({ connector })}
+              type="button"
+            >
+              Sign in with Smart Wallet
+            </button>
+          ))} */}
+        {isPlayerLoggedInAndInTheRoom && (
+          <div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs px-2 text-white"
+              onClick={handleLeaveGame}
+            >
+              {/* todo: confirmation dialog */}
+              <LogOut size={16} strokeWidth={2} />
+            </Button>
+          </div>
+        )}
+      </div>
       <div className="absolute top-1 right-1 z-20 flex flex-row gap-2">
         <ConnectButton
           accountStatus={{
@@ -460,11 +492,14 @@ export default function Room() {
             largeScreen: "full",
           }}
         />
-
       </div>
       <div className="absolute top-[15%] z-20 flex flex-row gap-2">
-        {roomDataError && <span className="text-red-500 bg-white/60 rounded-md p-2 flex flex-row gap-2"><OctagonAlert />{roomDataError.shortMessage}</span>}
-
+        {roomDataError && (
+          <span className="text-red-500 bg-white/60 rounded-md p-2 flex flex-row gap-2">
+            <OctagonAlert />
+            {roomDataError.shortMessage}
+          </span>
+        )}
       </div>
       <div className="w-full h-full relative">
         <>
@@ -482,7 +517,9 @@ export default function Room() {
             player={players?.find((player) => player.addr === address)}
           />
 
-          <div className={`${isLoggedInAndIsTurn ? "block" : "hidden"}`}>
+          <div
+            className={`${isLoggedInAndIsTurn && BETTING_STAGES.includes(stage) ? "block" : "hidden"}`}
+          >
             <GameControls
               room={{
                 id: roomId,
@@ -506,7 +543,7 @@ export default function Room() {
           </div>
         </>
       </div>
-      <ErudaEnabler/>
+      <ErudaEnabler />
     </main>
   );
 }
