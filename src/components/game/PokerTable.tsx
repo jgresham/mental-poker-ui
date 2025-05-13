@@ -8,6 +8,7 @@ import {
   GameStageToString,
   GameStage,
   REVEAL_COMMUNITY_CARDS_STAGES,
+  ALL_REVEAL_CARDS_STAGES,
 } from "@/lib/types";
 import { PlayerUI } from "./PlayerUI";
 import { Card } from "./Card";
@@ -245,8 +246,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     }
     if (
       room.stage !== GameStage.Shuffle &&
-      room.stage !== GameStage.RevealDeal &&
-      !REVEAL_COMMUNITY_CARDS_STAGES.includes(room.stage) &&
+      !ALL_REVEAL_CARDS_STAGES.includes(room.stage) &&
       room.stage !== GameStage.Showdown
     ) {
       console.log("not a valid stage for obligation");
@@ -640,7 +640,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       });
       setTxHashResetRound(hash);
     } catch (error) {
-      console.error("Error joining game:", error);
+      console.error("Error resetting round:", error);
     }
   };
 
@@ -700,7 +700,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
           (stage === GameStage.Shuffle &&
             isSubmittingEncryptedDeckSuccess !== true &&
             isPlayerTurn) ||
-          (REVEAL_COMMUNITY_CARDS_STAGES.includes(stage) &&
+          (ALL_REVEAL_CARDS_STAGES.includes(stage) &&
             isSubmittingDecryptionValuesSuccess !== true &&
             isPlayerTurn)) && (
           <Button
@@ -714,7 +714,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
               ? " Encrypted Deck"
               : stage === GameStage.Showdown
                 ? " Reveal My Cards"
-                : REVEAL_COMMUNITY_CARDS_STAGES.includes(stage)
+                : ALL_REVEAL_CARDS_STAGES.includes(stage)
                   ? " Decryption Values"
                   : ""}
           </Button>

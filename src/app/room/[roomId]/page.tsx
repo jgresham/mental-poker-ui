@@ -352,6 +352,7 @@ export default function Room() {
       setTxHashJoinGame(hash);
     } catch (error) {
       console.error("Error joining game:", error);
+      toast.error(`Error joining game: ${error.shortMessage}`);
     }
   };
 
@@ -459,7 +460,7 @@ export default function Room() {
               </span>
             </Button>
           )}
-        {connectors
+        {/* {connectors
           .filter((connector) => connector.name === "Coinbase Wallet")
           .map((connector) => (
             <button
@@ -469,7 +470,7 @@ export default function Room() {
             >
               Sign in with Smart Wallet
             </button>
-          ))}
+          ))} */}
         {isPlayerLoggedInAndInTheRoom && (
           <div>
             <Button

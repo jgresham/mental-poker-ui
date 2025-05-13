@@ -157,7 +157,6 @@ export function PlayerUI({
         </PopoverContent>
       </Popover>
       <div className="flex flex-col overflow-hidden">
-        {isCurrentUser && <span className="text-xs font-medium truncate">ME</span>}
         {/* <span className="text-xs font-medium truncate">{displayName}</span> */}
         <span className="text-xs font-bold">${chips}</span>
       </div>
