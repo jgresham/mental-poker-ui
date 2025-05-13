@@ -146,7 +146,7 @@ export function bigintToHexString(chunk: bigint): `0x${string}` {
   const strippedPrefix = chunk.toString(16).startsWith("0x")
     ? chunk.toString(16).slice(2)
     : chunk.toString(16);
-  return `0x${strippedPrefix.padStart(512, "0")}` as `0x${string}`;
+  return `0x${strippedPrefix.padStart(64, "0")}` as `0x${string}`;
 }
 
 // Modular multiplicative inverse

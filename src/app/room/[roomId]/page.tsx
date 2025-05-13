@@ -31,6 +31,8 @@ import {
   GameStage,
   MAX_PLAYERS,
   BETTING_STAGES,
+  HandRank,
+  stringCardsToCards,
 } from "../../../lib/types";
 import { p256 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { generateC1 } from "../../../lib/elgamal-commutative-node-1chunk";
@@ -39,6 +41,7 @@ import { decryptCard } from "../../../lib/encrypted-poker-1chunk";
 import { toast } from "sonner";
 import { Coins, LogOut, OctagonAlert } from "lucide-react";
 import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
+import { useSetEventLogEncryptedDeck } from "../../../hooks/eventLogEncryptedDeck";
 
 // export function generateStaticParams() {
 //   // should render for all /room/[roomIds]
@@ -55,6 +58,9 @@ export default function Room() {
   const { mutate: setInvalidCards } = useSetInvalidCards();
   const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
+
+  // const { data: eventLogEncryptedDeck } = useEventLogEncryptedDeck();
+  const { mutate: setEventLogEncryptedDeck } = useSetEventLogEncryptedDeck();
   console.log("room page.tsx invalidCards", invalidCards);
 
   const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
@@ -100,6 +106,11 @@ export default function Room() {
       areInvalid: false,
       playerOrCommunityCards: undefined,
       cardIndices: undefined,
+    });
+    setEventLogEncryptedDeck({
+      encryptedDeck: [],
+      lastUpdatedByPlayerAddress: zeroAddress,
+      cardIndiciesUpdated: undefined,
     });
     refetchGetPlayerIndexFromAddr();
     refetchPlayers();
@@ -156,6 +167,7 @@ export default function Room() {
           console.log("PotWon event log", log);
           toast.info(
             `Pot ${log.args.amount} chips won by player ${log.args.winners.join(", ")}!`,
+            { duration: 30000 }, // 30s
           );
         }
         if (log.eventName === "IdlePlayerKicked") {
@@ -175,9 +187,7 @@ export default function Room() {
           toast.info(`Player ${log.args.player} left the room.`);
         }
       }
-      // sleep 3 seconds
-      console.log("sleeping 3 seconds");
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       refetchRoomData();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
@@ -191,9 +201,39 @@ export default function Room() {
       refetchRoomData();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
-      // sleep 3 seconds
-      console.log("sleeping 3 seconds");
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      for (const log of logs) {
+        if (log.eventName === "EncryptedShuffleSubmitted") {
+          console.log("EncryptedShuffleSubmitted event log", log);
+          // toast.info(
+          //   `Encrypted shuffle submitted by player ${log.args.player}. Restarting round...`,
+          // );
+          setEventLogEncryptedDeck({
+            encryptedDeck: log.args.encryptedShuffle,
+            lastUpdatedByPlayerAddress: log.args.player,
+          });
+        }
+        if (log.eventName === "DecryptionValuesSubmitted") {
+          console.log("DecryptionValuesSubmitted event log", log);
+          const newEncryptedDeck = log.args.decryptionValues as string[];
+          setEventLogEncryptedDeck({
+            encryptedDeck: log.args.decryptionValues,
+            lastUpdatedByPlayerAddress: log.args.player,
+            cardIndiciesUpdated: log.args.cardIndexes,
+          });
+        }
+        if (log.eventName === "PlayerCardsRevealed") {
+          console.log("PlayerCardsRevealed event log", log);
+          toast.info(
+            `Player ${log.args.player} revealed their cards: 
+              ${stringCardsToCards([log.args.card1, log.args.card2])
+                .map((card) => card.rank + card.suit)
+                .join(", ")}, a ${HandRank[log.args.rank]}! Score: ${log.args.handScore}`,
+            { duration: 30000 }, // 30s
+          );
+        }
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       refetchRoomData();
       refetchGetPlayerIndexFromAddr();
       refetchPlayers();
@@ -350,9 +390,14 @@ export default function Room() {
         args: [],
       });
       setTxHashJoinGame(hash);
-    } catch (error) {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    } catch (error: any) {
       console.error("Error joining game:", error);
-      toast.error(`Error joining game: ${error.shortMessage}`);
+      if (error?.shortMessage) {
+        toast.error(`Error joining game: ${error.shortMessage}`);
+      } else {
+        toast.error(`Error joining game: ${error}`);
+      }
     }
   };
 

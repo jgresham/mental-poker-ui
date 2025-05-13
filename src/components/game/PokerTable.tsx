@@ -49,6 +49,7 @@ import {
   shuffleAndEncryptDeck,
 } from "../../lib/encrypted-poker-1chunk";
 import * as bigintModArith from "bigint-mod-arith";
+import { useEventLogEncryptedDeck } from "../../hooks/eventLogEncryptedDeck";
 
 interface PokerTableProps {
   room?: Room;
@@ -63,6 +64,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   const { data: isDevMode } = useDevMode();
   const { address, connector } = useAccount();
   const { data: roundKeys } = useRoundKeys(room?.id, room?.roundNumber);
+  const { data: eventLogEncryptedDeck } = useEventLogEncryptedDeck();
   const { data: invalidCards } = useInvalidCards();
   console.log("PokerTable invalidCards", invalidCards);
   const { writeContractAsync: reportInvalidCards } =
@@ -120,9 +122,9 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   const [txHash2, setTxHash2] = useState<string | undefined>(undefined);
   const {
     data: txResult,
-    // isLoading: isWaitingForTx,
+    isLoading: isWaitingForTx,
     // isSuccess: isTxSuccess,
-    // isError: isTxError,
+    isError: isTxError2,
     error: txError2,
   } = useWaitForTransactionReceipt({
     hash: txHash2 as `0x${string}`,
@@ -134,9 +136,11 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   // console.log("txError2", txError2);
   // console.log("txError2.cause", txError2?.cause);
   // console.log("txError2 user message", txError2?.message.split("\n")[0]);
-  console.log("txError2 error message", txError2?.message);
-  console.log("txError2.stack", txError2?.stack);
-  // console.log("txError2.name", txError2?.name);
+  if (txError2) {
+    console.log("txError2 error message", txError2?.message);
+    console.log("txError2.stack", txError2?.stack);
+    // console.log("txError2.name", txError2?.name);
+  }
 
   const {
     data: txResultResetRound,
@@ -147,6 +151,28 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   } = useWaitForTransactionReceipt({
     hash: txHashResetRound,
   });
+
+  useEffect(() => {
+    if (txError2) {
+      console.log("useEffecttxError2", txError2);
+      // The 2nd part of this boolean is confusing because the tx can be submitted successfully,
+      // but still the tx can later be reverted or fail. That shows up in the txReceipt ("txError2").
+      if (isSubmittingEncryptedDeckError || isSubmittingEncryptedDeckSuccess) {
+        toast.error(`Failed to submit encrypted deck: ${txError2?.shortMessage}`);
+      }
+      if (isSubmittingRevealMyCardsError || isSubmittingRevealMyCardsSuccess) {
+        toast.error(`Failed to reveal my cards: ${txError2?.shortMessage}`);
+      }
+      if (isSubmittingDecryptionValuesError || isSubmittingDecryptionValuesSuccess) {
+        toast.error(`Failed to submit decryption values: ${txError2?.shortMessage}`);
+      }
+    }
+  }, [
+    txError2,
+    isSubmittingEncryptedDeckError,
+    isSubmittingRevealMyCardsError,
+    isSubmittingDecryptionValuesError,
+  ]);
 
   useEffect(() => {
     if (room?.stage !== hasPromptedStageObligation) {
@@ -215,7 +241,12 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   }, [room]);
 
   useEffect(() => {
-    console.log("waiting for vars to be ready to call handleObligation", isPlayerTurn);
+    console.log(
+      "waiting for vars to be ready to call handleObligation. isPlayerTurn",
+      isPlayerTurn,
+      "eventLogEncryptedDeck",
+      eventLogEncryptedDeck,
+    );
     if (connections.length === 0 && connector === undefined) {
       console.log("no wagmi connections yet. connector", connector);
       return;
@@ -263,6 +294,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     roundKeys,
     connections,
     connector,
+    eventLogEncryptedDeck,
   ]);
 
   if (!room) {
@@ -280,18 +312,19 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   } = room;
 
   const handleObligation = () => {
-    console.log("handleObligation called");
+    console.log("handleObligation called. eventLogEncryptedDeck", eventLogEncryptedDeck);
+    // if eventLogEncryptedDeck.encryptedDeck is set (whole deck in case of shuffle or card indicies from the deck
+    // in case of reveal cards) and is not equal to the room.encryptedDeck,
+    // then we should refetch the room.encrypted deck until they match
+
     // if shuffle, call submitEncryptedDeck
     if (room.stage === GameStage.Shuffle && !isSubmittingEncryptedDeck) {
       console.log("BACKGROUND OBLIGATION: SHUFFLE");
-      setHasPromptedStageObligation(GameStage.Shuffle);
       handleShuffle();
       // return submitEncryptedDeck({ args: [room.encryptedDeck] });
     }
     if (room.stage === GameStage.RevealDeal && !isSubmittingDecryptionValues) {
       console.log("BACKGROUND OBLIGATION: REVEAL PLAYER CARDS");
-      setHasPromptedStageObligation(GameStage.RevealDeal);
-      // submitDecryptionValues({ args: [[], []] });
       handleRevealPlayerCards();
     }
     // if reveal cards, call submitDecryptionValues
@@ -300,7 +333,6 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       !isSubmittingDecryptionValues
     ) {
       console.log("BACKGROUND OBLIGATION: REVEAL COMMUNITY CARDS");
-      setHasPromptedStageObligation(room.stage);
       handleRevealCommunityCards();
     }
 
@@ -309,10 +341,10 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       !player?.hasFolded &&
       !player?.joinedAndWaitingForNextRound &&
       room.stage === GameStage.Showdown &&
-      !isSubmittingRevealMyCards
+      !isSubmittingRevealMyCards &&
+      player?.handScore === 0 // > 0 if already revealed cards
     ) {
       console.log("BACKGROUND OBLIGATION: SHOWDOWN REVEAL MY CARDS");
-      setHasPromptedStageObligation(room.stage);
       handleSubmitRevealMyCards();
     } else if (room.stage === GameStage.Showdown) {
       console.log(
@@ -324,7 +356,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   };
 
   const handleShuffle = async () => {
-    console.log("handleShuffle", room.encryptedDeck);
+    console.log("handleShuffle", encryptedDeck);
     let deck: {
       c1: bigint;
       c2: bigint;
@@ -341,6 +373,16 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       console.error("handleShuffle: null round key found");
       return;
     }
+    if (
+      eventLogEncryptedDeck.encryptedDeck.length > 0 &&
+      encryptedDeck[0] !== eventLogEncryptedDeck.encryptedDeck[0]
+    ) {
+      console.warn(
+        "BACKGROUND OBLIGATION: SHUFFLE: handleShuffle eventLogEncryptedDeck.encryptedDeck.length > 0 && encryptedDeck[0] !== eventLogEncryptedDeck.encryptedDeck[0]",
+      );
+      return;
+    }
+
     if (player?.isDealer) {
       // new encrypted deck from unencrypted deck
       console.log("Deck before encrypted shuffle: ", DECK);
@@ -349,11 +391,11 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       console.log("Deck before encrypted shuffle, formatted deck: ", deck);
     } else {
       console.log("handleShuffle: encrypting and shuffling existing encrypted deck");
-      if (!room.encryptedDeck) {
+      if (!encryptedDeck) {
         console.error("handleShuffle: no encrypted deck");
         return;
       }
-      deck = room.encryptedDeck.map((card) => ({
+      deck = encryptedDeck.map((card) => ({
         c1: BigInt(0), // this c1 is not used in the encryption process
         c2: BigInt(card),
       }));
@@ -378,6 +420,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     console.log("submitEncryptedDeck encryptedDeckArray", encryptedDeckArray);
     // intentional bug: for testing invalid cards
     // encryptedDeckArray[0] = encryptedDeckArray[0].replace("2", "3") as `0x${string}`;
+    setHasPromptedStageObligation(GameStage.Shuffle);
+
     const txHash2 = await submitEncryptedDeck({
       args: [encryptedDeckArray],
     });
@@ -392,7 +436,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       return;
     }
     if (player?.seatPosition === undefined) {
-      console.error("handleRevealPlayerCards: player seat position is undefined");
+      console.error("handleSubmitRevealMyCards: player seat position is undefined");
       return;
     }
     if (
@@ -400,16 +444,16 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       roundKeys.publicKey === null ||
       roundKeys.r === null
     ) {
-      console.error("handleRevealPlayerCards: null round key found");
+      console.error("handleSubmitRevealMyCards: null round key found");
       return;
     }
     if (players === undefined || players === null) {
-      console.error("handleRevealPlayerCards: players is undefined");
+      console.error("handleSubmitRevealMyCards: players is undefined");
       return;
     }
     const dealerPosition = room?.dealerPosition;
     if (dealerPosition === undefined) {
-      console.error("handleRevealPlayerCards: dealer position is undefined");
+      console.error("handleSubmitRevealMyCards: dealer position is undefined");
       return;
     }
 
@@ -430,13 +474,21 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       bigintToHexString(roundKeys.privateKey),
       bigintToHexString(c1InversePowPrivateKey),
     ] as const;
-    console.log("handleSubmitRevealMyCards args", args);
+    console.log(
+      "handleSubmitRevealMyCards args",
+      args,
+      c1,
+      roundKeys.privateKey,
+      c1InversePowPrivateKey,
+    );
+    setHasPromptedStageObligation(stage);
     const txHash2 = await submitRevealMyCards({
       args,
     });
     console.log("txHash2", txHash2);
     setTxHash2(txHash2);
   }
+
   async function handleRevealPlayerCards() {
     console.log("handleRevealPlayerCards", encryptedDeck);
     if (encryptedDeck === undefined) {
@@ -476,6 +528,26 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       revealOtherPlayersCardsIndexes,
     );
 
+    for (const index of revealOtherPlayersCardsIndexes) {
+      // eventLog value may be undefined if the user was disconnected and/or refreshed after the log came in
+      if (
+        eventLogEncryptedDeck.encryptedDeck?.[index] !== undefined &&
+        encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index]
+      ) {
+        console.warn(
+          "BACKGROUND OBLIGATION: handleRevealPlayerCards encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index] for index: ",
+          index,
+          "Waiting for values to match",
+        );
+        console.log(
+          "eventLogEncryptedDeck.encryptedDeck",
+          eventLogEncryptedDeck.encryptedDeck,
+        );
+        console.log("encryptedDeck", encryptedDeck);
+        return;
+      }
+    }
+
     const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealOtherPlayersCardsIndexes.map((index) => {
@@ -492,7 +564,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     });
     console.log("decryptedCards", decryptedCards);
     const partiallyDecryptedCardsHexStrings = decryptedCards.map((card) => {
-      const hexstring = `0x${card.toString(16).padStart(512, "0")}` as `0x${string}`;
+      const hexstring = `0x${card.toString(16).padStart(64, "0")}` as `0x${string}`;
       if (hexstring.length % 2 !== 0) {
         console.log("hexstring not even", hexstring);
       }
@@ -507,6 +579,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     //   "2",
     //   "3",
     // ) as `0x${string}`;
+    setHasPromptedStageObligation(GameStage.RevealDeal);
     const txHash2 = await submitDecryptionValues({
       args: [revealOtherPlayersCardsIndexes, partiallyDecryptedCardsHexStrings],
     });
@@ -547,6 +620,26 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       revealCommunityCardsIndexes,
     );
 
+    for (const index of revealCommunityCardsIndexes) {
+      // eventLog value may be undefined if the user was disconnected and/or refreshed after the log came in
+      if (
+        eventLogEncryptedDeck.encryptedDeck?.[index] !== undefined &&
+        encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index]
+      ) {
+        console.warn(
+          "BACKGROUND OBLIGATION: handleRevealCommunityCardsIndexes encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index] for index: ",
+          index,
+          "Waiting for values to match",
+        );
+        console.log(
+          "eventLogEncryptedDeck.encryptedDeck",
+          eventLogEncryptedDeck.encryptedDeck,
+        );
+        console.log("encryptedDeck", encryptedDeck);
+        return;
+      }
+    }
+
     const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
     const decryptedCards = revealCommunityCardsIndexes.map((index) => {
@@ -563,7 +656,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     });
     console.log("decryptedCards", decryptedCards);
     const partiallyDecryptedCardsHexStrings = decryptedCards.map((card) => {
-      const hexstring = `0x${card.toString(16).padStart(512, "0")}` as `0x${string}`;
+      const hexstring = `0x${card.toString(16).padStart(64, "0")}` as `0x${string}`;
       if (hexstring.length % 2 !== 0) {
         console.log("hexstring not even", hexstring);
       }
@@ -573,6 +666,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       "submitDecryptionValues partiallyDecryptedCardsHexStrings",
       partiallyDecryptedCardsHexStrings,
     );
+    setHasPromptedStageObligation(room.stage);
+
     const txHash2 = await submitDecryptionValues({
       args: [revealCommunityCardsIndexes, partiallyDecryptedCardsHexStrings],
     });
@@ -666,11 +761,11 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
           <br />
           Keys:
           <br />
-          r: {roundKeys?.r?.toString().substring(0, 5)}
+          r: {roundKeys?.r?.toString(16).substring(0, 5)}
           <br />
-          pub: {roundKeys?.publicKey?.toString().substring(0, 5)}
+          pub: {roundKeys?.publicKey?.toString(16).substring(0, 5)}
           <br />
-          priv: {roundKeys?.privateKey?.toString().substring(0, 5)}
+          priv: {roundKeys?.privateKey?.toString(16).substring(0, 5)}
         </div>
       )}
       <div className="absolute z-10 bottom-25 right-0">
@@ -696,12 +791,16 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
         <div className="absolute top-[30%] left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full text-sm">
           Pot: ${pot}
         </div>
-        {((stage === GameStage.Showdown && isSubmittingRevealMyCardsSuccess !== true) ||
+        {/* If there is a txn error (revert) then show the button */}
+        {/* hide the btn while the txn is submitting */}
+        {((stage === GameStage.Showdown &&
+          !player?.handScore && // on refresh, this is how we know if the player has revealed their cards
+          (isSubmittingRevealMyCards !== true || txError2)) ||
           (stage === GameStage.Shuffle &&
-            isSubmittingEncryptedDeckSuccess !== true &&
+            (isSubmittingEncryptedDeck !== true || txError2) &&
             isPlayerTurn) ||
           (ALL_REVEAL_CARDS_STAGES.includes(stage) &&
-            isSubmittingDecryptionValuesSuccess !== true &&
+            (isSubmittingDecryptionValues !== true || txError2) &&
             isPlayerTurn)) && (
           <Button
             variant="secondary"
@@ -717,6 +816,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
                 : ALL_REVEAL_CARDS_STAGES.includes(stage)
                   ? " Decryption Values"
                   : ""}
+            {isWaitingForTx && "..."}
           </Button>
         )}
         {/* {(invalidCards?.areInvalid || true) && ( */}
