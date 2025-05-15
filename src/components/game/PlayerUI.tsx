@@ -4,6 +4,7 @@ import {
   stringCardsToCards,
   type Player,
   GameStage,
+  roughHandScoreToHandRank,
 } from "@/lib/types";
 import { Card } from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -203,6 +204,11 @@ export function PlayerUI({
       {joinedAndWaitingForNextRound && (
         <Badge variant="outline" className="text-xs py-0 px-1 h-5">
           <LogIn size={8} strokeWidth={1} />
+        </Badge>
+      )}
+      {player.handScore > 0 && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          {roughHandScoreToHandRank(Number(player.handScore))}
         </Badge>
       )}
     </div>

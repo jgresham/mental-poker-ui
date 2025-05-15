@@ -30,6 +30,7 @@ import { useDevMode } from "../../hooks/devMode";
 import {
   ADMIN_ADDRESSES,
   getCommunityCardIndexes,
+  getCountOfPlayersCounterClockwiseToDealer,
   getMyCardsIndexes,
   getOtherPlayersCardsIndexes,
 } from "../../lib/utils";
@@ -61,6 +62,7 @@ interface PokerTableProps {
 export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   console.log("PokerTable player", player);
 
+  const [copyOfRoomDeck, setCopyOfRoomDeck] = useState<`0x${string}`[] | undefined>();
   const { data: isDevMode } = useDevMode();
   const { address, connector } = useAccount();
   const { data: roundKeys } = useRoundKeys(room?.id, room?.roundNumber);
@@ -69,8 +71,10 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
   console.log("PokerTable invalidCards", invalidCards);
   const { writeContractAsync: reportInvalidCards } =
     useWriteTexasHoldemRoomReportInvalidCards();
-  const { writeContractAsync: reportIdlePlayer } =
-    useWriteTexasHoldemRoomReportIdlePlayer();
+  const {
+    writeContractAsync: reportIdlePlayer,
+    isPending: isSubmittingReportIdlePlayer,
+  } = useWriteTexasHoldemRoomReportIdlePlayer();
   const { writeContractAsync: resetRound, isPending: isResettingRound } =
     useWriteTexasHoldemRoomResetRound();
   const [txHashResetRound, setTxHashResetRound] = useState<`0x${string}` | undefined>(
@@ -157,14 +161,15 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       console.log("useEffecttxError2", txError2);
       // The 2nd part of this boolean is confusing because the tx can be submitted successfully,
       // but still the tx can later be reverted or fail. That shows up in the txReceipt ("txError2").
+      const typeTxError2 = txError2 as { shortMessage?: string } | undefined;
       if (isSubmittingEncryptedDeckError || isSubmittingEncryptedDeckSuccess) {
-        toast.error(`Failed to submit encrypted deck: ${txError2?.shortMessage}`);
+        toast.error(`Failed to submit encrypted deck: ${typeTxError2?.shortMessage}`);
       }
       if (isSubmittingRevealMyCardsError || isSubmittingRevealMyCardsSuccess) {
-        toast.error(`Failed to reveal my cards: ${txError2?.shortMessage}`);
+        toast.error(`Failed to reveal my cards: ${typeTxError2?.shortMessage}`);
       }
       if (isSubmittingDecryptionValuesError || isSubmittingDecryptionValuesSuccess) {
-        toast.error(`Failed to submit decryption values: ${txError2?.shortMessage}`);
+        toast.error(`Failed to submit decryption values: ${typeTxError2?.shortMessage}`);
       }
     }
   }, [
@@ -172,6 +177,9 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     isSubmittingEncryptedDeckError,
     isSubmittingRevealMyCardsError,
     isSubmittingDecryptionValuesError,
+    isSubmittingEncryptedDeckSuccess,
+    isSubmittingRevealMyCardsSuccess,
+    isSubmittingDecryptionValuesSuccess,
   ]);
 
   useEffect(() => {
@@ -311,11 +319,69 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     encryptedDeck,
   } = room;
 
+  useEffect(() => {
+    console.log(
+      "PT: useEffect encryptedDeck currentPlayerIndex",
+      encryptedDeck,
+      currentPlayerIndex,
+    );
+  }, [encryptedDeck, currentPlayerIndex]);
+
+  // dont think this works
+  const isEventLogDataAheadOfContractData = (
+    eventLogEncryptedDeckLastUpdatedByPlayerIndex: number,
+  ) => {
+    const eventLogPlayerDistanceToDealer = getCountOfPlayersCounterClockwiseToDealer(
+      eventLogEncryptedDeckLastUpdatedByPlayerIndex,
+      dealerPosition,
+      players,
+    );
+    const currentPlayerDistanceToDealer = getCountOfPlayersCounterClockwiseToDealer(
+      currentPlayerIndex,
+      dealerPosition,
+      players,
+    );
+    if (eventLogPlayerDistanceToDealer > currentPlayerDistanceToDealer) {
+      console.warn(
+        "handleObligation: eventLogPlayerDistanceToDealer > currentPlayerDistanceToDealer. This means the event log data is 'ahead' of the contract data.",
+      );
+      console.warn("eventLogPlayerDistanceToDealer", eventLogPlayerDistanceToDealer);
+      console.warn("currentPlayerDistanceToDealer", currentPlayerDistanceToDealer);
+      return true;
+    }
+    return false;
+  };
+
   const handleObligation = () => {
     console.log("handleObligation called. eventLogEncryptedDeck", eventLogEncryptedDeck);
     // if eventLogEncryptedDeck.encryptedDeck is set (whole deck in case of shuffle or card indicies from the deck
     // in case of reveal cards) and is not equal to the room.encryptedDeck,
     // then we should refetch the room.encrypted deck until they match
+    // if the player index of the event log deck is "closer" to the dealer than the contract data,
+    // then don't allow the user to submit the encrypted deck from the contract data
+    // if (
+    //   room.stage !== GameStage.Showdown && // going in a circle doing obligations
+    //   eventLogEncryptedDeck.lastUpdatedByPlayerIndex !== undefined &&
+    //   eventLogEncryptedDeck.encryptedDeck.length > 0
+    // ) {
+    //   console.log(
+    //     "handleObligation: eventLogEncryptedDeck.lastUpdatedByPlayerIndex",
+    //     eventLogEncryptedDeck.lastUpdatedByPlayerIndex,
+    //   );
+    //   console.log("handleObligation: currentPlayerIndex", currentPlayerIndex);
+    //   console.log(
+    //     "handleObligation: isEventLogDataAheadOfContractData",
+    //     isEventLogDataAheadOfContractData(eventLogEncryptedDeck.lastUpdatedByPlayerIndex),
+    //   );
+    //   if (
+    //     isEventLogDataAheadOfContractData(eventLogEncryptedDeck.lastUpdatedByPlayerIndex)
+    //   ) {
+    //     console.warn(
+    //       "BACKGROUND OBLIGATION: handleObligation: eventLogDataAheadOfContractData",
+    //     );
+    //     return;
+    //   }
+    // }
 
     // if shuffle, call submitEncryptedDeck
     if (room.stage === GameStage.Shuffle && !isSubmittingEncryptedDeck) {
@@ -373,15 +439,30 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       console.error("handleShuffle: null round key found");
       return;
     }
-    if (
-      eventLogEncryptedDeck.encryptedDeck.length > 0 &&
-      encryptedDeck[0] !== eventLogEncryptedDeck.encryptedDeck[0]
-    ) {
-      console.warn(
-        "BACKGROUND OBLIGATION: SHUFFLE: handleShuffle eventLogEncryptedDeck.encryptedDeck.length > 0 && encryptedDeck[0] !== eventLogEncryptedDeck.encryptedDeck[0]",
-      );
-      return;
-    }
+
+    // if (
+    //   eventLogEncryptedDeck.lastUpdatedByPlayerIndex !== undefined &&
+    //   eventLogEncryptedDeck.encryptedDeck.length > 0
+    // ) {
+    //   if (
+    //     isEventLogDataAheadOfContractData(eventLogEncryptedDeck.lastUpdatedByPlayerIndex)
+    //   ) {
+    //     console.warn("BACKGROUND OBLIGATION: SHUFFLE: eventLogDataAheadOfContractData");
+    //     return;
+    //   }
+    //   // if (encryptedDeck[0] !== eventLogEncryptedDeck.encryptedDeck[0]) {
+    //   //   console.warn(
+    //   //     "BACKGROUND OBLIGATION: SHUFFLE: handleShuffle eventLogEncryptedDeck.encryptedDeck.length > 0 && encryptedDeck[0] !== eventLogEncryptedDeck.encryptedDeck[0]",
+    //   //   );
+    //   //   console.warn(
+    //   //     "players[currentPlayerIndex]",
+    //   //     players[currentPlayerIndex],
+    //   //     currentPlayerIndex,
+    //   //   );
+    //   //   console.warn();
+    //   //   return;
+    //   // }
+    // }
 
     if (player?.isDealer) {
       // new encrypted deck from unencrypted deck
@@ -420,13 +501,15 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     console.log("submitEncryptedDeck encryptedDeckArray", encryptedDeckArray);
     // intentional bug: for testing invalid cards
     // encryptedDeckArray[0] = encryptedDeckArray[0].replace("2", "3") as `0x${string}`;
-    setHasPromptedStageObligation(GameStage.Shuffle);
+    if (hasPromptedStageObligation === null) {
+      setHasPromptedStageObligation(GameStage.Shuffle);
 
-    const txHash2 = await submitEncryptedDeck({
-      args: [encryptedDeckArray],
-    });
-    console.log("txHash2", txHash2);
-    setTxHash2(txHash2);
+      const txHash2 = await submitEncryptedDeck({
+        args: [encryptedDeckArray],
+      });
+      console.log("txHash2", txHash2);
+      setTxHash2(txHash2);
+    }
   };
 
   async function handleSubmitRevealMyCards() {
@@ -481,12 +564,15 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       roundKeys.privateKey,
       c1InversePowPrivateKey,
     );
-    setHasPromptedStageObligation(stage);
-    const txHash2 = await submitRevealMyCards({
-      args,
-    });
-    console.log("txHash2", txHash2);
-    setTxHash2(txHash2);
+    if (hasPromptedStageObligation === null) {
+      setHasPromptedStageObligation(stage);
+      const txHash2 = await submitRevealMyCards({
+        args,
+        gas: BigInt(4000000), // 4 million, should only be ~2 million
+      });
+      console.log("txHash2", txHash2);
+      setTxHash2(txHash2);
+    }
   }
 
   async function handleRevealPlayerCards() {
@@ -528,25 +614,47 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       revealOtherPlayersCardsIndexes,
     );
 
-    for (const index of revealOtherPlayersCardsIndexes) {
-      // eventLog value may be undefined if the user was disconnected and/or refreshed after the log came in
-      if (
-        eventLogEncryptedDeck.encryptedDeck?.[index] !== undefined &&
-        encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index]
-      ) {
-        console.warn(
-          "BACKGROUND OBLIGATION: handleRevealPlayerCards encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index] for index: ",
-          index,
-          "Waiting for values to match",
-        );
-        console.log(
-          "eventLogEncryptedDeck.encryptedDeck",
-          eventLogEncryptedDeck.encryptedDeck,
-        );
-        console.log("encryptedDeck", encryptedDeck);
-        return;
-      }
-    }
+    // if (
+    //   eventLogEncryptedDeck.lastUpdatedByPlayerIndex !== undefined &&
+    //   eventLogEncryptedDeck.encryptedDeck.length > 0
+    // ) {
+    //   console.log(
+    //     "handleRevealPlayerCards: eventLogEncryptedDeck.lastUpdatedByPlayerIndex",
+    //     eventLogEncryptedDeck.lastUpdatedByPlayerIndex,
+    //   );
+    //   console.log("handleRevealPlayerCards: currentPlayerIndex", currentPlayerIndex);
+    //   console.log(
+    //     "handleRevealPlayerCards: isEventLogDataAheadOfContractData",
+    //     isEventLogDataAheadOfContractData(eventLogEncryptedDeck.lastUpdatedByPlayerIndex),
+    //   );
+    //   if (
+    //     isEventLogDataAheadOfContractData(eventLogEncryptedDeck.lastUpdatedByPlayerIndex)
+    //   ) {
+    //     console.warn(
+    //       "BACKGROUND OBLIGATION: handleRevealPlayerCards: eventLogDataAheadOfContractData",
+    //     );
+    //     return;
+    //   }
+    // for (const index of revealOtherPlayersCardsIndexes) {
+    //   // eventLog value may be undefined if the user was disconnected and/or refreshed after the log came in
+    //   if (
+    //     eventLogEncryptedDeck.encryptedDeck?.[index] !== undefined &&
+    //     encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index]
+    //   ) {
+    //     console.warn(
+    //       "BACKGROUND OBLIGATION: handleRevealPlayerCards encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index] for index: ",
+    //       index,
+    //       "Waiting for values to match",
+    //     );
+    //     console.log(
+    //       "eventLogEncryptedDeck.encryptedDeck",
+    //       eventLogEncryptedDeck.encryptedDeck,
+    //     );
+    //     console.log("encryptedDeck", encryptedDeck);
+    //     return;
+    //   }
+    // }
+    // }
 
     const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
@@ -579,12 +687,14 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     //   "2",
     //   "3",
     // ) as `0x${string}`;
-    setHasPromptedStageObligation(GameStage.RevealDeal);
-    const txHash2 = await submitDecryptionValues({
-      args: [revealOtherPlayersCardsIndexes, partiallyDecryptedCardsHexStrings],
-    });
-    console.log("txHash2", txHash2);
-    setTxHash2(txHash2);
+    if (hasPromptedStageObligation === null) {
+      setHasPromptedStageObligation(GameStage.RevealDeal);
+      const txHash2 = await submitDecryptionValues({
+        args: [revealOtherPlayersCardsIndexes, partiallyDecryptedCardsHexStrings],
+      });
+      console.log("txHash2", txHash2);
+      setTxHash2(txHash2);
+    }
   }
 
   async function handleRevealCommunityCards() {
@@ -620,25 +730,25 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       revealCommunityCardsIndexes,
     );
 
-    for (const index of revealCommunityCardsIndexes) {
-      // eventLog value may be undefined if the user was disconnected and/or refreshed after the log came in
-      if (
-        eventLogEncryptedDeck.encryptedDeck?.[index] !== undefined &&
-        encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index]
-      ) {
-        console.warn(
-          "BACKGROUND OBLIGATION: handleRevealCommunityCardsIndexes encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index] for index: ",
-          index,
-          "Waiting for values to match",
-        );
-        console.log(
-          "eventLogEncryptedDeck.encryptedDeck",
-          eventLogEncryptedDeck.encryptedDeck,
-        );
-        console.log("encryptedDeck", encryptedDeck);
-        return;
-      }
-    }
+    // for (const index of revealCommunityCardsIndexes) {
+    //   // eventLog value may be undefined if the user was disconnected and/or refreshed after the log came in
+    //   if (
+    //     eventLogEncryptedDeck.encryptedDeck?.[index] !== undefined &&
+    //     encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index]
+    //   ) {
+    //     console.warn(
+    //       "BACKGROUND OBLIGATION: handleRevealCommunityCardsIndexes encryptedDeck[index] !== eventLogEncryptedDeck.encryptedDeck[index] for index: ",
+    //       index,
+    //       "Waiting for values to match",
+    //     );
+    //     console.log(
+    //       "eventLogEncryptedDeck.encryptedDeck",
+    //       eventLogEncryptedDeck.encryptedDeck,
+    //     );
+    //     console.log("encryptedDeck", encryptedDeck);
+    //     return;
+    //   }
+    // }
 
     const c1 = generateC1(g2048, roundKeys.r, p256); // todo: player should keep it from the original encrypted shuffle
     console.log("generated c1", c1.toString(16));
@@ -666,13 +776,15 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
       "submitDecryptionValues partiallyDecryptedCardsHexStrings",
       partiallyDecryptedCardsHexStrings,
     );
-    setHasPromptedStageObligation(room.stage);
+    if (hasPromptedStageObligation === null) {
+      setHasPromptedStageObligation(room.stage);
 
-    const txHash2 = await submitDecryptionValues({
-      args: [revealCommunityCardsIndexes, partiallyDecryptedCardsHexStrings],
-    });
-    console.log("txHash2", txHash2);
-    setTxHash2(txHash2);
+      const txHash2 = await submitDecryptionValues({
+        args: [revealCommunityCardsIndexes, partiallyDecryptedCardsHexStrings],
+      });
+      console.log("txHash2", txHash2);
+      setTxHash2(txHash2);
+    }
   }
 
   console.log("/components/game/PokerTable room, players", room, players);
@@ -806,7 +918,10 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
             variant="secondary"
             size="sm"
             className="absolute z-15 top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse"
-            onClick={handleObligation}
+            onClick={() => {
+              setHasPromptedStageObligation(null);
+              handleObligation();
+            }}
           >
             Submit
             {stage === GameStage.Shuffle
@@ -834,9 +949,9 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
           <Button
             onClick={handleReportIdlePlayer}
             variant="outline"
-            className="absolute z-15 top-[75%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent border-white text-white"
+            className="absolute z-20 top-[75%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent border-white text-white"
           >
-            Report idle player
+            Report idle player {isSubmittingReportIdlePlayer ? "..." : ""}
           </Button>
         )}
 

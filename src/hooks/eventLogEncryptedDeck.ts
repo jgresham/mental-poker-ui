@@ -8,13 +8,27 @@ const EVENT_LOG_ENCRYPTED_DECK_KEY = ["eventLogEncryptedDeck"];
  */
 export function useEventLogEncryptedDeck() {
   // Initialize the query with default value
-  return useQuery<{ encryptedDeck: string[]; lastUpdatedByPlayerAddress: string }>({
+  return useQuery<{
+    encryptedDeck: string[];
+    lastUpdatedByPlayerAddress: string;
+    lastUpdatedByPlayerIndex?: number;
+  }>({
     queryKey: EVENT_LOG_ENCRYPTED_DECK_KEY,
-    initialData: { encryptedDeck: [], lastUpdatedByPlayerAddress: "" } as {
+    initialData: {
+      encryptedDeck: [],
+      lastUpdatedByPlayerAddress: "",
+      lastUpdatedByPlayerIndex: undefined,
+    } as {
       encryptedDeck: string[];
       lastUpdatedByPlayerAddress: string;
+      lastUpdatedByPlayerIndex?: number;
     },
-    queryFn: () => Promise.resolve({ encryptedDeck: [], lastUpdatedByPlayerAddress: "" }),
+    queryFn: () =>
+      Promise.resolve({
+        encryptedDeck: [],
+        lastUpdatedByPlayerAddress: "",
+        lastUpdatedByPlayerIndex: undefined,
+      }),
   });
 }
 
@@ -28,6 +42,7 @@ export function useSetEventLogEncryptedDeck() {
     mutationFn: (newEventLogEncryptedDeck: {
       encryptedDeck: string[];
       lastUpdatedByPlayerAddress: string;
+      lastUpdatedByPlayerIndex?: number;
       cardIndiciesUpdated?: number[];
     }) => {
       console.log("useSetEventLogEncryptedDeck called", newEventLogEncryptedDeck);

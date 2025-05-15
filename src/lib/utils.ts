@@ -85,7 +85,7 @@ export function getOtherPlayersCardsIndexes(
  * @param players - The players in the game
  * @returns The count of players counter clockwise to the dealer
  */
-function getCountOfPlayersCounterClockwiseToDealer(
+export function getCountOfPlayersCounterClockwiseToDealer(
   playerIndex: number,
   dealerPosition: number,
   players: Player[],

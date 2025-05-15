@@ -184,6 +184,11 @@ export enum HandRank {
   RoyalFlush = 9, // 9
 }
 
+export const roughHandScoreToHandRank = (handScore: number) => {
+  const rank = handScore / 1e14;
+  return HandRank[Math.floor(rank)];
+};
+
 export const REVEAL_COMMUNITY_CARDS_STAGES = [
   GameStage.RevealFlop,
   GameStage.RevealTurn,

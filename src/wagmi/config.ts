@@ -51,6 +51,12 @@ export const frameWagmiConfig = createConfig({
     [base.id]: http(
       "https://base-mainnet.g.alchemy.com/v2/xFjQGD9_D32OdWAY-iyViQ7xHYHIUF-i",
     ),
+    // [baseSepolia.id]: http(
+    //   "https://api.developer.coinbase.com/rpc/v1/base-sepolia/FSONDekndFVk2jM2YRCRvcOCER5dIKTl",
+    // ),
+    // [baseSepolia.id]: webSocket(
+    //   "wss://base-sepolia.g.alchemy.com/v2/xFjQGD9_D32OdWAY-iyViQ7xHYHIUF-i",
+    // ),
     [baseSepolia.id]: http(
       "https://base-sepolia.g.alchemy.com/v2/xFjQGD9_D32OdWAY-iyViQ7xHYHIUF-i",
     ),

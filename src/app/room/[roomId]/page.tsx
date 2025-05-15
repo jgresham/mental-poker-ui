@@ -60,6 +60,7 @@ export default function Room() {
   const { mutate: setInvalidCards } = useSetInvalidCards();
   const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
+  const [hasToastedInactive, setHasToastedInactive] = useState(false);
 
   // const { data: eventLogEncryptedDeck } = useEventLogEncryptedDeck();
   const { mutate: setEventLogEncryptedDeck } = useSetEventLogEncryptedDeck();
@@ -104,6 +105,7 @@ export default function Room() {
     setEventLogEncryptedDeck({
       encryptedDeck: [],
       lastUpdatedByPlayerAddress: zeroAddress,
+      lastUpdatedByPlayerIndex: undefined,
       cardIndiciesUpdated: undefined,
     });
     refetchPlayers();
@@ -121,11 +123,18 @@ export default function Room() {
       // console.log("10s polling for updates...");
       refetchRoomData();
       refetchPlayers();
+      setHasToastedInactive(false);
     } else {
-      console.log("10 minutes of inactivity detected, stopping polling contract data...");
-      toast.info(
-        "You have been inactive for 10 minutes. Stopping some updates until you return.",
-      );
+      if (!hasToastedInactive) {
+        console.log(
+          "10 minutes of inactivity detected, stopping polling contract data...",
+        );
+        toast.info(
+          "You have been inactive for 10 minutes. Stopping some updates until you return.",
+          { duration: 10000 }, // 10 seconds
+        );
+        setHasToastedInactive(true);
+      }
     }
   }, 10000);
 
@@ -209,27 +218,52 @@ export default function Room() {
           // toast.info(
           //   `Encrypted shuffle submitted by player ${log.args.player}. Restarting round...`,
           // );
+          const args = log.args as {
+            player?: `0x${string}` | undefined;
+            encryptedShuffle?: readonly `0x${string}`[] | undefined;
+          };
+          const newEncryptedDeck = args.encryptedShuffle as unknown as string[];
+          const playerIndex = players?.findIndex((player) => player.addr === args.player);
           setEventLogEncryptedDeck({
-            encryptedDeck: log.args.encryptedShuffle,
-            lastUpdatedByPlayerAddress: log.args.player,
+            encryptedDeck: newEncryptedDeck,
+            lastUpdatedByPlayerAddress: args.player || zeroAddress,
+            lastUpdatedByPlayerIndex: playerIndex,
           });
-        }
-        if (log.eventName === "DecryptionValuesSubmitted") {
+        } else if (log.eventName === "DecryptionValuesSubmitted") {
           console.log("DecryptionValuesSubmitted event log", log);
-          const newEncryptedDeck = log.args.decryptionValues as string[];
+          const decryptionArgs = log.args as {
+            player?: `0x${string}` | undefined;
+            cardIndexes?: readonly number[] | undefined;
+            decryptionValues?: readonly `0x${string}`[] | undefined;
+          };
+          const playerIndex = players?.findIndex(
+            (player) => player.addr === decryptionArgs.player,
+          );
           setEventLogEncryptedDeck({
-            encryptedDeck: log.args.decryptionValues,
-            lastUpdatedByPlayerAddress: log.args.player,
-            cardIndiciesUpdated: log.args.cardIndexes,
+            encryptedDeck: decryptionArgs.decryptionValues as unknown as string[],
+            lastUpdatedByPlayerAddress: decryptionArgs.player || zeroAddress,
+            lastUpdatedByPlayerIndex: playerIndex,
+            cardIndiciesUpdated: decryptionArgs.cardIndexes as number[],
           });
-        }
-        if (log.eventName === "PlayerCardsRevealed") {
+        } else if (log.eventName === "PlayerCardsRevealed") {
           console.log("PlayerCardsRevealed event log", log);
+          const playerCardsRevealedArgs = log.args as {
+            player?: `0x${string}` | undefined;
+            card1?: string | undefined;
+            card2?: string | undefined;
+            rank?: number | undefined;
+            handScore?: bigint | undefined;
+          };
           toast.info(
-            `Player ${log.args.player} revealed their cards: 
-              ${stringCardsToCards([log.args.card1, log.args.card2])
+            `Player ${playerCardsRevealedArgs.player} revealed their cards: 
+              ${stringCardsToCards([
+                playerCardsRevealedArgs.card1 || "",
+                playerCardsRevealedArgs.card2 || "",
+              ])
                 .map((card) => card.rank + card.suit)
-                .join(", ")}, a ${HandRank[log.args.rank]}! Score: ${log.args.handScore}`,
+                .join(
+                  ", ",
+                )}, a ${HandRank[playerCardsRevealedArgs.rank || 0]}! Score: ${playerCardsRevealedArgs.handScore}`,
             { duration: 30000 }, // 30s
           );
         }
