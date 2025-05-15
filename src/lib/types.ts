@@ -185,8 +185,9 @@ export enum HandRank {
 }
 
 export const roughHandScoreToHandRank = (handScore: number) => {
+  // rank should be the first 1 digit of the handScore
   const rank = handScore / 1e14;
-  return HandRank[Math.floor(rank)];
+  return HandRank[Math.floor(rank) - 1];
 };
 
 export const REVEAL_COMMUNITY_CARDS_STAGES = [

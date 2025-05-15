@@ -151,7 +151,10 @@ export default function Room() {
   useWatchTexasHoldemRoomEvent({
     onError: (error) => {
       console.error("Texas Holdem Room event error", error);
-      toast.error(`useWatchTexasHoldemRoomEvent error: ${error.message}`);
+      // ignore if the error contains "filter not found" because this occurs frequently with alchemy
+      if (!error.message.includes("filter not found")) {
+        toast.error(`useWatchTexasHoldemRoomEvent error: ${error.message}`);
+      }
     },
     // onLogs: (logs: {
     //   eventName: string;

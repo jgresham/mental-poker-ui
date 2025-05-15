@@ -352,7 +352,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     return false;
   };
 
-  const handleObligation = () => {
+  const handleObligation = (userClicked?: boolean) => {
     console.log("handleObligation called. eventLogEncryptedDeck", eventLogEncryptedDeck);
     // if eventLogEncryptedDeck.encryptedDeck is set (whole deck in case of shuffle or card indicies from the deck
     // in case of reveal cards) and is not equal to the room.encryptedDeck,
@@ -382,6 +382,10 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     //     return;
     //   }
     // }
+    if (!userClicked && hasPromptedStageObligation !== null) {
+      console.log("BACKGROUND OBLIGATION: (auto) hasPromptedStageObligation !== null");
+      return;
+    }
 
     // if shuffle, call submitEncryptedDeck
     if (room.stage === GameStage.Shuffle && !isSubmittingEncryptedDeck) {
@@ -503,7 +507,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     // encryptedDeckArray[0] = encryptedDeckArray[0].replace("2", "3") as `0x${string}`;
     if (hasPromptedStageObligation === null) {
       setHasPromptedStageObligation(GameStage.Shuffle);
-
+      // sleep for 3 seconds to hopefully give time for the simulate contract to be successful
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const txHash2 = await submitEncryptedDeck({
         args: [encryptedDeckArray],
       });
@@ -566,6 +571,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     );
     if (hasPromptedStageObligation === null) {
       setHasPromptedStageObligation(stage);
+      // sleep for 3 seconds to hopefully give time for the simulate contract to be successful
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const txHash2 = await submitRevealMyCards({
         args,
         gas: BigInt(4000000), // 4 million, should only be ~2 million
@@ -689,6 +696,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     // ) as `0x${string}`;
     if (hasPromptedStageObligation === null) {
       setHasPromptedStageObligation(GameStage.RevealDeal);
+      // sleep for 3 seconds to hopefully give time for the simulate contract to be successful
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const txHash2 = await submitDecryptionValues({
         args: [revealOtherPlayersCardsIndexes, partiallyDecryptedCardsHexStrings],
       });
@@ -778,7 +787,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
     );
     if (hasPromptedStageObligation === null) {
       setHasPromptedStageObligation(room.stage);
-
+      // sleep for 3 seconds to hopefully give time for the simulate contract to be successful
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const txHash2 = await submitDecryptionValues({
         args: [revealCommunityCardsIndexes, partiallyDecryptedCardsHexStrings],
       });
@@ -880,8 +890,8 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
           priv: {roundKeys?.privateKey?.toString(16).substring(0, 5)}
         </div>
       )}
-      <div className="absolute z-10 bottom-25 right-0">
-        {address && ADMIN_ADDRESSES.includes(address) && (
+      <div className="absolute z-10 bottom-45 right-0">
+        {address && ADMIN_ADDRESSES.includes(address) && isDevMode && (
           <Button
             onClick={handleResetRound}
             variant="ghost"
@@ -920,7 +930,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
             className="absolute z-15 top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse"
             onClick={() => {
               setHasPromptedStageObligation(null);
-              handleObligation();
+              handleObligation(true);
             }}
           >
             Submit

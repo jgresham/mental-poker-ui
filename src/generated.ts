@@ -1196,7 +1196,7 @@ export const cryptoUtilsAbi = [
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const deckHandlerAbi = [
   {
@@ -1500,14 +1500,14 @@ export const deckHandlerAbi = [
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const deckHandlerAddress = {
   10: '0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9',
   8453: '0x5B4e312D30D042a3B06C1f9446Fe821d36875afe',
   31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
   42161: '0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9',
-  84532: '0x9A00377FE9373aFaD041cEb497728fc1958c90B8',
+  84532: '0x577A57868513382203e8739e3e7f8056b13987DD',
 } as const
 
 /**
@@ -1515,7 +1515,7 @@ export const deckHandlerAddress = {
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const deckHandlerConfig = {
   address: deckHandlerAddress,
@@ -2463,6 +2463,34 @@ export const reportIdlePlayerFirstShuffleTestAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SimpleAdd5
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const simpleAdd5Abi = [
+  {
+    type: 'function',
+    inputs: [],
+    name: 'addFive',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getFive',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'lastResult',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // StringExtensions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2550,7 +2578,7 @@ export const stringExtensionsAbi = [
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const texasHoldemRoomAbi = [
   {
@@ -3080,14 +3108,14 @@ export const texasHoldemRoomAbi = [
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const texasHoldemRoomAddress = {
   10: '0xf34890f942220f48391BA33Ff053f64Aa8979956',
   8453: '0x97B60973647dD10393fAE9E4deF62373F4BEE117',
   31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
   42161: '0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D',
-  84532: '0x51A68322005F44d6Db90f844B68e960Eb1D6A909',
+  84532: '0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367',
 } as const
 
 /**
@@ -3095,7 +3123,7 @@ export const texasHoldemRoomAddress = {
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const texasHoldemRoomConfig = {
   address: texasHoldemRoomAddress,
@@ -3927,7 +3955,7 @@ export const useWatchCryptoUtilsCuLogEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandler = /*#__PURE__*/ createUseReadContract({
   abi: deckHandlerAbi,
@@ -3941,7 +3969,7 @@ export const useReadDeckHandler = /*#__PURE__*/ createUseReadContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerCommunityCards =
   /*#__PURE__*/ createUseReadContract({
@@ -3957,7 +3985,7 @@ export const useReadDeckHandlerCommunityCards =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerCryptoUtils =
   /*#__PURE__*/ createUseReadContract({
@@ -3973,7 +4001,7 @@ export const useReadDeckHandlerCryptoUtils =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerEncryptedDeck =
   /*#__PURE__*/ createUseReadContract({
@@ -3989,7 +4017,7 @@ export const useReadDeckHandlerEncryptedDeck =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetBulkRoomData =
   /*#__PURE__*/ createUseReadContract({
@@ -4005,7 +4033,7 @@ export const useReadDeckHandlerGetBulkRoomData =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetCommunityCards =
   /*#__PURE__*/ createUseReadContract({
@@ -4021,7 +4049,7 @@ export const useReadDeckHandlerGetCommunityCards =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetEncrypedCard =
   /*#__PURE__*/ createUseReadContract({
@@ -4037,7 +4065,7 @@ export const useReadDeckHandlerGetEncrypedCard =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetEncryptedDeck =
   /*#__PURE__*/ createUseReadContract({
@@ -4053,7 +4081,7 @@ export const useReadDeckHandlerGetEncryptedDeck =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerHandEvaluator =
   /*#__PURE__*/ createUseReadContract({
@@ -4069,7 +4097,7 @@ export const useReadDeckHandlerHandEvaluator =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerTexasHoldemRoom =
   /*#__PURE__*/ createUseReadContract({
@@ -4085,7 +4113,7 @@ export const useReadDeckHandlerTexasHoldemRoom =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandler = /*#__PURE__*/ createUseWriteContract({
   abi: deckHandlerAbi,
@@ -4099,7 +4127,7 @@ export const useWriteDeckHandler = /*#__PURE__*/ createUseWriteContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerResetDeck =
   /*#__PURE__*/ createUseWriteContract({
@@ -4115,7 +4143,7 @@ export const useWriteDeckHandlerResetDeck =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerRevealMyCards =
   /*#__PURE__*/ createUseWriteContract({
@@ -4131,7 +4159,7 @@ export const useWriteDeckHandlerRevealMyCards =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerSubmitDecryptionValues =
   /*#__PURE__*/ createUseWriteContract({
@@ -4147,7 +4175,7 @@ export const useWriteDeckHandlerSubmitDecryptionValues =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerSubmitEncryptedShuffle =
   /*#__PURE__*/ createUseWriteContract({
@@ -4163,7 +4191,7 @@ export const useWriteDeckHandlerSubmitEncryptedShuffle =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandler = /*#__PURE__*/ createUseSimulateContract({
   abi: deckHandlerAbi,
@@ -4177,7 +4205,7 @@ export const useSimulateDeckHandler = /*#__PURE__*/ createUseSimulateContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerResetDeck =
   /*#__PURE__*/ createUseSimulateContract({
@@ -4193,7 +4221,7 @@ export const useSimulateDeckHandlerResetDeck =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerRevealMyCards =
   /*#__PURE__*/ createUseSimulateContract({
@@ -4209,7 +4237,7 @@ export const useSimulateDeckHandlerRevealMyCards =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerSubmitDecryptionValues =
   /*#__PURE__*/ createUseSimulateContract({
@@ -4225,7 +4253,7 @@ export const useSimulateDeckHandlerSubmitDecryptionValues =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerSubmitEncryptedShuffle =
   /*#__PURE__*/ createUseSimulateContract({
@@ -4241,7 +4269,7 @@ export const useSimulateDeckHandlerSubmitEncryptedShuffle =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4256,7 +4284,7 @@ export const useWatchDeckHandlerEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerDecryptionValuesSubmittedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4272,7 +4300,7 @@ export const useWatchDeckHandlerDecryptionValuesSubmittedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerEncryptedShuffleSubmittedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4288,7 +4316,7 @@ export const useWatchDeckHandlerEncryptedShuffleSubmittedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerFlopRevealedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4304,7 +4332,7 @@ export const useWatchDeckHandlerFlopRevealedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerPlayerCardsRevealedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4320,7 +4348,7 @@ export const useWatchDeckHandlerPlayerCardsRevealedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerPlayerRevealingCardsEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4336,7 +4364,7 @@ export const useWatchDeckHandlerPlayerRevealingCardsEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerRiverRevealedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -4352,7 +4380,7 @@ export const useWatchDeckHandlerRiverRevealedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9A00377FE9373aFaD041cEb497728fc1958c90B8)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerTurnRevealedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -5099,6 +5127,60 @@ export const useWatchReportIdlePlayerFirstShuffleTestLogsEvent =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleAdd5Abi}__
+ */
+export const useReadSimpleAdd5 = /*#__PURE__*/ createUseReadContract({
+  abi: simpleAdd5Abi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleAdd5Abi}__ and `functionName` set to `"getFive"`
+ */
+export const useReadSimpleAdd5GetFive = /*#__PURE__*/ createUseReadContract({
+  abi: simpleAdd5Abi,
+  functionName: 'getFive',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleAdd5Abi}__ and `functionName` set to `"lastResult"`
+ */
+export const useReadSimpleAdd5LastResult = /*#__PURE__*/ createUseReadContract({
+  abi: simpleAdd5Abi,
+  functionName: 'lastResult',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleAdd5Abi}__
+ */
+export const useWriteSimpleAdd5 = /*#__PURE__*/ createUseWriteContract({
+  abi: simpleAdd5Abi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleAdd5Abi}__ and `functionName` set to `"addFive"`
+ */
+export const useWriteSimpleAdd5AddFive = /*#__PURE__*/ createUseWriteContract({
+  abi: simpleAdd5Abi,
+  functionName: 'addFive',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleAdd5Abi}__
+ */
+export const useSimulateSimpleAdd5 = /*#__PURE__*/ createUseSimulateContract({
+  abi: simpleAdd5Abi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleAdd5Abi}__ and `functionName` set to `"addFive"`
+ */
+export const useSimulateSimpleAdd5AddFive =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleAdd5Abi,
+    functionName: 'addFive',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stringExtensionsAbi}__
  */
 export const useReadStringExtensions = /*#__PURE__*/ createUseReadContract({
@@ -5148,7 +5230,7 @@ export const useReadStringExtensionsToString =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoom = /*#__PURE__*/ createUseReadContract({
   abi: texasHoldemRoomAbi,
@@ -5162,7 +5244,7 @@ export const useReadTexasHoldemRoom = /*#__PURE__*/ createUseReadContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomEmptySeat =
   /*#__PURE__*/ createUseReadContract({
@@ -5178,7 +5260,7 @@ export const useReadTexasHoldemRoomEmptySeat =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomMaxPlayers =
   /*#__PURE__*/ createUseReadContract({
@@ -5194,7 +5276,7 @@ export const useReadTexasHoldemRoomMaxPlayers =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomMinPlayers =
   /*#__PURE__*/ createUseReadContract({
@@ -5210,7 +5292,7 @@ export const useReadTexasHoldemRoomMinPlayers =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomStartingChips =
   /*#__PURE__*/ createUseReadContract({
@@ -5226,7 +5308,7 @@ export const useReadTexasHoldemRoomStartingChips =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomBigBlind =
   /*#__PURE__*/ createUseReadContract({
@@ -5242,7 +5324,7 @@ export const useReadTexasHoldemRoomBigBlind =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCountActivePlayers =
   /*#__PURE__*/ createUseReadContract({
@@ -5258,7 +5340,7 @@ export const useReadTexasHoldemRoomCountActivePlayers =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCountOfHandsRevealed =
   /*#__PURE__*/ createUseReadContract({
@@ -5274,7 +5356,7 @@ export const useReadTexasHoldemRoomCountOfHandsRevealed =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCountPlayersAtRoundStart =
   /*#__PURE__*/ createUseReadContract({
@@ -5290,7 +5372,7 @@ export const useReadTexasHoldemRoomCountPlayersAtRoundStart =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCryptoUtils =
   /*#__PURE__*/ createUseReadContract({
@@ -5306,7 +5388,7 @@ export const useReadTexasHoldemRoomCryptoUtils =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCurrentPlayerIndex =
   /*#__PURE__*/ createUseReadContract({
@@ -5322,7 +5404,7 @@ export const useReadTexasHoldemRoomCurrentPlayerIndex =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCurrentStageBet =
   /*#__PURE__*/ createUseReadContract({
@@ -5338,7 +5420,7 @@ export const useReadTexasHoldemRoomCurrentStageBet =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomDealerPosition =
   /*#__PURE__*/ createUseReadContract({
@@ -5354,7 +5436,7 @@ export const useReadTexasHoldemRoomDealerPosition =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomDeckHandler =
   /*#__PURE__*/ createUseReadContract({
@@ -5370,7 +5452,7 @@ export const useReadTexasHoldemRoomDeckHandler =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetNextActivePlayer =
   /*#__PURE__*/ createUseReadContract({
@@ -5386,7 +5468,7 @@ export const useReadTexasHoldemRoomGetNextActivePlayer =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayer =
   /*#__PURE__*/ createUseReadContract({
@@ -5402,7 +5484,7 @@ export const useReadTexasHoldemRoomGetPlayer =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayerIndexFromAddr =
   /*#__PURE__*/ createUseReadContract({
@@ -5418,7 +5500,7 @@ export const useReadTexasHoldemRoomGetPlayerIndexFromAddr =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayers =
   /*#__PURE__*/ createUseReadContract({
@@ -5434,7 +5516,7 @@ export const useReadTexasHoldemRoomGetPlayers =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayersCardIndexes =
   /*#__PURE__*/ createUseReadContract({
@@ -5450,7 +5532,7 @@ export const useReadTexasHoldemRoomGetPlayersCardIndexes =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomIsPrivate =
   /*#__PURE__*/ createUseReadContract({
@@ -5466,7 +5548,7 @@ export const useReadTexasHoldemRoomIsPrivate =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomLastActionTimestamp =
   /*#__PURE__*/ createUseReadContract({
@@ -5482,7 +5564,7 @@ export const useReadTexasHoldemRoomLastActionTimestamp =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomLastRaiseIndex =
   /*#__PURE__*/ createUseReadContract({
@@ -5498,7 +5580,7 @@ export const useReadTexasHoldemRoomLastRaiseIndex =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomNumPlayers =
   /*#__PURE__*/ createUseReadContract({
@@ -5514,7 +5596,7 @@ export const useReadTexasHoldemRoomNumPlayers =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomPlayers =
   /*#__PURE__*/ createUseReadContract({
@@ -5530,7 +5612,7 @@ export const useReadTexasHoldemRoomPlayers =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomPot = /*#__PURE__*/ createUseReadContract({
   abi: texasHoldemRoomAbi,
@@ -5545,7 +5627,7 @@ export const useReadTexasHoldemRoomPot = /*#__PURE__*/ createUseReadContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomRoundNumber =
   /*#__PURE__*/ createUseReadContract({
@@ -5561,7 +5643,7 @@ export const useReadTexasHoldemRoomRoundNumber =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomSeatPositionToPlayerIndex =
   /*#__PURE__*/ createUseReadContract({
@@ -5577,7 +5659,7 @@ export const useReadTexasHoldemRoomSeatPositionToPlayerIndex =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomSmallBlind =
   /*#__PURE__*/ createUseReadContract({
@@ -5593,7 +5675,7 @@ export const useReadTexasHoldemRoomSmallBlind =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomStage = /*#__PURE__*/ createUseReadContract({
   abi: texasHoldemRoomAbi,
@@ -5608,7 +5690,7 @@ export const useReadTexasHoldemRoomStage = /*#__PURE__*/ createUseReadContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
   abi: texasHoldemRoomAbi,
@@ -5622,7 +5704,7 @@ export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomJoinGame =
   /*#__PURE__*/ createUseWriteContract({
@@ -5638,7 +5720,7 @@ export const useWriteTexasHoldemRoomJoinGame =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomLeaveGame =
   /*#__PURE__*/ createUseWriteContract({
@@ -5654,7 +5736,7 @@ export const useWriteTexasHoldemRoomLeaveGame =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomProgressGame =
   /*#__PURE__*/ createUseWriteContract({
@@ -5670,7 +5752,7 @@ export const useWriteTexasHoldemRoomProgressGame =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomReportIdlePlayer =
   /*#__PURE__*/ createUseWriteContract({
@@ -5686,7 +5768,7 @@ export const useWriteTexasHoldemRoomReportIdlePlayer =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomReportInvalidCards =
   /*#__PURE__*/ createUseWriteContract({
@@ -5702,7 +5784,7 @@ export const useWriteTexasHoldemRoomReportInvalidCards =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomResetRound =
   /*#__PURE__*/ createUseWriteContract({
@@ -5718,7 +5800,7 @@ export const useWriteTexasHoldemRoomResetRound =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomSetDeckHandler =
   /*#__PURE__*/ createUseWriteContract({
@@ -5734,7 +5816,7 @@ export const useWriteTexasHoldemRoomSetDeckHandler =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomSetPlayerHandScore =
   /*#__PURE__*/ createUseWriteContract({
@@ -5750,7 +5832,7 @@ export const useWriteTexasHoldemRoomSetPlayerHandScore =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomSubmitAction =
   /*#__PURE__*/ createUseWriteContract({
@@ -5766,7 +5848,7 @@ export const useWriteTexasHoldemRoomSubmitAction =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoom =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5781,7 +5863,7 @@ export const useSimulateTexasHoldemRoom =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomJoinGame =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5797,7 +5879,7 @@ export const useSimulateTexasHoldemRoomJoinGame =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomLeaveGame =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5813,7 +5895,7 @@ export const useSimulateTexasHoldemRoomLeaveGame =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomProgressGame =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5829,7 +5911,7 @@ export const useSimulateTexasHoldemRoomProgressGame =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomReportIdlePlayer =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5845,7 +5927,7 @@ export const useSimulateTexasHoldemRoomReportIdlePlayer =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomReportInvalidCards =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5861,7 +5943,7 @@ export const useSimulateTexasHoldemRoomReportInvalidCards =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomResetRound =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5877,7 +5959,7 @@ export const useSimulateTexasHoldemRoomResetRound =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomSetDeckHandler =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5893,7 +5975,7 @@ export const useSimulateTexasHoldemRoomSetDeckHandler =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomSetPlayerHandScore =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5909,7 +5991,7 @@ export const useSimulateTexasHoldemRoomSetPlayerHandScore =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomSubmitAction =
   /*#__PURE__*/ createUseSimulateContract({
@@ -5925,7 +6007,7 @@ export const useSimulateTexasHoldemRoomSubmitAction =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -5940,7 +6022,7 @@ export const useWatchTexasHoldemRoomEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomGameStartedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -5956,7 +6038,7 @@ export const useWatchTexasHoldemRoomGameStartedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomIdlePlayerKickedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -5972,7 +6054,7 @@ export const useWatchTexasHoldemRoomIdlePlayerKickedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomInvalidCardsReportedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -5988,7 +6070,7 @@ export const useWatchTexasHoldemRoomInvalidCardsReportedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomNewStageEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -6004,7 +6086,7 @@ export const useWatchTexasHoldemRoomNewStageEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPlayerJoinedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -6020,7 +6102,7 @@ export const useWatchTexasHoldemRoomPlayerJoinedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPlayerLeftEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -6036,7 +6118,7 @@ export const useWatchTexasHoldemRoomPlayerLeftEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPlayerMovedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -6052,7 +6134,7 @@ export const useWatchTexasHoldemRoomPlayerMovedEvent =
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
  * -
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x51A68322005F44d6Db90f844B68e960Eb1D6A909)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPotWonEvent =
   /*#__PURE__*/ createUseWatchContractEvent({

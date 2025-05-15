@@ -94,9 +94,7 @@ export default function Home() {
               Mental Poker
             </h1>
 
-            <p className="text-xl md:text-2xl text-green-100">
-              {"Secure, open poker with no house fees"}
-            </p>
+            <p className="text-xl md:text-2xl text-green-100">{"Secure, open poker"}</p>
             {/* </div> */}
 
             <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl text-white">
@@ -105,9 +103,9 @@ export default function Home() {
                 {/* Mental Poker uses cryptographic protocols to ensure fair play without
                 requiring a trusted dealer. The deck is encrypted and shuffled by each
                 player and your cards remain private to you until you reveal them, just
-                like real poker - all with no house fees. */}
+                like real poker. */}
                 Your cards remain private to you until they are revealed, just like real
-                poker - all with no house fees.
+                poker.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -120,7 +118,7 @@ export default function Home() {
 
                 <Button
                   className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
-                  onClick={() => router.push("/room/0")}
+                  onClick={() => router.push("/room/8453")}
                 >
                   Start Playing
                 </Button>
@@ -137,7 +135,7 @@ export default function Home() {
                 <h3 className="font-bold text-xl mb-2">No House</h3>
                 <p>
                   Play directly with other players without a central server controlling
-                  the game nor a trusted dealer, and no house fees.
+                  the game nor a trusted dealer.
                 </p>
               </div>
 
