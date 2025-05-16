@@ -572,7 +572,11 @@ export default function Room() {
         <ConnectButton
           accountStatus={{
             smallScreen: "avatar",
-            largeScreen: "full",
+            largeScreen: "avatar",
+          }}
+          chainStatus={{
+            smallScreen: "icon",
+            largeScreen: "icon",
           }}
         />
       </div>
