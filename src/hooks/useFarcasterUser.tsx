@@ -1,5 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import type { FarcasterUser } from "../../lib/neynar.server";
+
+export type FarcasterUser = {
+  fid: number;
+  username: string;
+  display_name: string;
+  pfp_url: string;
+  score: number;
+};
 
 function useFarcasterUser(address?: `0x${string}`) {
   return useQuery({
