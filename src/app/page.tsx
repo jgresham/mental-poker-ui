@@ -141,10 +141,7 @@ export default function Home() {
 
               <div className="bg-black/30 p-4 rounded-lg">
                 <h3 className="font-bold text-xl mb-2">Public & open</h3>
-                <p>
-                  All actions are recorded onchain, so anyone can verify and build on top
-                  of your history.
-                </p>
+                <p>All actions are recorded onchain, so anyone can verify and build.</p>
               </div>
             </div>
 

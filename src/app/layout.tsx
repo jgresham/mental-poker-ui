@@ -25,7 +25,7 @@ export const metadata: Metadata = {
       "Mental Poker is onchain poker that is a secure and no fee poker game using commutative encryption",
     images: [
       {
-        url: "https://mentalpoker.xyz/heroimage.png",
+        url: "https://mentalpoker.xyz/mental-poker-opengraph.png",
         width: 1200,
         height: 630,
       },
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   other: {
     "fc:frame": JSON.stringify({
       version: "1",
-      imageUrl: "https://mentalpoker.xyz/heroimage.png",
+      imageUrl: "https://mentalpoker.xyz/mental-poker-opengraph.png",
       button: {
         title: "Play Poker",
         action: {

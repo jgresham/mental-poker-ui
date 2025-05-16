@@ -20,10 +20,10 @@
     ],
     "primaryCategory": "games",
     "tags": ["poker", "onchain", "verifiable", "texasholdem", "holdem"],
-    "heroImageUrl": "https://mentalpoker.xyz/heroimage.png",
+    "heroImageUrl": "https://mentalpoker.xyz/mental-poker-opengraph.png",
     "tagline": "Secure, onchain poker",
     "ogTitle": "Mental Poker",
     "ogDescription": "Mental Poker is onchain poker that is a secure and no fee poker game using commutative encryption.",
-    "ogImageUrl": "https://mentalpoker.xyz/heroimage.png"
+    "ogImageUrl": "https://mentalpoker.xyz/mental-poker-opengraph.png"
   }
 }
