@@ -25,7 +25,7 @@ export const metadata: Metadata = {
       "Mental Poker is onchain poker that is a secure and no fee poker game using commutative encryption",
     images: [
       {
-        url: "https://mentalpoker.xyz/heroimage.png",
+        url: "https://mentalpoker.xyz/mental-poker-opengraph.png",
         width: 1200,
         height: 630,
       },
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   other: {
     "fc:frame": JSON.stringify({
       version: "1",
-      imageUrl: "https://mentalpoker.xyz/heroimage.png",
+      imageUrl: "https://mentalpoker.xyz/mental-poker-opengraph.png",
       button: {
         title: "Play Poker",
         action: {
@@ -56,10 +56,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>
-          {children}
-          </Providers>
+        <Providers>{children}</Providers>
         <Toaster />
         <Analytics />
       </body>

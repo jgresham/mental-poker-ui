@@ -8,13 +8,12 @@ import { GameControls } from "@/components/game/GameControls";
 import {
   useWriteTexasHoldemRoomJoinGame,
   useWriteTexasHoldemRoomLeaveGame,
-  useReadTexasHoldemRoomGetPlayerIndexFromAddr,
   useWatchTexasHoldemRoomEvent,
   useWatchDeckHandlerEvent,
 } from "../../../generated";
 import { Button } from "../../../components/ui/button";
 import { zeroAddress } from "viem";
-import { useAccount, useConnect, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useEffect, useMemo, useState } from "react";
 import { useGetBulkRoomData, useGetPlayers } from "../../../wagmi/wrapper";
 import { getCommunityCards, getMyCardsIndexes } from "../../../lib/utils";
@@ -31,6 +30,8 @@ import {
   GameStage,
   MAX_PLAYERS,
   BETTING_STAGES,
+  HandRank,
+  stringCardsToCards,
 } from "../../../lib/types";
 import { p256 } from "../../../lib/elgamal-commutative-node-1chunk";
 import { generateC1 } from "../../../lib/elgamal-commutative-node-1chunk";
@@ -39,6 +40,9 @@ import { decryptCard } from "../../../lib/encrypted-poker-1chunk";
 import { toast } from "sonner";
 import { Coins, LogOut, OctagonAlert } from "lucide-react";
 import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
+import { useSetEventLogEncryptedDeck } from "../../../hooks/eventLogEncryptedDeck";
+import useInactive from "../../../hooks/useInactive";
+import { useInterval } from "../../../hooks/useInterval";
 
 // export function generateStaticParams() {
 //   // should render for all /room/[roomIds]
@@ -48,19 +52,20 @@ import { bigintToString } from "../../../lib/elgamal-commutative-node-1chunk";
 export default function Room() {
   const params = useParams();
   const { address } = useAccount();
-  const { connectors, connect } = useConnect();
+  const isInactive = useInactive(10 * 60 * 1000); // after 10 minutes, stop polling the rpc for contract data
+
   const roomId = params.roomId as string;
   const [communityCards, setCommunityCards] = useState<Card[]>([]);
   const { data: invalidCards } = useInvalidCards();
   const { mutate: setInvalidCards } = useSetInvalidCards();
   const { data: playerCards } = usePlayerCards();
   const { mutate: setPlayerCards } = useSetPlayerCards();
+  const [hasToastedInactive, setHasToastedInactive] = useState(false);
+
+  // const { data: eventLogEncryptedDeck } = useEventLogEncryptedDeck();
+  const { mutate: setEventLogEncryptedDeck } = useSetEventLogEncryptedDeck();
   console.log("room page.tsx invalidCards", invalidCards);
 
-  const { data: getPlayerIndexFromAddr, refetch: refetchGetPlayerIndexFromAddr } =
-    useReadTexasHoldemRoomGetPlayerIndexFromAddr({
-      args: [address as `0x${string}`],
-    });
   const { data: players, refetch: refetchPlayers } = useGetPlayers();
   const {
     data: roomData,
@@ -69,11 +74,7 @@ export default function Room() {
   } = useGetBulkRoomData();
   const { data: roundKeys } = useRoundKeys(roomId, Number(roomData?.roundNumber));
 
-  console.log(
-    "/room/[roomId] useReadTexasHoldemRoom non-bulk properties",
-    players,
-    getPlayerIndexFromAddr,
-  );
+  console.log("/room/[roomId] useReadTexasHoldemRoom non-bulk properties", players);
   console.log(
     "/room/[roomId] useReadDeckHandlerGetPublicVariables all properties, roomDataError",
     roomData,
@@ -101,17 +102,41 @@ export default function Room() {
       playerOrCommunityCards: undefined,
       cardIndices: undefined,
     });
-    refetchGetPlayerIndexFromAddr();
+    setEventLogEncryptedDeck({
+      encryptedDeck: [],
+      lastUpdatedByPlayerAddress: zeroAddress,
+      lastUpdatedByPlayerIndex: undefined,
+      cardIndiciesUpdated: undefined,
+    });
     refetchPlayers();
     refetchRoomData();
   }, [
     roomData?.roundNumber,
     setInvalidCards,
     setPlayerCards,
-    refetchGetPlayerIndexFromAddr,
     refetchPlayers,
     refetchRoomData,
   ]);
+
+  useInterval(async () => {
+    if (!isInactive) {
+      // console.log("10s polling for updates...");
+      refetchRoomData();
+      refetchPlayers();
+      setHasToastedInactive(false);
+    } else {
+      if (!hasToastedInactive) {
+        console.log(
+          "10 minutes of inactivity detected, stopping polling contract data...",
+        );
+        toast.info(
+          "You have been inactive for 10 minutes. Stopping some updates until you return.",
+          { duration: 10000 }, // 10 seconds
+        );
+        setHasToastedInactive(true);
+      }
+    }
+  }, 10000);
 
   const {
     data: txResultJoinGame,
@@ -126,7 +151,10 @@ export default function Room() {
   useWatchTexasHoldemRoomEvent({
     onError: (error) => {
       console.error("Texas Holdem Room event error", error);
-      toast.error(`useWatchTexasHoldemRoomEvent error: ${error.message}`);
+      // ignore if the error contains "filter not found" because this occurs frequently with alchemy
+      if (!error.message.includes("filter not found")) {
+        toast.error(`useWatchTexasHoldemRoomEvent error: ${error.message}`);
+      }
     },
     // onLogs: (logs: {
     //   eventName: string;
@@ -142,7 +170,6 @@ export default function Room() {
       console.log("Texas Holdem Room event logs", logs);
       // refretch all contract data
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
 
       for (const log of logs) {
@@ -156,6 +183,7 @@ export default function Room() {
           console.log("PotWon event log", log);
           toast.info(
             `Pot ${log.args.amount} chips won by player ${log.args.winners.join(", ")}!`,
+            { duration: 30000 }, // 30s
           );
         }
         if (log.eventName === "IdlePlayerKicked") {
@@ -175,11 +203,8 @@ export default function Room() {
           toast.info(`Player ${log.args.player} left the room.`);
         }
       }
-      // sleep 3 seconds
-      console.log("sleeping 3 seconds");
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
     },
   });
@@ -189,13 +214,66 @@ export default function Room() {
       console.log("Deck Handler event logs", logs);
       // refretch all contract data
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
-      // sleep 3 seconds
-      console.log("sleeping 3 seconds");
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      for (const log of logs) {
+        if (log.eventName === "EncryptedShuffleSubmitted") {
+          console.log("EncryptedShuffleSubmitted event log", log);
+          // toast.info(
+          //   `Encrypted shuffle submitted by player ${log.args.player}. Restarting round...`,
+          // );
+          const args = log.args as {
+            player?: `0x${string}` | undefined;
+            encryptedShuffle?: readonly `0x${string}`[] | undefined;
+          };
+          const newEncryptedDeck = args.encryptedShuffle as unknown as string[];
+          const playerIndex = players?.findIndex((player) => player.addr === args.player);
+          setEventLogEncryptedDeck({
+            encryptedDeck: newEncryptedDeck,
+            lastUpdatedByPlayerAddress: args.player || zeroAddress,
+            lastUpdatedByPlayerIndex: playerIndex,
+          });
+        } else if (log.eventName === "DecryptionValuesSubmitted") {
+          console.log("DecryptionValuesSubmitted event log", log);
+          const decryptionArgs = log.args as {
+            player?: `0x${string}` | undefined;
+            cardIndexes?: readonly number[] | undefined;
+            decryptionValues?: readonly `0x${string}`[] | undefined;
+          };
+          const playerIndex = players?.findIndex(
+            (player) => player.addr === decryptionArgs.player,
+          );
+          setEventLogEncryptedDeck({
+            encryptedDeck: decryptionArgs.decryptionValues as unknown as string[],
+            lastUpdatedByPlayerAddress: decryptionArgs.player || zeroAddress,
+            lastUpdatedByPlayerIndex: playerIndex,
+            cardIndiciesUpdated: decryptionArgs.cardIndexes as number[],
+          });
+        } else if (log.eventName === "PlayerCardsRevealed") {
+          console.log("PlayerCardsRevealed event log", log);
+          const playerCardsRevealedArgs = log.args as {
+            player?: `0x${string}` | undefined;
+            card1?: string | undefined;
+            card2?: string | undefined;
+            rank?: number | undefined;
+            handScore?: bigint | undefined;
+          };
+          toast.info(
+            `Player ${playerCardsRevealedArgs.player} revealed their cards: 
+              ${stringCardsToCards([
+                playerCardsRevealedArgs.card1 || "",
+                playerCardsRevealedArgs.card2 || "",
+              ])
+                .map((card) => card.rank + card.suit)
+                .join(
+                  ", ",
+                )}, a ${HandRank[playerCardsRevealedArgs.rank || 0]}! Score: ${playerCardsRevealedArgs.handScore}`,
+            { duration: 30000 }, // 30s
+          );
+        }
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       refetchRoomData();
-      refetchGetPlayerIndexFromAddr();
       refetchPlayers();
     },
   });
@@ -350,9 +428,14 @@ export default function Room() {
         args: [],
       });
       setTxHashJoinGame(hash);
-    } catch (error) {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    } catch (error: any) {
       console.error("Error joining game:", error);
-      toast.error(`Error joining game: ${error.shortMessage}`);
+      if (error?.shortMessage) {
+        toast.error(`Error joining game: ${error.shortMessage}`);
+      } else {
+        toast.error(`Error joining game: ${error}`);
+      }
     }
   };
 

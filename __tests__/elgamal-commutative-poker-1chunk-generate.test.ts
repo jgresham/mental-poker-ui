@@ -108,7 +108,7 @@ test("test generate data, 2-player test, optional-shuffle", () => {
     for (let j = 0; j < player.encryptedDeck.length; j++) {
       const card = player.encryptedDeck[j];
       console.log(
-        `encryptedDeck${i + 1}bytes[${j}] = hex"${card.c2.toString(16).padStart(512, "0")}";`,
+        `encryptedDeck${i + 1}bytes[${j}] = hex"${card.c2.toString(16).padStart(64, "0")}";`,
       );
     }
   }

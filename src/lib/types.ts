@@ -171,6 +171,25 @@ export enum GameStage {
   Ended = 12,
 }
 
+export enum HandRank {
+  HighCard = 0, // 0
+  Pair = 1, // 1
+  TwoPair = 2, // 2
+  ThreeOfAKind = 3, // 3
+  Straight = 4, // 4
+  Flush = 5, // 5
+  FullHouse = 6, // 6
+  FourOfAKind = 7, // 7
+  StraightFlush = 8, // 8
+  RoyalFlush = 9, // 9
+}
+
+export const roughHandScoreToHandRank = (handScore: number) => {
+  // rank should be the first 1 digit of the handScore
+  const rank = handScore / 1e14;
+  return HandRank[Math.floor(rank) - 1];
+};
+
 export const REVEAL_COMMUNITY_CARDS_STAGES = [
   GameStage.RevealFlop,
   GameStage.RevealTurn,
@@ -179,7 +198,7 @@ export const REVEAL_COMMUNITY_CARDS_STAGES = [
 
 export const ALL_REVEAL_CARDS_STAGES = [
   GameStage.RevealDeal,
-  ...REVEAL_COMMUNITY_CARDS_STAGES
+  ...REVEAL_COMMUNITY_CARDS_STAGES,
 ];
 
 export const BETTING_STAGES = [

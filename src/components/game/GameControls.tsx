@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Action,
-  type Room,
-  type Player,
-  BETTING_STAGES,
-} from "@/lib/types";
+import { Action, type Room, type Player, BETTING_STAGES } from "@/lib/types";
 import { useWaitForTransactionReceipt } from "wagmi";
 
-import {
-  useWriteTexasHoldemRoomSubmitAction,
-} from "../../generated";
+import { useWriteTexasHoldemRoomSubmitAction } from "../../generated";
 import { toast } from "sonner";
-import {
-  useRoundKeys,
-} from "../../hooks/localRoomState";
+import { useRoundKeys } from "../../hooks/localRoomState";
 
 interface GameControlsProps {
   room: Room;
@@ -27,7 +18,6 @@ export function GameControls({ room, player }: GameControlsProps) {
   console.log("GameControls player", player);
   const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(false);
   console.log("GameControls isPlayerTurn", isPlayerTurn);
-
 
   const [betAmount, setBetAmount] = useState<number>(room?.currentStageBet || 0);
   const { data: roundKeys } = useRoundKeys(room.id, Number(room.roundNumber));
@@ -48,13 +38,15 @@ export function GameControls({ room, player }: GameControlsProps) {
   console.log("txReceipt", txResult);
   console.log("txReceipt2", isWaitingForTx);
   console.log("isTxSuccess", isTxSuccess);
-  console.log("isTxError", isTxError);
-  console.log("txError2", txError2);
-  console.log("txError2.cause", txError2?.cause);
-  console.log("txError2 user message", txError2?.message.split("\n")[0]);
-  console.log("txError2 error message", txError2?.message);
-  console.log("txError2.stack", txError2?.stack);
-  console.log("txError2.name", txError2?.name);
+  if (isTxError) {
+    console.log("isTxError", isTxError);
+    console.log("txError2", txError2);
+    console.log("txError2.cause", txError2?.cause);
+    console.log("txError2 user message", txError2?.message.split("\n")[0]);
+    console.log("txError2 error message", txError2?.message);
+    console.log("txError2.stack", txError2?.stack);
+    console.log("txError2.name", txError2?.name);
+  }
 
   const { writeContractAsync: submitAction } = useWriteTexasHoldemRoomSubmitAction();
 
@@ -90,7 +82,6 @@ export function GameControls({ room, player }: GameControlsProps) {
       setIsPlayerTurn(room.currentPlayerIndex === player?.playerIndex);
     }
   }, [player?.playerIndex, room.currentPlayerIndex]);
-
 
   // gen c1InversePowPrivateKey
   // const c1T = BigInt(
@@ -129,7 +120,12 @@ export function GameControls({ room, player }: GameControlsProps) {
   const handleCall = async () => {
     console.log("handleCall");
     if (!player) return;
-    console.log("handleCall player", player, room.currentPlayerIndex, room.currentPlayerIndex === player.playerIndex);
+    console.log(
+      "handleCall player",
+      player,
+      room.currentPlayerIndex,
+      room.currentPlayerIndex === player.playerIndex,
+    );
     const txHash = await submitAction({
       args: [Action.Call, BigInt(0)],
     });
@@ -250,7 +246,7 @@ export function GameControls({ room, player }: GameControlsProps) {
           variant="secondary"
           size="sm"
           className="h-8 text-xs sm:text-sm"
-          disabled={!isPlayerTurn || !isBettingStage}
+          disabled={!isPlayerTurn || !isBettingStage || room.currentStageBet > 0}
           onClick={handleCheck}
         >
           Check

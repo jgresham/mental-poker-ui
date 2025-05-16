@@ -4,13 +4,14 @@ import {
   stringCardsToCards,
   type Player,
   GameStage,
+  roughHandScoreToHandRank,
 } from "@/lib/types";
 import { Card } from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useEnsAvatar, useEnsName } from "wagmi";
-import { Clock, LogOut, LogIn } from "lucide-react";
+import { Clock, LogOut, LogIn, Coins } from "lucide-react";
 import { toast } from "sonner";
 import {
   usePlayerCards,
@@ -127,7 +128,10 @@ export function PlayerUI({
             </div>
             <div className="grid grid-cols-2 gap-1 text-sm">
               <div>Chips:</div>
-              <div className="font-medium">${chips}</div>
+              <div className="font-medium">
+                <Coins className="w-4 h-4 inline" />
+                {chips}
+              </div>
               <div>Status:</div>
               <div className="font-medium">
                 {hasFolded ? "Folded" : isAllIn ? "All-In" : "Active"}
@@ -158,7 +162,10 @@ export function PlayerUI({
       </Popover>
       <div className="flex flex-col overflow-hidden">
         {/* <span className="text-xs font-medium truncate">{displayName}</span> */}
-        <span className="text-xs font-bold">${chips}</span>
+        <span className="text-xs font-bold">
+          <Coins className="w-4 h-4 inline" />
+          {chips}
+        </span>
       </div>
     </div>
   );
@@ -203,6 +210,11 @@ export function PlayerUI({
       {joinedAndWaitingForNextRound && (
         <Badge variant="outline" className="text-xs py-0 px-1 h-5">
           <LogIn size={8} strokeWidth={1} />
+        </Badge>
+      )}
+      {player.handScore > 0 && (
+        <Badge variant="outline" className="text-xs py-0 px-1 h-5">
+          {roughHandScoreToHandRank(Number(player.handScore))}
         </Badge>
       )}
     </div>
