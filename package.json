@@ -14,8 +14,8 @@
   "dependencies": {
     "@datadog/browser-rum": "^6.6.4",
     "@datadog/browser-rum-react": "^6.6.4",
-    "@farcaster/frame-sdk": "^0.0.41",
-    "@farcaster/frame-wagmi-connector": "^0.0.30",
+    "@farcaster/frame-sdk": "^0.0.44",
+    "@farcaster/frame-wagmi-connector": "^0.0.33",
     "@radix-ui/react-avatar": "^1.1.9",
     "@radix-ui/react-dialog": "^1.1.13",
     "@radix-ui/react-popover": "^1.1.13",
@@ -30,7 +30,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eruda": "^3.4.1",
-    "lucide-react": "^0.510.0",
+    "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
@@ -38,7 +38,7 @@
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "~2.29.1",
+    "viem": "~2.29.4",
     "wagmi": "^2.15.3"
   },
   "devDependencies": {
@@ -56,7 +56,7 @@
     "eslint-config-next": "15.3.2",
     "jsdom": "^26.1.0",
     "pino-pretty": "^13.0.0",
-    "tailwindcss": "^4.1.6",
+    "tailwindcss": "^4.1.7",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.3"

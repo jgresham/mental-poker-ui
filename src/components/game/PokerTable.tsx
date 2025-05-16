@@ -827,7 +827,7 @@ export function PokerTable({ room, players, roomId, player }: PokerTableProps) {
 
       // moves chip count just above table white line
       if (i === 0) {
-        y -= 1.5;
+        y += 1;
       }
 
       positions.push({ x, y });

@@ -19,6 +19,7 @@ import {
   useSetInvalidCards,
 } from "../../hooks/localRoomState";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useFarcasterUser } from "../../hooks/useFarcasterUser";
 
 interface PlayerProps {
   player: Player;
@@ -44,7 +45,6 @@ export function PlayerUI({
     isTurn,
     isAllIn,
     currentStageBet,
-    avatarUrl,
     leavingAfterRoundEnds,
     joinedAndWaitingForNextRound,
   } = player;
@@ -56,7 +56,10 @@ export function PlayerUI({
   const { data: invalidCardsData } = useInvalidCards();
   const { mutate: setInvalidCards } = useSetInvalidCards();
   console.log("playerUI.tsx invalidCards", invalidCardsData);
-
+  const { data: playerFarcasterData } = useFarcasterUser(
+    addr.toLowerCase() as `0x${string}`,
+  );
+  console.log("playerUI.tsx playerFarcasterData", playerFarcasterData);
   useEffect(() => {
     console.log("player ui setCards useEffect");
     if (
@@ -100,8 +103,8 @@ export function PlayerUI({
         .toUpperCase()
     : addr?.slice(2, 4);
 
-  let avatarSrc = avatarUrl;
-  if (avatarUrl === undefined) {
+  let avatarSrc = playerFarcasterData?.pfp_url;
+  if (avatarSrc === undefined) {
     avatarSrc = ensAvatar ?? undefined;
   }
 
@@ -109,20 +112,28 @@ export function PlayerUI({
     <div className="flex items-center gap-1 mb-1 w-full">
       <Popover>
         <PopoverTrigger asChild>
-          <Avatar className="h-8 w-8 border-2 border-white dark:border-gray-700 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all">
+          <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all shadow-[0_0_2px_rgba(0,0,0,0.3)]">
             <AvatarImage src={avatarSrc} alt={name} />
             <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent className="w-60 p-2" align="center" side="top">
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-10 w-10">
+            <div className="flex items-start gap-2">
+              <Avatar className="h-10 w-10 flex-shrink-0">
                 <AvatarImage src={avatarSrc} alt={name} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
-              <div className="flex flex-col">
-                <span className="font-medium">{displayName}</span>
+              <div className="flex flex-col min-w-0">
+                {playerFarcasterData && (
+                  <>
+                    <span className="truncate">{playerFarcasterData?.username}</span>
+                    <span className="truncate">{playerFarcasterData?.display_name}</span>
+                    <span>FC user#: {playerFarcasterData?.fid}</span>
+                    <span>FC score: {playerFarcasterData?.score}</span>
+                  </>
+                )}
+                <span className="font-medium truncate">{displayName}</span>
                 <span className="text-xs text-gray-500 truncate">{addr}</span>
               </div>
             </div>
@@ -171,7 +182,7 @@ export function PlayerUI({
   );
 
   const BadgesSection = () => (
-    <div className="flex flex-wrap gap-0.5 sm:gap-1 justify-center">
+    <div className="flex flex-wrap gap-0.5 sm:gap-1 justify-center -mt-2 z-10">
       {isDealer && (
         <Badge variant="outline" className="text-xs py-0 px-1 h-5">
           D
@@ -207,7 +218,7 @@ export function PlayerUI({
           <LogOut size={8} strokeWidth={1} />
         </Badge>
       )}
-      {joinedAndWaitingForNextRound && (
+      {joinedAndWaitingForNextRound && stage !== GameStage.Idle && (
         <Badge variant="outline" className="text-xs py-0 px-1 h-5">
           <LogIn size={8} strokeWidth={1} />
         </Badge>
@@ -255,7 +266,7 @@ export function PlayerUI({
           isCurrentUser && " rounded-lg bg-green-50/30 dark:bg-green-900/20",
         )}
       >
-        {isTurn && (
+        {isTurn && stage !== GameStage.Idle && (
           <div className="absolute bottom-[-2px] left-[-2px] z-20">
             <span className="flex items-center justify-center w-5 h-5 bg-yellow-100 dark:bg-yellow-800 rounded-full ring-1 ring-yellow-500 shadow-md animate-pulse">
               <Clock size={10} />
