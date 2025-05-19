@@ -9,7 +9,7 @@
     "name": "Poker",
     "iconUrl": "https://mentalpoker.xyz/MentalPokerLogo200.jpg",
     "homeUrl": "https://mentalpoker.xyz/",
-    "splashImageUrl": "https://mentalpoker.xyz/MentalPokerLogo200.jpg",
+    "splashImageUrl": "https://mentalpoker.xyz/mental_poker_splash.jpg",
     "splashBackgroundColor": "#ffffff",
     "webhookUrl": "https://api.neynar.com/f/app/6441e10b-f1c4-432e-a670-1c396d4444ae/event",
     "subtitle": "Mental Poker - Onchain Poker",

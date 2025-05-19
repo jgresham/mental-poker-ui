@@ -8,7 +8,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { http, createConfig, webSocket } from "@wagmi/core";
 import {
-  arbitrum,
+  // arbitrum,
   base,
   baseSepolia,
   type Chain,
@@ -35,7 +35,7 @@ const walletConnectors = connectorsForWallets(
 const chains: Chain[] = [baseSepolia, base];
 // chains.push(baseSepolia);
 chains.push(optimism);
-chains.push(arbitrum);
+// chains.push(arbitrum);
 if (
   process.env.NEXT_PUBLIC_WORKER_DOMAIN?.includes("staging") ||
   process.env.NEXT_PUBLIC_WORKER_DOMAIN?.includes("localhost") ||
@@ -67,9 +67,9 @@ export const frameWagmiConfig = createConfig({
     //   ,
     //   webSocket("wss://opt-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC")
     // ]
-    [arbitrum.id]: http(
-      "https://arb-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC",
-    ),
+    // [arbitrum.id]: http(
+    //   "https://arb-mainnet.g.alchemy.com/v2/cIUEeDRaumsVFcSQ_960UNHREYME1hNC",
+    // ),
   },
   connectors: [
     ...walletConnectors,

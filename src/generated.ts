@@ -1170,20 +1170,7 @@ export const cryptoUtilsAbi = [
         ],
       },
     ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'message',
-        internalType: 'string',
-        type: 'string',
-        indexed: false,
-      },
-    ],
-    name: 'CULog',
+    stateMutability: 'view',
   },
 ] as const
 
@@ -1192,10 +1179,9 @@ export const cryptoUtilsAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const deckHandlerAbi = [
@@ -1496,25 +1482,22 @@ export const deckHandlerAbi = [
 ] as const
 
 /**
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const deckHandlerAddress = {
-  10: '0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9',
-  8453: '0x5B4e312D30D042a3B06C1f9446Fe821d36875afe',
+  10: '0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6',
+  8453: '0x3f9b9c2577d8277805ea7587D598E39965a2C7C7',
   31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
-  42161: '0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9',
   84532: '0x577A57868513382203e8739e3e7f8056b13987DD',
 } as const
 
 /**
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const deckHandlerConfig = {
@@ -2574,10 +2557,9 @@ export const stringExtensionsAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const texasHoldemRoomAbi = [
@@ -3104,25 +3086,22 @@ export const texasHoldemRoomAbi = [
 ] as const
 
 /**
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const texasHoldemRoomAddress = {
-  10: '0xf34890f942220f48391BA33Ff053f64Aa8979956',
-  8453: '0x97B60973647dD10393fAE9E4deF62373F4BEE117',
+  10: '0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9',
+  8453: '0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1',
   31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
-  42161: '0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D',
   84532: '0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367',
 } as const
 
 /**
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const texasHoldemRoomConfig = {
@@ -3902,59 +3881,20 @@ export const useReadCryptoUtilsStrEq = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cryptoUtilsAbi}__
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `functionName` set to `"verifyDecryptCard"`
  */
-export const useWriteCryptoUtils = /*#__PURE__*/ createUseWriteContract({
-  abi: cryptoUtilsAbi,
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `functionName` set to `"verifyDecryptCard"`
- */
-export const useWriteCryptoUtilsVerifyDecryptCard =
-  /*#__PURE__*/ createUseWriteContract({
+export const useReadCryptoUtilsVerifyDecryptCard =
+  /*#__PURE__*/ createUseReadContract({
     abi: cryptoUtilsAbi,
     functionName: 'verifyDecryptCard',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cryptoUtilsAbi}__
- */
-export const useSimulateCryptoUtils = /*#__PURE__*/ createUseSimulateContract({
-  abi: cryptoUtilsAbi,
-})
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `functionName` set to `"verifyDecryptCard"`
- */
-export const useSimulateCryptoUtilsVerifyDecryptCard =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: cryptoUtilsAbi,
-    functionName: 'verifyDecryptCard',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cryptoUtilsAbi}__
- */
-export const useWatchCryptoUtilsEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({ abi: cryptoUtilsAbi })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link cryptoUtilsAbi}__ and `eventName` set to `"CULog"`
- */
-export const useWatchCryptoUtilsCuLogEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: cryptoUtilsAbi,
-    eventName: 'CULog',
   })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandler = /*#__PURE__*/ createUseReadContract({
@@ -3965,10 +3905,9 @@ export const useReadDeckHandler = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"communityCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerCommunityCards =
@@ -3981,10 +3920,9 @@ export const useReadDeckHandlerCommunityCards =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"cryptoUtils"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerCryptoUtils =
@@ -3997,10 +3935,9 @@ export const useReadDeckHandlerCryptoUtils =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"encryptedDeck"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerEncryptedDeck =
@@ -4013,10 +3950,9 @@ export const useReadDeckHandlerEncryptedDeck =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getBulkRoomData"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetBulkRoomData =
@@ -4029,10 +3965,9 @@ export const useReadDeckHandlerGetBulkRoomData =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getCommunityCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetCommunityCards =
@@ -4045,10 +3980,9 @@ export const useReadDeckHandlerGetCommunityCards =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getEncrypedCard"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetEncrypedCard =
@@ -4061,10 +3995,9 @@ export const useReadDeckHandlerGetEncrypedCard =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"getEncryptedDeck"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerGetEncryptedDeck =
@@ -4077,10 +4010,9 @@ export const useReadDeckHandlerGetEncryptedDeck =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"handEvaluator"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerHandEvaluator =
@@ -4093,10 +4025,9 @@ export const useReadDeckHandlerHandEvaluator =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"texasHoldemRoom"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useReadDeckHandlerTexasHoldemRoom =
@@ -4109,10 +4040,9 @@ export const useReadDeckHandlerTexasHoldemRoom =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandler = /*#__PURE__*/ createUseWriteContract({
@@ -4123,10 +4053,9 @@ export const useWriteDeckHandler = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"resetDeck"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerResetDeck =
@@ -4139,10 +4068,9 @@ export const useWriteDeckHandlerResetDeck =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"revealMyCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerRevealMyCards =
@@ -4155,10 +4083,9 @@ export const useWriteDeckHandlerRevealMyCards =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitDecryptionValues"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerSubmitDecryptionValues =
@@ -4171,10 +4098,9 @@ export const useWriteDeckHandlerSubmitDecryptionValues =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitEncryptedShuffle"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWriteDeckHandlerSubmitEncryptedShuffle =
@@ -4187,10 +4113,9 @@ export const useWriteDeckHandlerSubmitEncryptedShuffle =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandler = /*#__PURE__*/ createUseSimulateContract({
@@ -4201,10 +4126,9 @@ export const useSimulateDeckHandler = /*#__PURE__*/ createUseSimulateContract({
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"resetDeck"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerResetDeck =
@@ -4217,10 +4141,9 @@ export const useSimulateDeckHandlerResetDeck =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"revealMyCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerRevealMyCards =
@@ -4233,10 +4156,9 @@ export const useSimulateDeckHandlerRevealMyCards =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitDecryptionValues"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerSubmitDecryptionValues =
@@ -4249,10 +4171,9 @@ export const useSimulateDeckHandlerSubmitDecryptionValues =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link deckHandlerAbi}__ and `functionName` set to `"submitEncryptedShuffle"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useSimulateDeckHandlerSubmitEncryptedShuffle =
@@ -4265,10 +4186,9 @@ export const useSimulateDeckHandlerSubmitEncryptedShuffle =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerEvent =
@@ -4280,10 +4200,9 @@ export const useWatchDeckHandlerEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"DecryptionValuesSubmitted"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerDecryptionValuesSubmittedEvent =
@@ -4296,10 +4215,9 @@ export const useWatchDeckHandlerDecryptionValuesSubmittedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"EncryptedShuffleSubmitted"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerEncryptedShuffleSubmittedEvent =
@@ -4312,10 +4230,9 @@ export const useWatchDeckHandlerEncryptedShuffleSubmittedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"FlopRevealed"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerFlopRevealedEvent =
@@ -4328,10 +4245,9 @@ export const useWatchDeckHandlerFlopRevealedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"PlayerCardsRevealed"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerPlayerCardsRevealedEvent =
@@ -4344,10 +4260,9 @@ export const useWatchDeckHandlerPlayerCardsRevealedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"PlayerRevealingCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerPlayerRevealingCardsEvent =
@@ -4360,10 +4275,9 @@ export const useWatchDeckHandlerPlayerRevealingCardsEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"RiverRevealed"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerRiverRevealedEvent =
@@ -4376,10 +4290,9 @@ export const useWatchDeckHandlerRiverRevealedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link deckHandlerAbi}__ and `eventName` set to `"TurnRevealed"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x8ad3D9cf837117d44Ec08e77a3C38420f92243E9)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5B4e312D30D042a3B06C1f9446Fe821d36875afe)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x9a9258504184b53F91a2C6614F34Cd1CB873ccE9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD)
  */
 export const useWatchDeckHandlerTurnRevealedEvent =
@@ -5226,10 +5139,9 @@ export const useReadStringExtensionsToString =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoom = /*#__PURE__*/ createUseReadContract({
@@ -5240,10 +5152,9 @@ export const useReadTexasHoldemRoom = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"EMPTY_SEAT"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomEmptySeat =
@@ -5256,10 +5167,9 @@ export const useReadTexasHoldemRoomEmptySeat =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"MAX_PLAYERS"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomMaxPlayers =
@@ -5272,10 +5182,9 @@ export const useReadTexasHoldemRoomMaxPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"MIN_PLAYERS"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomMinPlayers =
@@ -5288,10 +5197,9 @@ export const useReadTexasHoldemRoomMinPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"STARTING_CHIPS"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomStartingChips =
@@ -5304,10 +5212,9 @@ export const useReadTexasHoldemRoomStartingChips =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"bigBlind"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomBigBlind =
@@ -5320,10 +5227,9 @@ export const useReadTexasHoldemRoomBigBlind =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countActivePlayers"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCountActivePlayers =
@@ -5336,10 +5242,9 @@ export const useReadTexasHoldemRoomCountActivePlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countOfHandsRevealed"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCountOfHandsRevealed =
@@ -5352,10 +5257,9 @@ export const useReadTexasHoldemRoomCountOfHandsRevealed =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"countPlayersAtRoundStart"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCountPlayersAtRoundStart =
@@ -5368,10 +5272,9 @@ export const useReadTexasHoldemRoomCountPlayersAtRoundStart =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"cryptoUtils"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCryptoUtils =
@@ -5384,10 +5287,9 @@ export const useReadTexasHoldemRoomCryptoUtils =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"currentPlayerIndex"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCurrentPlayerIndex =
@@ -5400,10 +5302,9 @@ export const useReadTexasHoldemRoomCurrentPlayerIndex =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"currentStageBet"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomCurrentStageBet =
@@ -5416,10 +5317,9 @@ export const useReadTexasHoldemRoomCurrentStageBet =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"dealerPosition"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomDealerPosition =
@@ -5432,10 +5332,9 @@ export const useReadTexasHoldemRoomDealerPosition =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"deckHandler"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomDeckHandler =
@@ -5448,10 +5347,9 @@ export const useReadTexasHoldemRoomDeckHandler =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getNextActivePlayer"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetNextActivePlayer =
@@ -5464,10 +5362,9 @@ export const useReadTexasHoldemRoomGetNextActivePlayer =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayer"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayer =
@@ -5480,10 +5377,9 @@ export const useReadTexasHoldemRoomGetPlayer =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayerIndexFromAddr"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayerIndexFromAddr =
@@ -5496,10 +5392,9 @@ export const useReadTexasHoldemRoomGetPlayerIndexFromAddr =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayers"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayers =
@@ -5512,10 +5407,9 @@ export const useReadTexasHoldemRoomGetPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"getPlayersCardIndexes"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomGetPlayersCardIndexes =
@@ -5528,10 +5422,9 @@ export const useReadTexasHoldemRoomGetPlayersCardIndexes =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"isPrivate"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomIsPrivate =
@@ -5544,10 +5437,9 @@ export const useReadTexasHoldemRoomIsPrivate =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"lastActionTimestamp"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomLastActionTimestamp =
@@ -5560,10 +5452,9 @@ export const useReadTexasHoldemRoomLastActionTimestamp =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"lastRaiseIndex"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomLastRaiseIndex =
@@ -5576,10 +5467,9 @@ export const useReadTexasHoldemRoomLastRaiseIndex =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"numPlayers"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomNumPlayers =
@@ -5592,10 +5482,9 @@ export const useReadTexasHoldemRoomNumPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"players"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomPlayers =
@@ -5608,10 +5497,9 @@ export const useReadTexasHoldemRoomPlayers =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"pot"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomPot = /*#__PURE__*/ createUseReadContract({
@@ -5623,10 +5511,9 @@ export const useReadTexasHoldemRoomPot = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"roundNumber"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomRoundNumber =
@@ -5639,10 +5526,9 @@ export const useReadTexasHoldemRoomRoundNumber =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"seatPositionToPlayerIndex"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomSeatPositionToPlayerIndex =
@@ -5655,10 +5541,9 @@ export const useReadTexasHoldemRoomSeatPositionToPlayerIndex =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"smallBlind"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomSmallBlind =
@@ -5671,10 +5556,9 @@ export const useReadTexasHoldemRoomSmallBlind =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"stage"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useReadTexasHoldemRoomStage = /*#__PURE__*/ createUseReadContract({
@@ -5686,10 +5570,9 @@ export const useReadTexasHoldemRoomStage = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
@@ -5700,10 +5583,9 @@ export const useWriteTexasHoldemRoom = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomJoinGame =
@@ -5716,10 +5598,9 @@ export const useWriteTexasHoldemRoomJoinGame =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"leaveGame"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomLeaveGame =
@@ -5732,10 +5613,9 @@ export const useWriteTexasHoldemRoomLeaveGame =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"progressGame"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomProgressGame =
@@ -5748,10 +5628,9 @@ export const useWriteTexasHoldemRoomProgressGame =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportIdlePlayer"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomReportIdlePlayer =
@@ -5764,10 +5643,9 @@ export const useWriteTexasHoldemRoomReportIdlePlayer =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportInvalidCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomReportInvalidCards =
@@ -5780,10 +5658,9 @@ export const useWriteTexasHoldemRoomReportInvalidCards =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"resetRound"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomResetRound =
@@ -5796,10 +5673,9 @@ export const useWriteTexasHoldemRoomResetRound =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomSetDeckHandler =
@@ -5812,10 +5688,9 @@ export const useWriteTexasHoldemRoomSetDeckHandler =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setPlayerHandScore"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomSetPlayerHandScore =
@@ -5828,10 +5703,9 @@ export const useWriteTexasHoldemRoomSetPlayerHandScore =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"submitAction"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWriteTexasHoldemRoomSubmitAction =
@@ -5844,10 +5718,9 @@ export const useWriteTexasHoldemRoomSubmitAction =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoom =
@@ -5859,10 +5732,9 @@ export const useSimulateTexasHoldemRoom =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"joinGame"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomJoinGame =
@@ -5875,10 +5747,9 @@ export const useSimulateTexasHoldemRoomJoinGame =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"leaveGame"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomLeaveGame =
@@ -5891,10 +5762,9 @@ export const useSimulateTexasHoldemRoomLeaveGame =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"progressGame"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomProgressGame =
@@ -5907,10 +5777,9 @@ export const useSimulateTexasHoldemRoomProgressGame =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportIdlePlayer"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomReportIdlePlayer =
@@ -5923,10 +5792,9 @@ export const useSimulateTexasHoldemRoomReportIdlePlayer =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"reportInvalidCards"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomReportInvalidCards =
@@ -5939,10 +5807,9 @@ export const useSimulateTexasHoldemRoomReportInvalidCards =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"resetRound"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomResetRound =
@@ -5955,10 +5822,9 @@ export const useSimulateTexasHoldemRoomResetRound =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setDeckHandler"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomSetDeckHandler =
@@ -5971,10 +5837,9 @@ export const useSimulateTexasHoldemRoomSetDeckHandler =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"setPlayerHandScore"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomSetPlayerHandScore =
@@ -5987,10 +5852,9 @@ export const useSimulateTexasHoldemRoomSetPlayerHandScore =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `functionName` set to `"submitAction"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useSimulateTexasHoldemRoomSubmitAction =
@@ -6003,10 +5867,9 @@ export const useSimulateTexasHoldemRoomSubmitAction =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomEvent =
@@ -6018,10 +5881,9 @@ export const useWatchTexasHoldemRoomEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"GameStarted"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomGameStartedEvent =
@@ -6034,10 +5896,9 @@ export const useWatchTexasHoldemRoomGameStartedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"IdlePlayerKicked"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomIdlePlayerKickedEvent =
@@ -6050,10 +5911,9 @@ export const useWatchTexasHoldemRoomIdlePlayerKickedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"InvalidCardsReported"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomInvalidCardsReportedEvent =
@@ -6066,10 +5926,9 @@ export const useWatchTexasHoldemRoomInvalidCardsReportedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"NewStage"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomNewStageEvent =
@@ -6082,10 +5941,9 @@ export const useWatchTexasHoldemRoomNewStageEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerJoined"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPlayerJoinedEvent =
@@ -6098,10 +5956,9 @@ export const useWatchTexasHoldemRoomPlayerJoinedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerLeft"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPlayerLeftEvent =
@@ -6114,10 +5971,9 @@ export const useWatchTexasHoldemRoomPlayerLeftEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PlayerMoved"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPlayerMovedEvent =
@@ -6130,10 +5986,9 @@ export const useWatchTexasHoldemRoomPlayerMovedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link texasHoldemRoomAbi}__ and `eventName` set to `"PotWon"`
  *
- * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0xf34890f942220f48391BA33Ff053f64Aa8979956)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x97B60973647dD10393fAE9E4deF62373F4BEE117)
+ * - [__View Contract on Op Mainnet Optimism Explorer__](https://optimistic.etherscan.io/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1)
  * -
- * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x5868ED6AaE7fed0bfD7176A87F80c2F93A2bc03D)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367)
  */
 export const useWatchTexasHoldemRoomPotWonEvent =

@@ -164,7 +164,7 @@ export default function Home() {
               </Link>
               <Link
                 className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
-                href="https://basescan.org/address/0xf34890f942220f48391BA33Ff053f64Aa8979956#code"
+                href="https://basescan.org/address/0xAF54254f9c0da161F22eBCFC5Ff569Bb305f18e1"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -176,11 +176,11 @@ export default function Home() {
                   width={16}
                   height={16}
                 />
-                Mainnet Smart Contract
+                Base Texas Holdem Room Contract
               </Link>
               <Link
                 className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
-                href="https://sepolia.basescan.org/address/0xfd95b63455287facf0eed16a4dd922813a98ecf1#code"
+                href="https://basescan.org/address/0x3f9b9c2577d8277805ea7587D598E39965a2C7C7"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -192,7 +192,71 @@ export default function Home() {
                   width={16}
                   height={16}
                 />
-                Testnet Smart Contract
+                Base Deck Handler Contract
+              </Link>
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
+                href="https://basescan.org/address/0x0B377624bd9BFDeB5fA6d0C4621EdBD9B2E7C1F9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/globe.svg"
+                  alt="Globe icon"
+                  width={16}
+                  height={16}
+                />
+                Optimism Texas Holdem Room Contract
+              </Link>
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
+                href="https://basescan.org/address/0xaa988C3d6D05C957AE01fB38f69271eDd44FB7A6"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/globe.svg"
+                  alt="Globe icon"
+                  width={16}
+                  height={16}
+                />
+                Optimism Deck Handler Contract
+              </Link>
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
+                href="https://sepolia.basescan.org/address/0x3B6d3862901Fe4b7FA6fB584F8851C0dC5ae0367"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/globe.svg"
+                  alt="Globe icon"
+                  width={16}
+                  height={16}
+                />
+                Base Sepolia Texas Holdem Room Contract
+              </Link>
+              <Link
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4 fill-black"
+                href="https://sepolia.basescan.org/address/0x577A57868513382203e8739e3e7f8056b13987DD"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  className="dark:invert"
+                  src="/globe.svg"
+                  alt="Globe icon"
+                  width={16}
+                  height={16}
+                />
+                Base Sepolia Deck Handler Contract
               </Link>
             </div>
           </div>

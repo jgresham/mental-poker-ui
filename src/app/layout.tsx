@@ -41,7 +41,7 @@ export const metadata: Metadata = {
           type: "launch_frame",
           name: "Mental Poker",
           url: "https://mentalpoker.xyz",
-          splashImageUrl: "https://mentalpoker.xyz/MentalPokerLogo200.jpg",
+          splashImageUrl: "https://mentalpoker.xyz/mental_poker_splash.jpg",
           splashBackgroundColor: "#0d542b",
         },
       },
